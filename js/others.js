@@ -1,15 +1,13 @@
-console.log("datepicker clicked");
+
 // month and year picker
 $('#datepicker').datepicker({
    
   format: "yyyy-mm-dd",
   //startDate: "1960/01/01",
-  minViewMode: 1,
+  startView: "months",
+  minViewMode: "months",
   todayBtn: true,
-  clearBtn: true,
-  keyboardNavigation: false,
-  daysOfWeekDisabled: "0,6",
-  daysOfWeekHighlighted: "1,2,3,4,5"
+  clearBtn: true
   
 });
 
