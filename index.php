@@ -6,7 +6,7 @@ $user = new User();
 
 // if User is already logged in 
 if ($user->isLoggedIn()) {
-  Redirect::to('landingpage.php');
+  Redirect::to('landingpagetest.php');
 }
 
 // Checks input and redirects to landing page if valid credentials
@@ -15,7 +15,7 @@ if (Input::exists()) {
     $user = new User();
 
     if ($user->isLoggedIn()) {
-      Redirect::to('landingpage.php');
+      Redirect::to('landingpagetest.php');
     } else {
 
       // implementation of login check in User.php
@@ -24,7 +24,7 @@ if (Input::exists()) {
       $login = $user->login(Input::get('mail'), Input::get('pass'));
 
       if ($login) {
-        Redirect::to('landingpage.php');
+        Redirect::to('landingpagetest.php');
       } else {
 
         echo "<script type=\"text/javascript\">alert(\"Wrong Credentials - Login Failed\");</script>";
