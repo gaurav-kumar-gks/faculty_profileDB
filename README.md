@@ -61,7 +61,7 @@ Make sure you've done required changes first**
 ### To access the website
 
 - Opening the landing page
-[http://localhost:8001/](http://localhost:8002/)    
+[http://localhost:8002/](http://localhost:8002/)    
 
 - Opening the phpmyadmin
 [http://localhost:8000/](http://localhost:8000/)
