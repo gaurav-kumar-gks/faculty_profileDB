@@ -135,7 +135,7 @@ if (Input::exists() && isset($_POST['edit'])) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <title>CONFERENCE</title>
+  <title>Conferences</title>
 
   <!-- CSS -->
   <link rel="stylesheet" href="css/font-awesome.min.css">
@@ -148,7 +148,7 @@ if (Input::exists() && isset($_POST['edit'])) {
   <!-- NAVBAR -->
   <nav class="navbar navbar-expand-sm navbar-dark bg-dark p-2 fixed-top">
     <div class="container">
-      <a href="conference.php" class="navbar-brand">Homepage</a>
+      <a href="journal.php" class="navbar-brand">Homepage</a>
       <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -294,7 +294,7 @@ if (Input::exists() && isset($_POST['edit'])) {
             </a>
             <ul class="collapse list-unstyled show" id="publicationsSubmenu">
               <li>
-                <a href="conference.php">CONFERENCE</a>
+                <a href="journal.php">Journals</a>
               </li>
               <li>
                 <a href="conference.php">Conference</a>
@@ -735,7 +735,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                   if (strlen(Input::get('CfnameS')) > 0) {
                     $cfnames = DB::getInstance();
                     $cfname = Input::get('CfnameS');
-                    $cfnames->query("SELECT fname,dept,title,authors,  publisher,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day, duration FROM faculty_profile_publications WHERE ptype = 'j' AND fname LIKE '%$cfname%' ORDER BY pdate DESC");
+                    $cfnames->query("SELECT fname,dept,title,authors,  publisher,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day, duration FROM faculty_profile_publications WHERE ptype = 'c' AND fname LIKE '%$cfname%' ORDER BY pdate DESC");
 
                     if ($cfnames->count()) {
                       echo "<table class=\"table table-striped table-hover\">";
