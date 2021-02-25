@@ -14,57 +14,48 @@
 ### Requirements
 
 - LAMP stack installed
-- Docker installed 
 - MySql db - faculty_profile_db (sample_queries.sql provided)
  
 
 ### Changes you need to do 
 In following files change the following
 
-1. docker-compose.yml 
-	```   
-	MYSQL_USER:"insert your faculty_profile_db's user name"
-	MYSQL_PASSWORD:"insert your db faculty_profile_db's password"
-	MYSQL_ROOT_PASSWORD:"insert your mysql root password"
-	// without quotes
-	```
-2. DB.php 
+
+1. DB.php 
 	```
 	$user  =  'insert your faculty_profile_db's user name';
 	$password  =  'insert your faculty_profile_db's password';
 	// with single quotes
 	```
-3.  init.php 
+2.  init.php 
 	```
 	'user' => 'insert your faculty_user_db's user's name',
 	'password' => 'insert your faculty_user_db's password',
 	// with single quotes
 	```
-Prefer user - 'root', password - (rootpassword) due to various docker issues
+3. in other php files
+   change mysqli_connect command
+	```
+	$conn = mysqli_connect("localhost", "insert your db user name here", "insert your db password here", "faculty_profile_db");
+	```
 
 
+### To get project up and running (in Ubuntu)
 
-### To get project up and running
 **Simply use the Dockerfile to build the image.
 Make sure you've done required changes first**
 
-- Open the terminal from forked project directory
-- To start the docker    
-``` docker-compose up -d```
-- To stop the docker
-``` docker-compose down```
-- To rebuild the docker-image 
-- ``` docker-compose build```
-- To see currently running containers ``` docker ps -a ```
-- You need to rebuild the image or stop the docker and restarting for changes to reflect
+- Go to this directory ```cd /var/www/html```
+- Make sure you have read/write permission in this directory
+- Pull the repository files in this directory (index.php should be in /var/www/html)
 
 ### To access the website
 
 - Opening the landing page
-[http://localhost:8002/](http://localhost:8002/)    
+[http://localhost/index.php](http://localhost/index.php)    
 
 - Opening the phpmyadmin
-[http://localhost:8000/](http://localhost:8000/)
+[http://localhost/phpmyadmin](http://localhost/phpmyadmin)
 
 
 
