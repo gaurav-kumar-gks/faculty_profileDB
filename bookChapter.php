@@ -9,7 +9,7 @@ if ($user->isLoggedIn()) {
   Redirect::to('index.php');
 }
 
-/* CONFERENCE submit */
+/* TEXT BOOK submit */
 if (Input::exists() && isset($_POST['csubmit'])) {
   try {
 
@@ -25,9 +25,10 @@ if (Input::exists() && isset($_POST['csubmit'])) {
     // columns that we get from form input
     $ctitle = Input::get('ctitle');
     $cauthors = Input::get('cauthors');
+    $btitle = Input::get('btitle');
     $cpublisher = Input::get('cpublisher');
     $cyear = Input::get('cyear');
-    $cduration = Input::get('cduration');
+    $cbook = Input::get('cbook');
     $clink = Input::get('clink');
 
     // connect with localhost
@@ -36,7 +37,7 @@ if (Input::exists() && isset($_POST['csubmit'])) {
       die("Unable to connect to database");
 
     // insert query
-    $stmt = "INSERT INTO `faculty_profile_publications` (`sno`, `fname`, `roll`, `dept`, `prog`, `ptype`, `title`, `authors`, `publication`, `publisher`, `pdate`, `location`, `pages`, `onlineLink`, `duration`, `impactFactor`, `bookTitle`, `bookType`, `editedVolume`, `eduPackageType`, `eduPackageLevel`, `patentNo`, `projectBudget`, `projectSponser`, `projectRole`, `projectStatus`, `email`, `aemail`) VALUES (NULL, '$fname', '$roll', '$dept', '$prog', 'c', '$ctitle', '$cauthors', NULL, '$cpublisher', '$cyear', NULL, NULL, '$clink', $cduration, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$email', '$aemail');";
+    $stmt = "INSERT INTO `faculty_profile_publications` (`sno`, `fname`, `roll`, `dept`, `prog`, `ptype`, `title`, `authors`, `publication`, `publisher`, `pdate`, `location`, `pages`, `onlineLink`, `duration`, `impactFactor`, `bookTitle`, `bookType`, `editedVolume`, `eduPackageType`, `eduPackageLevel`, `patentNo`, `projectBudget`, `projectSponser`, `projectRole`, `projectStatus`, `email`, `aemail`) VALUES (NULL, '$fname', '$roll', '$dept', '$prog', 'bc', '$ctitle', '$cauthors', NULL, '$cpublisher', '$cyear', NULL, NULL, '$clink', NULL, NULL, '$btitle', '$cbook', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$email', '$aemail');";
     // echo $stmt;
     // run insert query
     $result = mysqli_query($conn, $stmt);
@@ -64,7 +65,8 @@ if (Input::exists() && isset($_POST['delete_entry'])) {
     $cauthors = Input::get('cauthors');
     $cpublisher = Input::get('cpublisher');
     $cyear = Input::get('cyear');
-    $cduration = Input::get('cduration');
+    $btitle = Input::get('btitle');
+    $cbook = Input::get('cbook');
     $clink = Input::get('clink');
 
 
@@ -75,7 +77,7 @@ if (Input::exists() && isset($_POST['delete_entry'])) {
       die("Unable to connect to database");
 
     // delete query
-    $stmt = "DELETE FROM `faculty_profile_publications` WHERE roll='$roll' AND ptype='c' AND title=$ctitle AND authors=$cauthors AND publisher=$cpublisher AND pdate=$cyear AND duration=$cduration;";
+    $stmt = "DELETE FROM `faculty_profile_publications` WHERE roll='$roll' AND ptype='bc' AND title=$ctitle AND authors=$cauthors AND publisher=$cpublisher AND pdate=$cyear AND bookType=$cbook AND bookTitle=$btitle;";
     //echo $stmt;
     // run delete query
     $result = mysqli_query($conn, $stmt);
@@ -96,7 +98,8 @@ if (Input::exists() && isset($_POST['edit'])) {
     $cauthors = Input::get('cauthors');
     $cpublisher = Input::get('cpublisher');
     $cyear = Input::get('cyear');
-    $cduration = Input::get('cduration');
+    $cbook = Input::get('cbook');
+    $btitle = Input::get('btitle');
     $clink = Input::get('clink');
 
     // prev input
@@ -104,7 +107,8 @@ if (Input::exists() && isset($_POST['edit'])) {
     $cauthorsPrev = Input::get('cauthorsPrev');
     $cpublisherPrev = Input::get('cpublisherPrev');
     $cyearPrev = Input::get('cyearPrev');
-    $cdurationPrev = Input::get('cdurationPrev');
+    $cbookPrev = Input::get('cbookPrev');
+    $btitlePrev = Input::get('btitlePrev');
     $clinkPrev = Input::get('clinkPrev');
 
 
@@ -114,7 +118,7 @@ if (Input::exists() && isset($_POST['edit'])) {
       die("Unable to connect to database");
 
     // update query
-    $stmt = "UPDATE `faculty_profile_publications` SET title='$ctitle', authors='$cauthors', publisher='$cpublisher', pdate='$cyear', onlineLink='$clink', duration=$cduration WHERE roll='$roll' AND ptype='c' AND  title=$ctitlePrev AND authors=$cauthorsPrev AND publisher=$cpublisherPrev AND pdate=$cyearPrev AND onlineLink=$clinkPrev AND duration=$cdurationPrev;";
+    $stmt = "UPDATE `faculty_profile_publications` SET title='$ctitle', authors='$cauthors', publisher='$cpublisher', pdate='$cyear', onlineLink='$clink', bookTitle='$btitle', bookType='$cbook' WHERE roll='$roll' AND ptype='bc' AND  title=$ctitlePrev AND authors=$cauthorsPrev AND publisher=$cpublisherPrev AND pdate=$cyearPrev AND onlineLink=$clinkPrev AND bookTitle=$btitlePrev AND bookType=$cbookPrev;";
     //echo $stmt;
     // run query
     $result = mysqli_query($conn, $stmt);
@@ -135,7 +139,7 @@ if (Input::exists() && isset($_POST['edit'])) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <title>Conferences</title>
+  <title>Book Chapter</title>
 
   <!-- CSS -->
   <link rel="stylesheet" href="css/font-awesome.min.css">
@@ -372,41 +376,49 @@ if (Input::exists() && isset($_POST['edit'])) {
                 if edit btn is clicked then edit form will be displayed else insert form will be displayed
                -->
 
-              <!-- CONFERENCES EDIT/INSERT form -->
+              <!-- TEXT BOOKS EDIT/INSERT form -->
               <?php if (Input::exists() && isset($_POST['edit_entry'])) {
 
                 $ctitle = Input::get('ctitle');
                 $cauthors = Input::get('cauthors');
-                $cduration = Input::get('cduration');
+                $cbook = Input::get('cbook');
                 $cpublisher = Input::get('cpublisher');
                 $cyear = Input::get('cyear');
+                $btitle = Input::get('btitle');
                 $clink = Input::get('clink');
 
               ?>
-                <!-- CONFERENCE EDIT FORM -->
+                <!-- TEXT BOOK EDIT FORM -->
                 <div class="card">
-                  <!-- CONFERENCE EDIT FORM - HEADER -->
+                  <!-- TEXT BOOK EDIT FORM - HEADER -->
                   <div class="card-header">
-                    <h4><i class='fa fa-edit'></i> Edit Your Conference</h4>
+                    <h4><i class='fa fa-edit'></i> Edit Your Book Chapter</h4>
                   </div>
                   <br>
-                  <!-- CONFERENCE EDIT FORM - HEADER ends -->
+                  <!-- TEXT BOOK EDIT FORM - HEADER ends -->
 
-                  <!-- CONFERENCE EDIT FORM - BODY -->
-                  <form action="conference.php" method="post">
+                  <!-- TEXT BOOK EDIT FORM - BODY -->
+                  <form action="bookChapter.php" method="post">
 
                     <input type="hidden" name="ctitlePrev" value="<?php echo $ctitle ?>">
                     <input type="hidden" name="cauthorsPrev" value="<?php echo $cauthors ?>">
-                    <input type="hidden" name="cdurationPrev" value="<?php echo $cduration ?>">
+                    <input type="hidden" name="cbookPrev" value="<?php echo $cbook ?>">
                     <input type="hidden" name="cpublisherPrev" value="<?php echo $cpublisher ?>">
                     <input type="hidden" name="cyearPrev" value="<?php echo $cyear ?>">
+                    <input type="hidden" name="btitlePrev" value="<?php echo $btitle ?>">
                     <input type="hidden" name="clinkPrev" value="<?php echo $clink ?>">
 
 
 
+
                     <div class="form-group">
-                      <label> Title of Paper<span class="m-1 text-primary">*</span></label>
+                      <label> Chapter Title<span class="m-1 text-primary">*</span></label>
                       <input type="text" class="form-control" name="ctitle" required value=<?php echo "$ctitle" ?>>
+                    </div>
+
+                    <div class="form-group">
+                      <label> Book Title<span class="m-1 text-primary">*</span></label>
+                      <input type="text" class="form-control" name="btitle" required value=<?php echo "$btitle" ?>>
                     </div>
 
                     <div class="form-group">
@@ -416,49 +428,54 @@ if (Input::exists() && isset($_POST['edit'])) {
 
 
                     <div class="form-group">
-                      <label> Name of Conference<span class="m-1 text-primary">*</span></label>
+                      <label> Publisher<span class="m-1 text-primary">*</span></label>
                       <input type="text" class="form-control" name="cpublisher" required value=<?php echo "$cpublisher" ?>>
                     </div>
 
                     <div class="form-group">
                       <label for="cyear"> Published Date</label>
-                      <input type="date" value=<?php echo "$cyear" ?> id="cyear" name="cyear">
+                      <input type="date" id="cyear" name="cyear" value=<?php echo "$cyear" ?>>
                     </div>
 
                     <div class="form-group">
-                      <label> Conference Online link</label>
+                      <label> Online link</label>
                       <input type="text" class="form-control" name="clink" value=<?php echo "$clink" ?>>
                     </div>
 
                     <div class="form-group">
-                      <label> Duration (In no. of days)<span class="m-1 text-primary">*</span></label>
-                      <input type="number" value=<?php echo "$cduration" ?> class="form-control" name="cduration">
+                      <label> Book Type</label>
+                      <input type="text" class="form-control" name="cbook" value=<?php echo "$cbook" ?>>
                     </div>
 
                     <input type="submit" class="btn btn-info" name="edit" value="Edit">
 
                   </form>
-                  <!-- CONFERENCE EDIT FORM - BODY ends -->
+                  <!-- TEXT BOOK EDIT FORM - BODY ends -->
                 </div>
                 <br>
-                <!-- CONFERENCE EDIT FORM ends -->
+                <!-- TEXT BOOK EDIT FORM ends -->
               <?php
               } else { ?>
-                <!-- CONFERENCE INSERT FORM -->
+                <!-- TEXT BOOK INSERT FORM -->
                 <div class="card">
-                  <!-- CONFERENCE INSERT FORM - HEADER -->
+                  <!-- TEXT BOOK INSERT FORM - HEADER -->
                   <div class="card-header">
-                    <h4><i class='fa fa-edit'></i> Insert Conference Paper</h4>
+                    <h4><i class='fa fa-edit'></i> Insert Book Chapter</h4>
                   </div>
                   <br>
-                  <!-- CONFERENCE INSERT FORM - HEADER ends -->
+                  <!-- TEXT BOOK INSERT FORM - HEADER ends -->
 
-                  <!-- CONFERENCE INSERT FORM - BODY -->
-                  <form action="conference.php" method="post">
+                  <!-- TEXT BOOK INSERT FORM - BODY -->
+                  <form action="bookChapter.php" method="post">
 
                     <div class="form-group">
-                      <label> Title of Paper<span class="m-1 text-primary">*</span></label>
+                      <label> Chapter Title<span class="m-1 text-primary">*</span></label>
                       <input type="text" class="form-control" name="ctitle" required>
+                    </div>
+
+                    <div class="form-group">
+                      <label> Book Title<span class="m-1 text-primary">*</span></label>
+                      <input type="text" class="form-control" name="btitle" required>
                     </div>
 
                     <div class="form-group">
@@ -467,7 +484,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                     </div>
 
                     <div class="form-group">
-                      <label> Name of Conference<span class="m-1 text-primary">*</span></label>
+                      <label> Publisher<span class="m-1 text-primary">*</span></label>
                       <input type="text" class="form-control" name="cpublisher" required>
                     </div>
 
@@ -479,26 +496,26 @@ if (Input::exists() && isset($_POST['edit'])) {
 
 
                     <div class="form-group">
-                      <label> Conference Online link</label>
+                      <label> Online link</label>
                       <input type="text" class="form-control" name="clink">
                     </div>
 
                     <div class="form-group">
-                      <label> Duration (In no. of days)<span class="m-1 text-primary">*</span></label>
-                      <input type="number" value=<?php echo "$cduration" ?> class="form-control" name="cduration">
+                      <label> Book Type</label>
+                      <input type="text" class="form-control" name="cbook">
                     </div>
 
                     <input type="submit" class="btn btn-info" name="csubmit" value="Submit">
 
                   </form>
-                  <!-- CONFERENCE INSERT FORM - BODY ends -->
+                  <!-- TEXT BOOK INSERT FORM - BODY ends -->
                 </div>
                 <br>
-                <!-- CONFERENCE INSERT FORM ends -->
+                <!-- TEXT BOOK INSERT FORM ends -->
               <?php } ?>
-              <!-- CONFERENCES EDIT/INSERT form ends -->
+              <!-- TEXT BOOKS EDIT/INSERT form ends -->
 
-              <!-- VIEW ADDED CONFERENCES -->
+              <!-- VIEW ADDED TEXT BOOKS -->
               <div class="card">
                 <div class="card-header">
                   <h4><i class="fa fa-file-text"></i> Added Records</h4>
@@ -506,14 +523,13 @@ if (Input::exists() && isset($_POST['edit'])) {
                 <table class="table table-striped table-hover">
                   <thead class="thead-inverse">
                     <tr>
-                      <th>Title</th>
+                      <th>Chapter Title</th>
+                      <th>Book Title</th>
                       <th>Authors</th>
-
-                      <th>Name</th>
-
+                      <th>Publisher</th>
                       <th>Date</th>
                       <th>Online Link</th>
-                      <th>Duration</th>
+                      <th>Book Type</th>
                       <th></th>
                       <th></th>
                     </tr>
@@ -528,31 +544,35 @@ if (Input::exists() && isset($_POST['edit'])) {
                       die("Unable to connect to database");
 
                     // echo $roll;
-                    $stmt = "SELECT * FROM faculty_profile_publications WHERE roll='$roll' AND ptype='c' ORDER BY lastUpdated DESC;";
+                    $stmt = "SELECT * FROM faculty_profile_publications WHERE roll='$roll' AND ptype='bc' ORDER BY lastUpdated DESC;";
                     // echo $stmt;
                     $result = mysqli_query($conn, $stmt);
                     while ($row = mysqli_fetch_assoc($result)) {
                     ?>
                       <tr>
                         <td><?php echo $row['title']; ?></td>
+                        <td><?php echo $row['bookTitle']; ?></td>
                         <td><?php echo $row['authors']; ?></td>
                         <td><?php echo $row['publisher']; ?></td>
                         <td><?php echo $row['pdate']; ?></td>
                         <td><?php echo $row['onlineLink']; ?></td>
-                        <td><?php echo $row['duration']; ?></td>
+                        <td><?php echo $row['bookType']; ?></td>
 
                         <!-- EDIT -->
                         <td>
-                          <form action="conference.php" method="post">
+                          <form action="bookChapter.php" method="post">
                             <input type="hidden" name="ctitle" value="<?php echo "'";
                                                                       echo $row['title'];
+                                                                      echo "'"; ?>">
+                            <input type="hidden" name="btitle" value="<?php echo "'";
+                                                                      echo $row['bookTitle'];
                                                                       echo "'"; ?>">
                             <input type="hidden" name="cauthors" value="<?php echo "'";
                                                                         echo $row['authors'];
                                                                         echo "'"; ?>">
-                            <input type="hidden" name="cduration" value="<?php echo "'";
-                                                                          echo $row['duration'];
-                                                                          echo "'"; ?>">
+                            <input type="hidden" name="cbook" value="<?php echo "'";
+                                                                      echo $row['bookType'];
+                                                                      echo "'"; ?>">
 
                             <input type="hidden" name="cpublisher" value="<?php echo "'";
                                                                           echo $row['publisher'];
@@ -571,16 +591,20 @@ if (Input::exists() && isset($_POST['edit'])) {
                         <!-- EDIT ends -->
                         <!-- DELETE -->
                         <td>
-                          <form action="conference.php" method="post">
+                          <form action="bookChapter.php" method="post">
                             <input type="hidden" name="ctitle" value="<?php echo "'";
                                                                       echo $row['title'];
                                                                       echo "'"; ?>">
+                            <input type="hidden" name="btitle" value="<?php echo "'";
+                                                                      echo $row['bookTitle'];
+                                                                      echo "'"; ?>">
+
                             <input type="hidden" name="cauthors" value="<?php echo "'";
                                                                         echo $row['authors'];
                                                                         echo "'"; ?>">
-                            <input type="hidden" name="cduration" value="<?php echo "'";
-                                                                          echo $row['duration'];
-                                                                          echo "'"; ?>">
+                            <input type="hidden" name="cbook" value="<?php echo "'";
+                                                                      echo $row['bookType'];
+                                                                      echo "'"; ?>">
 
                             <input type="hidden" name="cpublisher" value="<?php echo "'";
                                                                           echo $row['publisher'];
@@ -607,22 +631,56 @@ if (Input::exists() && isset($_POST['edit'])) {
               </div>
               <br>
               <br>
-              <!-- VIEW ADDED CONFERENCES ends -->
+              <!-- VIEW ADDED TEXT BOOKS ends -->
 
 
 
               <!-- Search Functions -->
               <div class="card">
                 <div class="card-header">
-                  <h4><i class="fa fa-search mr-3"></i>Search Conferences</h4>
+                  <h4><i class="fa fa-search mr-3"></i> Search Book Chapter </h4>
                 </div>
                 <br>
                 <br>
 
-                <!-- Search 1- by CONFERENCE name -->
-                <form action="conference.php">
+                <!-- Search 0 - by book title -->
+                <form action="bookChapter.php">
                   <div class="input-group">
-                    <input type="text" required name="CnameS" class="form-control" placeholder="Search By Conference Paper Title">
+                    <input type="text" required name="BnameS" class="form-control" placeholder="Search By Book Title">
+                    <input type="submit" name="BnameSearch" class="btn btn-secondary">
+                  </div>
+                </form>
+                <br>
+                <div class="table-responsive">
+                  <?php
+                  if (strlen(Input::get('BnameS')) > 0) {
+                    $bnames = DB::getInstance();
+                    $bname = Input::get('BnameS');
+
+                    $bnames->query("SELECT fname,dept,title,bookTitle,authors, publisher,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day, bookType FROM faculty_profile_publications WHERE ptype = 'bc' AND bookTitle LIKE '%$bname%' ORDER BY pdate DESC");
+
+                    if ($bnames->count()) {
+                      echo "<table class=\"table table-striped table-hover\">";
+                      echo "<thead class=\"thead-inverse\">";
+                      echo "<tr><th>Name</th><th>Dept</th><th>Chapter Title</th><th>Book Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Book Type</th></tr></thead>";
+                      echo "<tbody>";
+
+                      foreach ($bnames->results() as $row) {
+                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->bookTitle</td><td>$row->authors</td><td>$row->publisher</td><td>$row->day</td><td>$row->bookType</td> </tr>\n";
+                      }
+                      echo "</tbody></table>";
+                    }
+                  }
+                  ?>
+                </div>
+                <!-- Search 0 - by book title ends -->
+
+                <br>
+
+                <!-- Search 1- by chapter title -->
+                <form action="bookChapter.php">
+                  <div class="input-group">
+                    <input type="text" required name="CnameS" class="form-control" placeholder="Search By Chapter Title">
                     <input type="submit" name="CnameSearch" class="btn btn-secondary">
                   </div>
                 </form>
@@ -633,30 +691,30 @@ if (Input::exists() && isset($_POST['edit'])) {
                     $cnames = DB::getInstance();
                     $cname = Input::get('CnameS');
 
-                    $cnames->query("SELECT fname,dept,title,authors, publisher,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day, duration FROM faculty_profile_publications WHERE ptype = 'c' AND title LIKE '%$cname%' ORDER BY pdate DESC");
+                    $cnames->query("SELECT fname,dept,title,bookTitle,authors, publisher,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day, bookType FROM faculty_profile_publications WHERE ptype = 'bc' AND title LIKE '%$cname%' ORDER BY pdate DESC");
 
                     if ($cnames->count()) {
                       echo "<table class=\"table table-striped table-hover\">";
                       echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Authors</th><th>Conference Name</th><th>Year</th><th>Duration</th></tr></thead>";
+                      echo "<tr><th>Name</th><th>Dept</th><th>Chapter Title</th><th>Book Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Book Type</th></tr></thead>";
                       echo "<tbody>";
 
                       foreach ($cnames->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->authors</td><td>$row->publisher</td><td>$row->day</td><td>$row->duration</td> </tr>\n";
+                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->bookTitle</td><td>$row->authors</td><td>$row->publisher</td><td>$row->day</td><td>$row->bookType</td> </tr>\n";
                       }
                       echo "</tbody></table>";
                     }
                   }
                   ?>
                 </div>
-                <!-- Search 1- by CONFERENCE name ends -->
+                <!-- Search 1- by chapter title ends -->
 
                 <br>
-                
+
                 <!-- Search 2 - by publisher name -->
-                <form action="conference.php">
+                <form action="bookChapter.php">
                   <div class="input-group">
-                    <input type="text" name="CpnameS" required class="form-control" placeholder="Search By Conference Name">
+                    <input type="text" name="CpnameS" required class="form-control" placeholder="Search By Publisher Name">
                     <input type="submit" name="JpnameSearch" class="btn btn-secondary">
                   </div>
                 </form>
@@ -667,16 +725,16 @@ if (Input::exists() && isset($_POST['edit'])) {
                     $cpnames = DB::getInstance();
                     $cpname = Input::get('CpnameS');
 
-                    $cpnames->query("SELECT fname,dept,title,authors, publisher,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day, duration FROM faculty_profile_publications WHERE ptype = 'c' AND publisher LIKE '%$cpname%' ORDER BY pdate DESC");
+                    $cpnames->query("SELECT fname,dept,title,bookTitle,authors, publisher,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day, bookType FROM faculty_profile_publications WHERE ptype = 'bc' AND publisher LIKE '%$cpname%' ORDER BY pdate DESC");
 
                     if ($cpnames->count()) {
                       echo "<table class=\"table table-striped table-hover\">";
                       echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Authors</th><th>Publisher</th><th>Year</th> <th>Duration</th></tr></thead>";
+                      echo "<tr><th>Name</th><th>Dept</th><th>Chapter Title</th><th>Book Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Book Type</th></tr></thead>";
                       echo "<tbody>";
 
                       foreach ($cpnames->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->authors</td><td>$row->publisher</td><td>$row->day</td><td>$row->duration</td></tr>\n";
+                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->bookTitle</td><td>$row->authors</td><td>$row->publisher</td><td>$row->day</td><td>$row->bookType</td></tr>\n";
                       }
                       echo "</tbody></table>";
                     }
@@ -685,12 +743,12 @@ if (Input::exists() && isset($_POST['edit'])) {
                 </div>
                 <!-- Search 2 - by publisher name ends -->
                 <br>
-                
+
 
                 <!-- Search 3 - by year -->
-                <form action="conference.php">
+                <form action="bookChapter.php">
                   <div class="input-group">
-                    <input type="text" name="cyearS" required class="form-control" placeholder="Search By Conference Paper published in last X years">
+                    <input type="text" name="cyearS" required class="form-control" placeholder="Search By Text Books published in last X years">
                     <input type="submit" name="jyearSearch" class="btn btn-secondary">
                   </div>
                 </form>
@@ -701,16 +759,16 @@ if (Input::exists() && isset($_POST['edit'])) {
                     $cyears = DB::getInstance();
                     $cyear = Input::get('cyearS');
 
-                    $cyears->query("SELECT fname,dept,title,authors, publisher, CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day, duration  FROM faculty_profile_publications WHERE ptype = 'c' AND DATEDIFF(CURRENT_DATE, pdate)/365 < $cyear ORDER BY pdate DESC");
+                    $cyears->query("SELECT fname,dept,title,bookTitle,authors, publisher, CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day, bookType  FROM faculty_profile_publications WHERE ptype = 'bc' AND DATEDIFF(CURRENT_DATE, pdate)/365 < $cyear ORDER BY pdate DESC");
 
                     if ($cyears->count()) {
                       echo "<table class=\"table table-striped table-hover\">";
                       echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Duration</th></tr></thead>";
+                      echo "<tr><th>Name</th><th>Dept</th><th>Chapter Title</th><th>Book Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Book Type</th></tr></thead>";
                       echo "<tbody>";
 
                       foreach ($cyears->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->authors</td><td>$row->publisher</td><td>$row->day</td><td>$row->duration</td></tr>\n";
+                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->bookTitle</td><td>$row->authors</td><td>$row->publisher</td><td>$row->day</td><td>$row->bookType</td></tr>\n";
                       }
                       echo "</tbody></table>";
                     }
@@ -720,10 +778,10 @@ if (Input::exists() && isset($_POST['edit'])) {
                 <!-- Search 3 - by year ends-->
 
                 <br>
-                
+
 
                 <!-- Search 4 - by faculty name -->
-                <form action="conference.php">
+                <form action="bookChapter.php">
                   <div class="input-group">
                     <input type="text" name="CfnameS" required class="form-control" placeholder="Search By Faculty Name">
                     <input type="submit" name="CfnameSearch" class="btn btn-secondary">
@@ -735,16 +793,16 @@ if (Input::exists() && isset($_POST['edit'])) {
                   if (strlen(Input::get('CfnameS')) > 0) {
                     $cfnames = DB::getInstance();
                     $cfname = Input::get('CfnameS');
-                    $cfnames->query("SELECT fname,dept,title,authors,  publisher,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day, duration FROM faculty_profile_publications WHERE ptype = 'c' AND fname LIKE '%$cfname%' ORDER BY pdate DESC");
+                    $cfnames->query("SELECT fname,dept,title,bookTitle,authors,  publisher,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day, bookType FROM faculty_profile_publications WHERE ptype = 'bc' AND fname LIKE '%$cfname%' ORDER BY pdate DESC");
 
                     if ($cfnames->count()) {
                       echo "<table class=\"table table-striped table-hover\">";
                       echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Duration</th></tr></thead>";
+                      echo "<tr><th>Name</th><th>Dept</th><th>Chapter Title</th><th>Book Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Book Type</th></tr></thead>";
                       echo "<tbody>";
 
                       foreach ($cfnames->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->authors</td><td>$row->publisher</td><td>$row->day</td><td>$row->duration</td></tr>\n";
+                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->bookTitle</td><td>$row->authors</td><td>$row->publisher</td><td>$row->day</td><td>$row->bookType</td></tr>\n";
                       }
                       echo "</tbody></table>";
                     }
@@ -765,7 +823,7 @@ if (Input::exists() && isset($_POST['edit'])) {
 
   </div>
   <!-- MAIN BODY CONTENT ends -->
-  
+
   <!-- floating to the top button -->
   <a href="#" id="scroll" style="display: none;"><span></span></a>
 

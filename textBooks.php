@@ -303,7 +303,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                 <a href="textBooks.php">Text Books</a>
               </li>
               <li>
-                <a href="Book Chapter.php">Book Chapter</a>
+                <a href="bookChapter.php">Book Chapter</a>
               </li>
               <li>
                 <a href="editedVolumes.php">Edited Volumes</a>
@@ -431,7 +431,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                     </div>
 
                     <div class="form-group">
-                      <label> Book Type<span class="m-1 text-primary">*</span></label>
+                      <label> Book Type</label>
                       <input type="text" class="form-control" name="cbook" value=<?php echo "$cbook" ?>>
                     </div>
 
@@ -484,7 +484,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                     </div>
 
                     <div class="form-group">
-                      <label> Book Type<span class="m-1 text-primary">*</span></label>
+                      <label> Book Type</label>
                       <input type="text" class="form-control" name="cbook">
                     </div>
 

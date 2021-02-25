@@ -2,6 +2,9 @@
   "cSpell.words": [
     "activites",
     "aemail",
+    "bname",
+    "bnames",
+    "btitle",
     "cauthors",
     "cbook",
     "cduration",
@@ -19,6 +22,7 @@
     "ctitle",
     "cyear",
     "cyears",
+    "datediff",
     "facpublisher",
     "fregid",
     "getaemail",
