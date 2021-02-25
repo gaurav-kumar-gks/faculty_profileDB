@@ -1,15 +1,23 @@
 
-// month and year picker
-$('#datepicker').datepicker({
-   
-  format: "yyyy-mm-dd",
-  //startDate: "1960/01/01",
-  startView: "months",
-  minViewMode: "months",
-  todayBtn: true,
-  clearBtn: true
-  
-});
+(function($) {
+
+  "use strict";
+
+  var fullHeight = function() {
+
+    $('.js-fullheight').css('height', $(window).height());
+    $(window).resize(function(){
+      $('.js-fullheight').css('height', $(window).height());
+    });
+
+  };
+  fullHeight();
+
+  $('#sidebarCollapse').on('click', function () {
+      $('#sidebar').toggleClass('active');
+  });
+
+})(jQuery);
 
 // back to top button
 $(document).ready(function() {

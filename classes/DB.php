@@ -32,7 +32,7 @@ class DB
   private function __construct(){
     try {
        
-      $dsn = 'mysql:dbname=faculty_profile_db;host=db'; 
+      $dsn = 'mysql:dbname=faculty_profile_db;host=localhost'; 
       $user = 'root';
       $password = 'jrtalent';
       

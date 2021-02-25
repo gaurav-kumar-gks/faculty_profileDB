@@ -1,5 +1,6 @@
 {
   "cSpell.words": [
+    "activites",
     "aemail",
     "checkfreg",
     "cissue",
@@ -13,6 +14,8 @@
     "getname",
     "getprog",
     "getroll",
+    "home",
+    "institute",
     "jauthors",
     "jfname",
     "jfnames",
@@ -26,6 +29,7 @@
     "jpnames",
     "jpublication",
     "jpublisher",
+    "jrtalent",
     "jsubmit",
     "jtitle",
     "jyear",
@@ -36,7 +40,9 @@
     "ptype",
     "s",
     "search",
-    "sponser"
+    "sponser",
+    "submenu",
+    "unstyled"
   ],
   "cSpell.ignoreWords": [
     "landingpage",

@@ -6,7 +6,7 @@ session_start();
 // SETTING THE CONFIGS
 $GLOBALS['config'] = array(
   'mysql' => array(
-    'host' => 'db',
+    'host' => 'localhost',
     'user' => 'root',
     'password' => 'jrtalent',
     'db' => 'faculty_profile_db'
