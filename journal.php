@@ -18,7 +18,7 @@ if (Input::exists() && isset($_POST['jsubmit'])) {
     $roll = $user->data()->{'Roll No'};
     $prog = $user->data()->prog;
     $dept = $user->data()->department;
-    $ptype = 'j';
+    //$ptype = 'j';
     $email = $user->data()->email;
     $aemail = $user->data()->aemail;
     
@@ -56,7 +56,7 @@ if (Input::exists() && isset($_POST['delete_entry'])) {
     $roll = $user->data()->{'Roll No'};
     $prog = $user->data()->prog;
     $dept = $user->data()->department;
-    $ptype = 'j';
+    //$ptype = 'j';
     $email = $user->data()->email;
     $aemail = $user->data()->aemail;
     // echo $fid;

@@ -18,7 +18,7 @@ if (Input::exists() && isset($_POST['csubmit'])) {
     $roll = $user->data()->{'Roll No'};
     $prog = $user->data()->prog;
     $dept = $user->data()->department;
-    $ptype = 'c';
+    //$ptype = 'c';
     $email = $user->data()->email;
     $aemail = $user->data()->aemail;
 
@@ -55,7 +55,7 @@ if (Input::exists() && isset($_POST['delete_entry'])) {
     $roll = $user->data()->{'Roll No'};
     $prog = $user->data()->prog;
     $dept = $user->data()->department;
-    $ptype = 'j';
+    //$ptype = 'j';
     $email = $user->data()->email;
     $aemail = $user->data()->aemail;
     // echo $fid;
@@ -570,9 +570,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                             <input type="hidden" name="cauthors" value="<?php echo "'";
                                                                         echo $row['authors'];
                                                                         echo "'"; ?>">
-                            <input type="hidden" name="cbook" value="<?php echo "'";
-                                                                      echo $row['bookType'];
-                                                                      echo "'"; ?>">
+
 
                             <input type="hidden" name="cpublisher" value="<?php echo "'";
                                                                           echo $row['publisher'];
@@ -583,6 +581,9 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                             <input type="hidden" name="clink" value="<?php echo "'";
                                                                       echo $row['onlineLink'];
+                                                                      echo "'"; ?>">
+                            <input type="hidden" name="cbook" value="<?php echo "'";
+                                                                      echo $row['bookType'];
                                                                       echo "'"; ?>">
 
                             <input type="submit" class="btn btn-primary" name="edit_entry" value="Edit" style="background-color: green">
@@ -602,9 +603,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                             <input type="hidden" name="cauthors" value="<?php echo "'";
                                                                         echo $row['authors'];
                                                                         echo "'"; ?>">
-                            <input type="hidden" name="cbook" value="<?php echo "'";
-                                                                      echo $row['bookType'];
-                                                                      echo "'"; ?>">
+
 
                             <input type="hidden" name="cpublisher" value="<?php echo "'";
                                                                           echo $row['publisher'];
@@ -615,6 +614,9 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                             <input type="hidden" name="clink" value="<?php echo "'";
                                                                       echo $row['onlineLink'];
+                                                                      echo "'"; ?>">
+                            <input type="hidden" name="cbook" value="<?php echo "'";
+                                                                      echo $row['bookType'];
                                                                       echo "'"; ?>">
 
                             <input type="submit" class="btn btn-danger" name="delete_entry" value="Delete">
