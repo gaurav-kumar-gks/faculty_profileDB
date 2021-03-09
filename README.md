@@ -42,8 +42,7 @@ In following files change the following
 
 ### To get project up and running (in Ubuntu)
 
-**Simply use the Dockerfile to build the image.
-Make sure you've done required changes first**
+** Make sure you've done required changes first **
 
 - Go to this directory ```cd /var/www/html```
 - Make sure you have read/write permission in this directory
