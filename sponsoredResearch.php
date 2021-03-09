@@ -18,17 +18,17 @@ if (Input::exists() && isset($_POST['csubmit'])) {
     $roll = $user->data()->{'Roll No'};
     $prog = $user->data()->prog;
     $dept = $user->data()->department;
-    //$ptype = 'c';
+    //$rtype = 'c';
     $email = $user->data()->email;
     $aemail = $user->data()->aemail;
 
     // columns that we get from form input
-    $ctitle = Input::get('ctitle');
-    $cauthors = Input::get('cauthors');
-    $cpublisher = Input::get('cpublisher');
-    $cyear = Input::get('cyear');
-    $cduration = Input::get('cduration');
-    $clink = Input::get('clink');
+    $title = Input::get('title');
+    $other = Input::get('other');
+    $rpi = Input::get('rpi');
+    // $cyear = Input::get('cyear');
+    $funds = Input::get('funds');
+    $rcopi = Input::get('rcopi');
 
     // connect with localhost
     $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
@@ -36,7 +36,7 @@ if (Input::exists() && isset($_POST['csubmit'])) {
       die("Unable to connect to database");
 
     // insert query
-    $stmt = "INSERT INTO `faculty_profile_publications` (`sno`, `fname`, `roll`, `dept`, `prog`, `ptype`, `title`, `authors`, `publication`, `publisher`, `pdate`, `location`, `pages`, `onlineLink`, `duration`, `impactFactor`, `bookTitle`, `bookType`, `editedVolume`, `eduPackageType`, `eduPackageLevel`, `patentNo`, `projectBudget`, `projectSponser`, `projectRole`, `projectStatus`, `email`, `aemail`) VALUES (NULL, '$fname', '$roll', '$dept', '$prog', 'c', '$ctitle', '$cauthors', NULL, '$cpublisher', '$cyear', NULL, NULL, '$clink', $cduration, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$email', '$aemail');";
+    $stmt = "INSERT INTO `faculty_profile_research` (`fname`, `roll`, `dept`, `prog`, `email`, `aemail`, `rtype`, `title`, `other`, `rpi`, `rcopi`, `rlevel`, `remarks`, `funds`, `projectStatus`, `juri`, `ref`) VALUES ('$fname', '$roll', '$dept', '$prog', '$email', '$aemail', 'orp', '$title', '$other', '$rpi', '$rcopi', NULL, NULL, $funds, NULL, NULL, NULL);";
     // echo $stmt;
     // run insert query
     $result = mysqli_query($conn, $stmt);
@@ -44,6 +44,7 @@ if (Input::exists() && isset($_POST['csubmit'])) {
     die($e->getMessage());
   }
 }
+
 
 /* delete */
 if (Input::exists() && isset($_POST['delete_entry'])) {
@@ -54,18 +55,18 @@ if (Input::exists() && isset($_POST['delete_entry'])) {
     $roll = $user->data()->{'Roll No'};
     $prog = $user->data()->prog;
     $dept = $user->data()->department;
-    //$ptype = 'j';
+    //$rtype = 'j';
     $email = $user->data()->email;
     $aemail = $user->data()->aemail;
     // echo $fid;
 
     // columns that we get from form input
-    $ctitle = Input::get('ctitle');
-    $cauthors = Input::get('cauthors');
-    $cpublisher = Input::get('cpublisher');
-    $cyear = Input::get('cyear');
-    $cduration = Input::get('cduration');
-    $clink = Input::get('clink');
+    $title = Input::get('title');
+    $other = Input::get('other');
+    $rpi = Input::get('rpi');
+    //$cyear = Input::get('cyear');
+    $funds = Input::get('funds');
+    $rcopi = Input::get('rcopi');
 
 
 
@@ -74,8 +75,8 @@ if (Input::exists() && isset($_POST['delete_entry'])) {
     if (!$conn)
       die("Unable to connect to database");
 
-    // delete query
-    $stmt = "DELETE FROM `faculty_profile_publications` WHERE roll='$roll' AND ptype='c' AND title=$ctitle AND authors=$cauthors AND publisher=$cpublisher AND pdate=$cyear AND duration=$cduration;";
+    // delete 
+    $stmt = "DELETE FROM `faculty_profile_research` WHERE roll='$roll' AND rtype='orp' AND title=$title AND other=$other AND rpi =$rpi AND rcopi = $rcopi AND funds=$funds;";
     //echo $stmt;
     // run delete query
     $result = mysqli_query($conn, $stmt);
@@ -92,20 +93,20 @@ if (Input::exists() && isset($_POST['edit'])) {
     $roll = $user->data()->{'Roll No'};
 
     // new input
-    $ctitle = Input::get('ctitle');
-    $cauthors = Input::get('cauthors');
-    $cpublisher = Input::get('cpublisher');
-    $cyear = Input::get('cyear');
-    $cduration = Input::get('cduration');
-    $clink = Input::get('clink');
+    $title = Input::get('title');
+    $other = Input::get('other');
+    $rpi = Input::get('rpi');
+    //$cyear = Input::get('cyear');
+    $funds = Input::get('funds');
+    $rcopi = Input::get('rcopi');
 
     // prev input
-    $ctitlePrev = Input::get('ctitlePrev');
-    $cauthorsPrev = Input::get('cauthorsPrev');
-    $cpublisherPrev = Input::get('cpublisherPrev');
-    $cyearPrev = Input::get('cyearPrev');
-    $cdurationPrev = Input::get('cdurationPrev');
-    $clinkPrev = Input::get('clinkPrev');
+    $titlePrev = Input::get('titlePrev');
+    $otherPrev = Input::get('otherPrev');
+    $rpiPrev = Input::get('rpiPrev');
+    //$cyearPrev = Input::get('cyearPrev');
+    $fundsPrev = Input::get('fundsPrev');
+    $rcopiPrev = Input::get('rcopiPrev');
 
 
     // connect with localhost
@@ -114,7 +115,7 @@ if (Input::exists() && isset($_POST['edit'])) {
       die("Unable to connect to database");
 
     // update query
-    $stmt = "UPDATE `faculty_profile_publications` SET title='$ctitle', authors='$cauthors', publisher='$cpublisher', pdate='$cyear', onlineLink='$clink', duration=$cduration WHERE roll='$roll' AND ptype='c' AND  title=$ctitlePrev AND authors=$cauthorsPrev AND publisher=$cpublisherPrev AND pdate=$cyearPrev AND onlineLink=$clinkPrev AND duration=$cdurationPrev;";
+    $stmt = "UPDATE `faculty_profile_research` SET title='$title', other='$other', rpi='$rpi', rcopi='$rcopi', funds=$funds WHERE roll='$roll' AND rtype='orp' AND  title=$titlePrev AND other=$otherPrev AND rpi=$rpiPrev  AND rcopi=$rcopiPrev AND funds=$fundsPrev;";
     //echo $stmt;
     // run query
     $result = mysqli_query($conn, $stmt);
@@ -135,7 +136,7 @@ if (Input::exists() && isset($_POST['edit'])) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <title>Conferences</title>
+  <title>Ongoing Research</title>
 
   <!-- CSS -->
   <link rel="stylesheet" href="css/font-awesome.min.css">
@@ -372,133 +373,125 @@ if (Input::exists() && isset($_POST['edit'])) {
                 if edit btn is clicked then edit form will be displayed else insert form will be displayed
                -->
 
-              <!-- CONFERENCES EDIT/INSERT form -->
+              <!--  EDIT/INSERT form -->
               <?php if (Input::exists() && isset($_POST['edit_entry'])) {
 
-                $ctitle = Input::get('ctitle');
-                $cauthors = Input::get('cauthors');
-                $cduration = Input::get('cduration');
-                $cpublisher = Input::get('cpublisher');
-                $cyear = Input::get('cyear');
-                $clink = Input::get('clink');
+                $title = Input::get('title');
+                $other = Input::get('other');
+                $funds = Input::get('funds');
+                $rpi = Input::get('rpi');
+                //$cyear = Input::get('cyear');
+                $rcopi = Input::get('rcopi');
 
               ?>
-                <!-- CONFERENCE EDIT FORM -->
+                <!--  EDIT FORM -->
                 <div class="card">
-                  <!-- CONFERENCE EDIT FORM - HEADER -->
+                  <!--  EDIT FORM - HEADER -->
                   <div class="card-header">
-                    <h4><i class='fa fa-edit'></i> Edit Your Conference</h4>
+                    <h4><i class='fa fa-edit'></i> Edit Your Ongoing Research Project</h4>
                   </div>
                   <br>
-                  <!-- CONFERENCE EDIT FORM - HEADER ends -->
+                  <!--  EDIT FORM - HEADER ends -->
 
-                  <!-- CONFERENCE EDIT FORM - BODY -->
-                  <form action="conference.php" method="post">
+                  <!--  EDIT FORM - BODY -->
+                  <form action="sponsoredResearch.php" method="post">
 
-                    <input type="hidden" name="ctitlePrev" value="<?php echo $ctitle ?>">
-                    <input type="hidden" name="cauthorsPrev" value="<?php echo $cauthors ?>">
-                    <input type="hidden" name="cdurationPrev" value="<?php echo $cduration ?>">
-                    <input type="hidden" name="cpublisherPrev" value="<?php echo $cpublisher ?>">
-                    <input type="hidden" name="cyearPrev" value="<?php echo $cyear ?>">
-                    <input type="hidden" name="clinkPrev" value="<?php echo $clink ?>">
+                    <input type="hidden" name="titlePrev" value="<?php echo $title ?>">
+                    <input type="hidden" name="otherPrev" value="<?php echo $other ?>">
+                    <input type="hidden" name="fundsPrev" value="<?php echo $funds ?>">
+                    <input type="hidden" name="rpiPrev" value="<?php echo $rpi ?>">
+
+                    <input type="hidden" name="rcopiPrev" value="<?php echo $rcopi ?>">
 
 
 
                     <div class="form-group">
-                      <label> Title of Paper<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="ctitle" required value=<?php echo "$ctitle" ?>>
+                      <label> Title of Project<span class="m-1 text-primary">*</span></label>
+                      <input type="text" class="form-control" name="title" required value=<?php echo "$title" ?>>
                     </div>
 
                     <div class="form-group">
-                      <label> Authors<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="cauthors" required value=<?php echo "$cauthors" ?>>
+                      <label> Sponsor<span class="m-1 text-primary">*</span></label>
+                      <input type="text" class="form-control" name="other" required value=<?php echo "$other" ?>>
                     </div>
 
 
                     <div class="form-group">
-                      <label> Name of Conference<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="cpublisher" required value=<?php echo "$cpublisher" ?>>
+                      <label> Name of PI</label>
+                      <input type="text" class="form-control" name="rpi" value=<?php echo "$rpi" ?>>
+                    </div>
+
+
+
+                    <div class="form-group">
+                      <label> Name of Co-PI</label>
+                      <input type="text" class="form-control" name="rcopi" value=<?php echo "$rcopi" ?>>
                     </div>
 
                     <div class="form-group">
-                      <label for="cyear"> Published Date</label>
-                      <input type="date" value=<?php echo "$cyear" ?> id="cyear" name="cyear">
-                    </div>
-
-                    <div class="form-group">
-                      <label> Conference Online link</label>
-                      <input type="text" class="form-control" name="clink" value=<?php echo "$clink" ?>>
-                    </div>
-
-                    <div class="form-group">
-                      <label> Duration (In no. of days)<span class="m-1 text-primary">*</span></label>
-                      <input type="number" value=<?php echo "$cduration" ?> class="form-control" name="cduration">
+                      <label> Funds (In Rs. Lakhs)<span class="m-1 text-primary">*</span></label>
+                      <input type="number" value=<?php echo "$funds" ?> class="form-control" name="funds">
                     </div>
 
                     <input type="submit" class="btn btn-info" name="edit" value="Edit">
 
                   </form>
-                  <!-- CONFERENCE EDIT FORM - BODY ends -->
+                  <!-- EDIT FORM - BODY ends -->
                 </div>
                 <br>
-                <!-- CONFERENCE EDIT FORM ends -->
+                <!-- EDIT FORM ends -->
               <?php
               } else { ?>
-                <!-- CONFERENCE INSERT FORM -->
+                <!--  INSERT FORM -->
                 <div class="card">
-                  <!-- CONFERENCE INSERT FORM - HEADER -->
+                  <!--  INSERT FORM - HEADER -->
                   <div class="card-header">
-                    <h4><i class='fa fa-edit'></i> Insert Conference Paper</h4>
+                    <h4><i class='fa fa-edit'></i> Insert Ongoing Research Projects</h4>
                   </div>
                   <br>
-                  <!-- CONFERENCE INSERT FORM - HEADER ends -->
+                  <!--  INSERT FORM - HEADER ends -->
 
-                  <!-- CONFERENCE INSERT FORM - BODY -->
-                  <form action="conference.php" method="post">
+                  <!--  INSERT FORM - BODY -->
+                  <form action="sponsoredResearch.php" method="post">
 
                     <div class="form-group">
-                      <label> Title of Paper<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="ctitle" required>
+                      <label> Title of Project<span class="m-1 text-primary">*</span></label>
+                      <input type="text" class="form-control" name="title" required>
                     </div>
 
                     <div class="form-group">
-                      <label> Authors<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="cauthors" required>
+                      <label> Sponsor<span class="m-1 text-primary">*</span></label>
+                      <input type="text" class="form-control" name="other" required>
                     </div>
 
                     <div class="form-group">
-                      <label> Name of Conference<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="cpublisher" required>
-                    </div>
-
-                    <div class="form-group">
-                      <label for="cyear"> Published Date</label>
-                      <input type="date" id="cyear" name="cyear">
+                      <label> Name of PI</label>
+                      <input type="text" class="form-control" name="rpi">
                     </div>
 
 
-
                     <div class="form-group">
-                      <label> Conference Online link</label>
-                      <input type="text" class="form-control" name="clink">
+                      <label> Name of Co-PI</label>
+                      <input type="text" class="form-control" name="rcopi">
                     </div>
 
                     <div class="form-group">
-                      <label> Duration (In no. of days)<span class="m-1 text-primary">*</span></label>
-                      <input type="number" class="form-control" name="cduration">
+                      <label> Funds (In Rs. Lakhs)</label>
+
+                      <input type="number" class="form-control" name="funds">
                     </div>
 
                     <input type="submit" class="btn btn-info" name="csubmit" value="Submit">
 
                   </form>
-                  <!-- CONFERENCE INSERT FORM - BODY ends -->
+                  <!--  INSERT FORM - BODY ends -->
                 </div>
                 <br>
-                <!-- CONFERENCE INSERT FORM ends -->
+                <!--  INSERT FORM ends -->
               <?php } ?>
-              <!-- CONFERENCES EDIT/INSERT form ends -->
+              <!--  EDIT/INSERT form ends -->
 
-              <!-- VIEW ADDED CONFERENCES -->
+              <!-- VIEW ADDED  -->
               <div class="card">
                 <div class="card-header">
                   <h4><i class="fa fa-file-text"></i> Added Records</h4>
@@ -507,13 +500,10 @@ if (Input::exists() && isset($_POST['edit'])) {
                   <thead class="thead-inverse">
                     <tr>
                       <th>Title</th>
-                      <th>Authors</th>
-
-                      <th>Name</th>
-
-                      <th>Date</th>
-                      <th>Online Link</th>
-                      <th>Duration</th>
+                      <th>Sponsor</th>
+                      <th>PI</th>
+                      <th>Co-PI</th>
+                      <th>Funds</th>
                       <th></th>
                       <th></th>
                     </tr>
@@ -528,41 +518,37 @@ if (Input::exists() && isset($_POST['edit'])) {
                       die("Unable to connect to database");
 
                     // echo $roll;
-                    $stmt = "SELECT * FROM faculty_profile_publications WHERE roll='$roll' AND ptype='c' ORDER BY lastUpdated DESC;";
+                    $stmt = "SELECT * FROM faculty_profile_research WHERE roll='$roll' AND rtype='orp' ORDER BY lastUpdated DESC;";
                     // echo $stmt;
                     $result = mysqli_query($conn, $stmt);
                     while ($row = mysqli_fetch_assoc($result)) {
                     ?>
                       <tr>
                         <td><?php echo $row['title']; ?></td>
-                        <td><?php echo $row['authors']; ?></td>
-                        <td><?php echo $row['publisher']; ?></td>
-                        <td><?php echo $row['pdate']; ?></td>
-                        <td><?php echo $row['onlineLink']; ?></td>
-                        <td><?php echo $row['duration']; ?></td>
+                        <td><?php echo $row['other']; ?></td>
+                        <td><?php echo $row['rpi']; ?></td>
+
+                        <td><?php echo $row['rcopi']; ?></td>
+                        <td><?php echo $row['funds']; ?></td>
 
                         <!-- EDIT -->
                         <td>
-                          <form action="conference.php" method="post">
-                            <input type="hidden" name="ctitle" value="<?php echo "'";
+                          <form action="sponsoredResearch.php" method="post">
+                            <input type="hidden" name="title" value="<?php echo "'";
                                                                       echo $row['title'];
                                                                       echo "'"; ?>">
-                            <input type="hidden" name="cauthors" value="<?php echo "'";
-                                                                        echo $row['authors'];
-                                                                        echo "'"; ?>">
-                            <input type="hidden" name="cduration" value="<?php echo "'";
-                                                                          echo $row['duration'];
-                                                                          echo "'"; ?>">
-
-                            <input type="hidden" name="cpublisher" value="<?php echo "'";
-                                                                          echo $row['publisher'];
-                                                                          echo "'"; ?>">
-                            <input type="hidden" name="cyear" value="<?php echo "'";
-                                                                      echo $row['pdate'];
+                            <input type="hidden" name="other" value="<?php echo "'";
+                                                                      echo $row['other'];
+                                                                      echo "'"; ?>">
+                            <input type="hidden" name="funds" value="<?php echo "'";
+                                                                      echo $row['funds'];
                                                                       echo "'"; ?>">
 
-                            <input type="hidden" name="clink" value="<?php echo "'";
-                                                                      echo $row['onlineLink'];
+                            <input type="hidden" name="rpi" value="<?php echo "'";
+                                                                    echo $row['rpi'];
+                                                                    echo "'"; ?>">
+                            <input type="hidden" name="rcopi" value="<?php echo "'";
+                                                                      echo $row['rcopi'];
                                                                       echo "'"; ?>">
 
                             <input type="submit" class="btn btn-primary" name="edit_entry" value="Edit" style="background-color: green">
@@ -571,26 +557,22 @@ if (Input::exists() && isset($_POST['edit'])) {
                         <!-- EDIT ends -->
                         <!-- DELETE -->
                         <td>
-                          <form action="conference.php" method="post">
-                            <input type="hidden" name="ctitle" value="<?php echo "'";
+                          <form action="sponsoredResearch.php" method="post">
+                            <input type="hidden" name="title" value="<?php echo "'";
                                                                       echo $row['title'];
                                                                       echo "'"; ?>">
-                            <input type="hidden" name="cauthors" value="<?php echo "'";
-                                                                        echo $row['authors'];
-                                                                        echo "'"; ?>">
-                            <input type="hidden" name="cduration" value="<?php echo "'";
-                                                                          echo $row['duration'];
-                                                                          echo "'"; ?>">
-
-                            <input type="hidden" name="cpublisher" value="<?php echo "'";
-                                                                          echo $row['publisher'];
-                                                                          echo "'"; ?>">
-                            <input type="hidden" name="cyear" value="<?php echo "'";
-                                                                      echo $row['pdate'];
+                            <input type="hidden" name="other" value="<?php echo "'";
+                                                                      echo $row['other'];
+                                                                      echo "'"; ?>">
+                            <input type="hidden" name="funds" value="<?php echo "'";
+                                                                      echo $row['funds'];
                                                                       echo "'"; ?>">
 
-                            <input type="hidden" name="clink" value="<?php echo "'";
-                                                                      echo $row['onlineLink'];
+                            <input type="hidden" name="rpi" value="<?php echo "'";
+                                                                    echo $row['rpi'];
+                                                                    echo "'"; ?>">
+                            <input type="hidden" name="rcopi" value="<?php echo "'";
+                                                                      echo $row['rcopi'];
                                                                       echo "'"; ?>">
 
                             <input type="submit" class="btn btn-danger" name="delete_entry" value="Delete">
@@ -607,22 +589,22 @@ if (Input::exists() && isset($_POST['edit'])) {
               </div>
               <br>
               <br>
-              <!-- VIEW ADDED CONFERENCES ends -->
+              <!-- VIEW ADDED  ends -->
 
 
 
               <!-- Search Functions -->
               <div class="card">
                 <div class="card-header">
-                  <h4><i class="fa fa-search mr-3"></i>Search Conferences</h4>
+                  <h4><i class="fa fa-search mr-3"></i>Search Ongoing Research Projects</h4>
                 </div>
                 <br>
                 <br>
 
-                <!-- Search 1- by CONFERENCE name -->
-                <form action="conference.php">
+                <!-- Search 1- by  name -->
+                <form action="sponsoredResearch.php">
                   <div class="input-group">
-                    <input type="text" required name="CnameS" class="form-control" placeholder="Search By Conference Paper Title">
+                    <input type="text" required name="CnameS" class="form-control" placeholder="Search By Project Title">
                     <input type="submit" name="CnameSearch" class="btn btn-secondary">
                   </div>
                 </form>
@@ -633,30 +615,30 @@ if (Input::exists() && isset($_POST['edit'])) {
                     $cnames = DB::getInstance();
                     $cname = Input::get('CnameS');
 
-                    $cnames->query("SELECT fname,dept,title,authors, publisher,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day, duration FROM faculty_profile_publications WHERE ptype = 'c' AND title LIKE '%$cname%' ORDER BY pdate DESC");
+                    $cnames->query("SELECT fname,dept,title,other, rpi, rcopi, funds, lastUpdated FROM faculty_profile_research WHERE rtype = 'orp' AND title LIKE '%$cname%' ORDER BY lastUpdated DESC");
 
                     if ($cnames->count()) {
                       echo "<table class=\"table table-striped table-hover\">";
                       echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Authors</th><th>Conference Name</th><th>Year</th><th>Duration</th></tr></thead>";
+                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Sponsor</th><th>PI</th><th>Co-PI</th><th>Funds</th></tr></thead>";
                       echo "<tbody>";
 
                       foreach ($cnames->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->authors</td><td>$row->publisher</td><td>$row->day</td><td>$row->duration</td> </tr>\n";
+                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->other</td><td>$row->rpi</td><td>$row->rcopi</td><td>$row->funds</td> </tr>\n";
                       }
                       echo "</tbody></table>";
                     }
                   }
                   ?>
                 </div>
-                <!-- Search 1- by CONFERENCE name ends -->
+                <!-- Search 1- by  name ends -->
 
                 <br>
-                
-                <!-- Search 2 - by publisher name -->
-                <form action="conference.php">
+
+                <!-- Search 2 - by sponsor name -->
+                <form action="sponsoredResearch.php">
                   <div class="input-group">
-                    <input type="text" name="CpnameS" required class="form-control" placeholder="Search By Conference Name">
+                    <input type="text" name="CpnameS" required class="form-control" placeholder="Search By Sponsor Name">
                     <input type="submit" name="JpnameSearch" class="btn btn-secondary">
                   </div>
                 </form>
@@ -667,63 +649,26 @@ if (Input::exists() && isset($_POST['edit'])) {
                     $cpnames = DB::getInstance();
                     $cpname = Input::get('CpnameS');
 
-                    $cpnames->query("SELECT fname,dept,title,authors, publisher,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day, duration FROM faculty_profile_publications WHERE ptype = 'c' AND publisher LIKE '%$cpname%' ORDER BY pdate DESC");
+                    $cpnames->query("SELECT fname,dept,title,other, rpi, rcopi, funds, lastUpdated FROM faculty_profile_research WHERE rtype = 'orp' AND other LIKE '%$cpname%' ORDER BY lastUpdated DESC");
 
                     if ($cpnames->count()) {
                       echo "<table class=\"table table-striped table-hover\">";
                       echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Authors</th><th>Publisher</th><th>Year</th> <th>Duration</th></tr></thead>";
+                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Sponsor</th><th>PI</th><th>Co-PI</th><th>Funds</th></tr></thead>";
                       echo "<tbody>";
 
                       foreach ($cpnames->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->authors</td><td>$row->publisher</td><td>$row->day</td><td>$row->duration</td></tr>\n";
+                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->other</td><td>$row->rpi</td><td>$row->rcopi</td><td>$row->funds</td> </tr>\n";
                       }
                       echo "</tbody></table>";
                     }
                   }
                   ?>
                 </div>
-                <!-- Search 2 - by publisher name ends -->
+                <!-- Search 2 - by rpi name ends -->
                 <br>
-                
-
-                <!-- Search 3 - by year -->
-                <form action="conference.php">
-                  <div class="input-group">
-                    <input type="text" name="cyearS" required class="form-control" placeholder="Search By Conference Paper published in last X years">
-                    <input type="submit" name="jyearSearch" class="btn btn-secondary">
-                  </div>
-                </form>
-                <br>
-                <div class="table-responsive">
-                  <?php
-                  if (strlen(Input::get('cyearS') && is_numeric(Input::get('cyearS'))) > 0) {
-                    $cyears = DB::getInstance();
-                    $cyear = Input::get('cyearS');
-
-                    $cyears->query("SELECT fname,dept,title,authors, publisher, CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day, duration  FROM faculty_profile_publications WHERE ptype = 'c' AND DATEDIFF(CURRENT_DATE, pdate)/365 < $cyear ORDER BY pdate DESC");
-
-                    if ($cyears->count()) {
-                      echo "<table class=\"table table-striped table-hover\">";
-                      echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Duration</th></tr></thead>";
-                      echo "<tbody>";
-
-                      foreach ($cyears->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->authors</td><td>$row->publisher</td><td>$row->day</td><td>$row->duration</td></tr>\n";
-                      }
-                      echo "</tbody></table>";
-                    }
-                  }
-                  ?>
-                </div>
-                <!-- Search 3 - by year ends-->
-
-                <br>
-                
-
-                <!-- Search 4 - by faculty name -->
-                <form action="conference.php">
+                <!-- Search 3 - by faculty name -->
+                <form action="sponsoredResearch.php">
                   <div class="input-group">
                     <input type="text" name="CfnameS" required class="form-control" placeholder="Search By Faculty Name">
                     <input type="submit" name="CfnameSearch" class="btn btn-secondary">
@@ -735,23 +680,23 @@ if (Input::exists() && isset($_POST['edit'])) {
                   if (strlen(Input::get('CfnameS')) > 0) {
                     $cfnames = DB::getInstance();
                     $cfname = Input::get('CfnameS');
-                    $cfnames->query("SELECT fname,dept,title,authors,  publisher,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day, duration FROM faculty_profile_publications WHERE ptype = 'c' AND fname LIKE '%$cfname%' ORDER BY pdate DESC");
+                    $cfnames->query("SELECT fname,dept,title,other, rpi, rcopi, funds, lastUpdated FROM faculty_profile_research WHERE rtype = 'orp' AND fname LIKE '%$cfname%' ORDER BY lastUpdated DESC");
 
                     if ($cfnames->count()) {
                       echo "<table class=\"table table-striped table-hover\">";
                       echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Duration</th></tr></thead>";
+                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Sponsor</th><th>PI</th><th>Co-PI</th><th>Funds</th></tr></thead>";
                       echo "<tbody>";
 
                       foreach ($cfnames->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->authors</td><td>$row->publisher</td><td>$row->day</td><td>$row->duration</td></tr>\n";
+                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->other</td><td>$row->rpi</td><td>$row->rcopi</td><td>$row->funds</td> </tr>\n";
                       }
                       echo "</tbody></table>";
                     }
                   }
                   ?>
                 </div>
-                <!-- Search 4 ends - by faculty name -->
+                <!-- Search 3 ends - by faculty name -->
               </div>
               <br>
               <!-- Search Functions ends -->
@@ -765,7 +710,7 @@ if (Input::exists() && isset($_POST['edit'])) {
 
   </div>
   <!-- MAIN BODY CONTENT ends -->
-  
+
   <!-- floating to the top button -->
   <a href="#" id="scroll" style="display: none;"><span></span></a>
 
