@@ -21,7 +21,7 @@ if (Input::exists() && isset($_POST['jsubmit'])) {
     //$ptype = 'j';
     $email = $user->data()->email;
     $aemail = $user->data()->aemail;
-    
+
     // columns that we get from form input
     $jtitle = Input::get('jtitle');
     $jauthors = Input::get('jauthors');
@@ -60,7 +60,7 @@ if (Input::exists() && isset($_POST['delete_entry'])) {
     $email = $user->data()->email;
     $aemail = $user->data()->aemail;
     // echo $fid;
-    
+
     // columns that we get from form input
     $jtitle = Input::get('jtitle');
     $jauthors = Input::get('jauthors');
@@ -139,16 +139,17 @@ if (Input::exists() && isset($_POST['edit'])) {
 <html lang="en">
 
 <head>
-  
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <title>Journal</title>
 
   <!-- CSS -->
+  <link rel="stylesheet" href="css/jqueryui.css">
   <link rel="stylesheet" href="css/font-awesome.min.css">
   <!-- <link rel="stylesheet" href="css/bootstrap.css"> -->
-  <link rel="stylesheet" href="css/style.css">  
+  <link rel="stylesheet" href="css/style.css">
   <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
 </head>
 
@@ -418,22 +419,22 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <div class="form-group">
                       <label> Title of Paper<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="jtitle" required value=<?php echo "$jtitle" ?>>
+                      <input type="text" class="form-control" id="jtitle" name="jtitle" required value=<?php echo "$jtitle" ?>>
                     </div>
 
                     <div class="form-group">
                       <label> Authors<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="jauthors" required value=<?php echo "$jauthors" ?>>
+                      <input type="text" class="form-control" id="jauthors" name="jauthors" required value=<?php echo "$jauthors" ?>>
                     </div>
 
                     <div class="form-group">
                       <label> Name of journal<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="jpublication" required value=<?php echo "$jpublication" ?>>
+                      <input type="text" class="form-control" id="jpublication" name="jpublication" required value=<?php echo "$jpublication" ?>>
                     </div>
 
                     <div class="form-group">
                       <label> Name of Publisher<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="jpublisher" required value=<?php echo "$jpublisher" ?>>
+                      <input type="text" class="form-control" id="jpublisher" name="jpublisher" required value=<?php echo "$jpublisher" ?>>
                     </div>
 
                     <div class="form-group">
@@ -479,22 +480,22 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <div class="form-group">
                       <label> Title of Paper<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="jtitle" required>
+                      <input type="text" class="form-control" id="jtitle" name="jtitle" required>
                     </div>
 
                     <div class="form-group">
                       <label> Authors<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="jauthors" required>
+                      <input type="text" class="form-control" id="jauthors" name="jauthors" required>
                     </div>
 
                     <div class="form-group">
                       <label> Name of journal<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="jpublication" required>
+                      <input type="text" class="form-control" id="jpublication" name="jpublication" required>
                     </div>
 
                     <div class="form-group">
                       <label> Name of Publisher<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="jpublisher" required>
+                      <input type="text" class="form-control" id="jpublisher" name="jpublisher" required>
                     </div>
 
                     <div class="form-group">
@@ -555,7 +556,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                     $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
                     if (!$conn)
                       die("Unable to connect to database");
-                    
+
                     // echo $roll;
                     $stmt = "SELECT * FROM faculty_profile_publications WHERE roll='$roll' AND ptype='j' ORDER BY lastUpdated DESC;";
                     // echo $stmt;
@@ -803,7 +804,7 @@ if (Input::exists() && isset($_POST['edit'])) {
 
   </div>
   <!-- MAIN BODY CONTENT ends -->
-  
+
   <!-- floating to the top button -->
   <a href="#" id="scroll" style="display: none;"><span></span></a>
 
@@ -811,6 +812,10 @@ if (Input::exists() && isset($_POST['edit'])) {
   <script src="js/popper.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/others.js"></script>
+  <script src="js/jquery.js"></script>
+  <script src="js/jqueryui.js"></script>
+  <script src="js/publications/journal.js"></script>
+  
 </body>
 
 </html>
