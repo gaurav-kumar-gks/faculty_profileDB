@@ -138,6 +138,7 @@ if (Input::exists() && isset($_POST['edit'])) {
   <title>Book Chapter</title>
 
   <!-- CSS -->
+  <link rel="stylesheet" href="css/jqueryui.css">
   <link rel="stylesheet" href="css/font-awesome.min.css">
   <!-- <link rel="stylesheet" href="css/bootstrap.css"> -->
   <link rel="stylesheet" href="css/style.css">
@@ -408,23 +409,23 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <div class="form-group">
                       <label> Title of Paper<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="ctitle" required value=<?php echo "$ctitle" ?>>
+                      <input type="text" class="form-control" id="jtitle" name="ctitle" required value=<?php echo "$ctitle" ?>>
                     </div>
 
                     <div class="form-group">
                       <label> Title of Edited Volume<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="btitle" required value=<?php echo "$btitle" ?>>
+                      <input type="text" class="form-control" id="editedVolume" name="btitle" required value=<?php echo "$btitle" ?>>
                     </div>
 
                     <div class="form-group">
                       <label> Authors<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="cauthors" required value=<?php echo "$cauthors" ?>>
+                      <input type="text" class="form-control" id="jauthors" name="cauthors" required value=<?php echo "$cauthors" ?>>
                     </div>
 
 
                     <div class="form-group">
                       <label> Publisher<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="cpublisher" required value=<?php echo "$cpublisher" ?>>
+                      <input type="text" class="form-control" id="jpublisher" name="cpublisher" required value=<?php echo "$cpublisher" ?>>
                     </div>
 
                     <div class="form-group">
@@ -460,22 +461,22 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <div class="form-group">
                       <label> Title of Paper<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="ctitle" required>
+                      <input type="text" class="form-control" id="jtitle" name="ctitle" required>
                     </div>
 
                     <div class="form-group">
                       <label> Title of Edited Volume<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="btitle" required>
+                      <input type="text" class="form-control" id="editedVolume" name="btitle" required>
                     </div>
 
                     <div class="form-group">
                       <label> Authors<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="cauthors" required>
+                      <input type="text" class="form-control" id="jauthors" name="cauthors" required>
                     </div>
 
                     <div class="form-group">
                       <label> Publisher<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="cpublisher" required>
+                      <input type="text" class="form-control" id="jpublisher" name="cpublisher" required>
                     </div>
 
                     <div class="form-group">
@@ -808,6 +809,9 @@ if (Input::exists() && isset($_POST['edit'])) {
   <script src="js/popper.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/others.js"></script>
+  <script src="js/jquery.js"></script>
+  <script src="js/jqueryui.js"></script>
+  <script src="js/publications/editedVolumes.js"></script>
 </body>
 
 </html>

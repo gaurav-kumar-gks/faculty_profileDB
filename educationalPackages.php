@@ -36,7 +36,7 @@ if (Input::exists() && isset($_POST['csubmit'])) {
 
     // insert query
     $stmt = "INSERT INTO `faculty_profile_publications` (`sno`, `fname`, `roll`, `dept`, `prog`, `ptype`, `title`, `authors`, `publication`, `publisher`, `pdate`, `location`, `pages`, `onlineLink`, `duration`, `impactFactor`, `bookTitle`, `bookType`, `editedVolume`, `eduPackageType`, `eduPackageLevel`, `patentNo`, `projectBudget`, `projectSponser`, `projectRole`, `projectStatus`, `email`, `aemail`) VALUES (NULL, '$fname', '$roll', '$dept', '$prog', 'ep', '$ctitle', '$cauthors', NULL, NULL, '$cyear', NULL, NULL, '$clink', NULL, NULL, NULL, NULL, NULL, '$eduPackageType', '$eduPackageLevel', NULL, NULL, NULL, NULL, NULL, '$email', '$aemail');";
-    // echo $stmt;
+    //echo $stmt;
     // run insert query
     $result = mysqli_query($conn, $stmt);
   } catch (Exception $e) {
@@ -138,6 +138,7 @@ if (Input::exists() && isset($_POST['edit'])) {
   <title>Book Chapter</title>
 
   <!-- CSS -->
+  <link rel="stylesheet" href="css/jqueryui.css">
   <link rel="stylesheet" href="css/font-awesome.min.css">
   <!-- <link rel="stylesheet" href="css/bootstrap.css"> -->
   <link rel="stylesheet" href="css/style.css">
@@ -408,17 +409,17 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <div class="form-group">
                       <label> Title of Package<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="ctitle" required value=<?php echo "$ctitle" ?>>
+                      <input type="text" class="form-control" id="jtitle" name="ctitle" required value=<?php echo "$ctitle" ?>>
                     </div>
 
                     <div class="form-group">
                       <label> Educational Package Level</label>
-                      <input type="text" class="form-control" name="eduPackageLevel" value=<?php echo "$eduPackageLevel" ?>>
+                      <input type="text" class="form-control" id="jpublisher" name="eduPackageLevel" value=<?php echo "$eduPackageLevel" ?>>
                     </div>
 
                     <div class="form-group">
                       <label> Authors<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="cauthors" required value=<?php echo "$cauthors" ?>>
+                      <input type="text" class="form-control" id="jauthors" name="cauthors" required value=<?php echo "$cauthors" ?>>
                     </div>
 
 
@@ -460,17 +461,17 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <div class="form-group">
                       <label> Educational Package title<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="ctitle" required>
+                      <input type="text" class="form-control" id="jtitle" name="ctitle" required>
                     </div>
 
                     <div class="form-group">
                       <label> Educational Package Level</label>
-                      <input type="text" class="form-control" name="eduPackageLevel" >
+                      <input type="text" class="form-control" id="jpublisher" name="eduPackageLevel" >
                     </div>
 
                     <div class="form-group">
                       <label> Authors<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="cauthors" required>
+                      <input type="text" class="form-control" id="jauthors" name="cauthors" required>
                     </div>
 
                     <div class="form-group">
@@ -542,7 +543,7 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                         <!-- EDIT -->
                         <td>
-                          <form action="editedVolumes.php" method="post">
+                          <form action="educationalPackages.php" method="post">
                             <input type="hidden" name="ctitle" value="<?php echo "'";
                                                                       echo $row['title'];
                                                                       echo "'"; ?>">
@@ -570,7 +571,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                         <!-- EDIT ends -->
                         <!-- DELETE -->
                         <td>
-                          <form action="editedVolumes.php" method="post">
+                          <form action="educationalPackages.php" method="post">
                             <input type="hidden" name="ctitle" value="<?php echo "'";
                                                                       echo $row['title'];
                                                                       echo "'"; ?>">
@@ -808,6 +809,9 @@ if (Input::exists() && isset($_POST['edit'])) {
   <script src="js/popper.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/others.js"></script>
+  <script src="js/jquery.js"></script>
+  <script src="js/jqueryui.js"></script>
+  <script src="js/publications/educationalPackages.js"></script>
 </body>
 
 </html>

@@ -7,7 +7,7 @@ if (!$conn)
 
 
   function get($conn , $term){ 
-    $query = "SELECT title FROM faculty_profile_publications WHERE ptype='j' AND  title LIKE '%".$term."%' ORDER BY title ASC";
+    $query = "SELECT  DISTINCT  title FROM faculty_profile_publications WHERE ptype='j' AND  title LIKE '%".$term."%' ORDER BY title ASC";
     $result = mysqli_query($conn, $query); 
     $data = mysqli_fetch_all($result,MYSQLI_ASSOC);
     return $data; 

@@ -12,21 +12,3 @@ $(function() {
     source: './autocomplete/publications/journal/publisher.php'
   });
 });
-
-// $(function() {
-//   $("#jauthors").autocomplete({
-//     source: './autocomplete/publications/authors.php'
-//   });
-// });
-
-// $(function() {
-//   $("#jpublication").autocomplete({
-//     source: './autocomplete/publications/name.php'
-//   });
-// });
-
-// $(function() {
-//   $("#jpublisher").autocomplete({
-//     source: './autocomplete/publications/publisher.php'
-//   });
-// });

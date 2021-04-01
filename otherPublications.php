@@ -138,6 +138,7 @@ if (Input::exists() && isset($_POST['edit'])) {
   <title>Text Books</title>
 
   <!-- CSS -->
+  <link rel="stylesheet" href="css/jqueryui.css">
   <link rel="stylesheet" href="css/font-awesome.min.css">
   <!-- <link rel="stylesheet" href="css/bootstrap.css"> -->
   <link rel="stylesheet" href="css/style.css">
@@ -387,7 +388,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                 <div class="card">
                   <!-- TEXT BOOK EDIT FORM - HEADER -->
                   <div class="card-header">
-                    <h4><i class='fa fa-edit'></i> Edit Your Text Books</h4>
+                    <h4><i class='fa fa-edit'></i> Edit Your Publications</h4>
                   </div>
                   <br>
                   <!-- TEXT BOOK EDIT FORM - HEADER ends -->
@@ -405,19 +406,19 @@ if (Input::exists() && isset($_POST['edit'])) {
 
 
                     <div class="form-group">
-                      <label> Text Book Title<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="ctitle" required value=<?php echo "$ctitle" ?>>
+                      <label>  Title<span class="m-1 text-primary">*</span></label>
+                      <input type="text" class="form-control" id="jtitle" name="ctitle" required value=<?php echo "$ctitle" ?>>
                     </div>
 
                     <div class="form-group">
                       <label> Authors<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="cauthors" required value=<?php echo "$cauthors" ?>>
+                      <input type="text" class="form-control" id="jauthors" name="cauthors" required value=<?php echo "$cauthors" ?>>
                     </div>
 
 
                     <div class="form-group">
                       <label> Publisher<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="cpublisher" required value=<?php echo "$cpublisher" ?>>
+                      <input type="text" class="form-control" id="jpublisher" name="cpublisher" required value=<?php echo "$cpublisher" ?>>
                     </div>
 
                     <div class="form-group">
@@ -431,8 +432,8 @@ if (Input::exists() && isset($_POST['edit'])) {
                     </div>
 
                     <div class="form-group">
-                      <label> Book Type</label>
-                      <input type="text" class="form-control" name="cbook" value=<?php echo "$cbook" ?>>
+                      <label> Type</label>
+                      <input type="text" class="form-control" id="jpublication" name="cbook" value=<?php echo "$cbook" ?>>
                     </div>
 
                     <input type="submit" class="btn btn-info" name="edit" value="Edit">
@@ -448,7 +449,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                 <div class="card">
                   <!-- TEXT BOOK INSERT FORM - HEADER -->
                   <div class="card-header">
-                    <h4><i class='fa fa-edit'></i> Insert Text Books</h4>
+                    <h4><i class='fa fa-edit'></i> Insert Other Publications</h4>
                   </div>
                   <br>
                   <!-- TEXT BOOK INSERT FORM - HEADER ends -->
@@ -457,18 +458,18 @@ if (Input::exists() && isset($_POST['edit'])) {
                   <form action="otherPublications.php" method="post">
 
                     <div class="form-group">
-                      <label> Text Book Title<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="ctitle" required>
+                      <label> Title<span class="m-1 text-primary">*</span></label>
+                      <input type="text" class="form-control" id="jtitle" name="ctitle" required>
                     </div>
 
                     <div class="form-group">
                       <label> Authors<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="cauthors" required>
+                      <input type="text" class="form-control" id="jauthors" name="cauthors" required>
                     </div>
 
                     <div class="form-group">
                       <label> Publisher<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="cpublisher" required>
+                      <input type="text" class="form-control" id="jpublisher" name="cpublisher" required>
                     </div>
 
                     <div class="form-group">
@@ -484,8 +485,8 @@ if (Input::exists() && isset($_POST['edit'])) {
                     </div>
 
                     <div class="form-group">
-                      <label> Book Type</label>
-                      <input type="text" class="form-control" name="cbook">
+                      <label> Type</label>
+                      <input type="text" class="form-control" placeholder="audio/video/book etc" id="jpublication" name="cbook">
                     </div>
 
                     <input type="submit" class="btn btn-info" name="csubmit" value="Submit">
@@ -513,7 +514,7 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                       <th>Date</th>
                       <th>Online Link</th>
-                      <th>Book Type</th>
+                      <th>Type</th>
                       <th></th>
                       <th></th>
                     </tr>
@@ -616,7 +617,7 @@ if (Input::exists() && isset($_POST['edit'])) {
               <!-- Search Functions -->
               <div class="card">
                 <div class="card-header">
-                  <h4><i class="fa fa-search mr-3"></i>Search Text Books</h4>
+                  <h4><i class="fa fa-search mr-3"></i>Search Your Other Publications</h4>
                 </div>
                 <br>
                 <br>
@@ -640,7 +641,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                     if ($cnames->count()) {
                       echo "<table class=\"table table-striped table-hover\">";
                       echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Book Type</th></tr></thead>";
+                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Type</th></tr></thead>";
                       echo "<tbody>";
 
                       foreach ($cnames->results() as $row) {
@@ -674,7 +675,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                     if ($cpnames->count()) {
                       echo "<table class=\"table table-striped table-hover\">";
                       echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Book Type</th></tr></thead>";
+                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Type</th></tr></thead>";
                       echo "<tbody>";
 
                       foreach ($cpnames->results() as $row) {
@@ -708,7 +709,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                     if ($cyears->count()) {
                       echo "<table class=\"table table-striped table-hover\">";
                       echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Book Type</th></tr></thead>";
+                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Type</th></tr></thead>";
                       echo "<tbody>";
 
                       foreach ($cyears->results() as $row) {
@@ -742,7 +743,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                     if ($cfnames->count()) {
                       echo "<table class=\"table table-striped table-hover\">";
                       echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Book Type</th></tr></thead>";
+                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Type</th></tr></thead>";
                       echo "<tbody>";
 
                       foreach ($cfnames->results() as $row) {
@@ -775,6 +776,9 @@ if (Input::exists() && isset($_POST['edit'])) {
   <script src="js/popper.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/others.js"></script>
+  <script src="js/jquery.js"></script>
+  <script src="js/jqueryui.js"></script>
+  <script src="js/publications/otherPublications.js"></script>
 </body>
 
 </html>

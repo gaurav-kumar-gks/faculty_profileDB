@@ -138,6 +138,7 @@ if (Input::exists() && isset($_POST['edit'])) {
   <title>Conferences</title>
 
   <!-- CSS -->
+  <link rel="stylesheet" href="css/jqueryui.css">
   <link rel="stylesheet" href="css/font-awesome.min.css">
   <!-- <link rel="stylesheet" href="css/bootstrap.css"> -->
   <link rel="stylesheet" href="css/style.css">
@@ -406,18 +407,18 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <div class="form-group">
                       <label> Title of Paper<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="ctitle" required value=<?php echo "$ctitle" ?>>
+                      <input type="text" class="form-control" id="jtitle" name="ctitle" required value=<?php echo "$ctitle" ?>>
                     </div>
 
                     <div class="form-group">
                       <label> Authors<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="cauthors" required value=<?php echo "$cauthors" ?>>
+                      <input type="text" class="form-control" id="jauthors" name="cauthors" required value=<?php echo "$cauthors" ?>>
                     </div>
 
 
                     <div class="form-group">
                       <label> Name of Conference<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="cpublisher" required value=<?php echo "$cpublisher" ?>>
+                      <input type="text" class="form-control" id="jpublisher" name="cpublisher" required value=<?php echo "$cpublisher" ?>>
                     </div>
 
                     <div class="form-group">
@@ -432,7 +433,7 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <div class="form-group">
                       <label> Duration (In no. of days)<span class="m-1 text-primary">*</span></label>
-                      <input type="number" value=<?php echo "$cduration" ?> class="form-control" name="cduration">
+                      <input type="number" value=<?php echo "$cduration" ?> required class="form-control" name="cduration">
                     </div>
 
                     <input type="submit" class="btn btn-info" name="edit" value="Edit">
@@ -458,17 +459,17 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <div class="form-group">
                       <label> Title of Paper<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="ctitle" required>
+                      <input type="text" class="form-control" id="jtitle" name="ctitle" required>
                     </div>
 
                     <div class="form-group">
                       <label> Authors<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="cauthors" required>
+                      <input type="text" class="form-control" id="jauthors" name="cauthors" required>
                     </div>
 
                     <div class="form-group">
                       <label> Name of Conference<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="cpublisher" required>
+                      <input type="text" class="form-control" id="jpublisher" name="cpublisher" required>
                     </div>
 
                     <div class="form-group">
@@ -485,7 +486,7 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <div class="form-group">
                       <label> Duration (In no. of days)<span class="m-1 text-primary">*</span></label>
-                      <input type="number" class="form-control" name="cduration">
+                      <input type="number" class="form-control" required name="cduration">
                     </div>
 
                     <input type="submit" class="btn btn-info" name="csubmit" value="Submit">
@@ -773,6 +774,9 @@ if (Input::exists() && isset($_POST['edit'])) {
   <script src="js/popper.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/others.js"></script>
+  <script src="js/jquery.js"></script>
+  <script src="js/jqueryui.js"></script>
+  <script src="js/publications/conference.js"></script>
 </body>
 
 </html>

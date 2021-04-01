@@ -7,7 +7,7 @@ if (!$conn)
 
 
   function get($conn , $term){ 
-    $query = "SELECT  DISTINCT  publication FROM faculty_profile_publications WHERE ptype='j' AND  publication LIKE '%".$term."%' ORDER BY publication ASC";
+    $query = "SELECT DISTINCT  publisher FROM faculty_profile_publications WHERE ptype='bc' AND  publisher LIKE '%".$term."%' ORDER BY publisher ASC";
     $result = mysqli_query($conn, $query); 
     $data = mysqli_fetch_all($result,MYSQLI_ASSOC);
     return $data; 
@@ -18,7 +18,7 @@ if (!$conn)
     $results = get($conn, $_GET['term']);
     $jnames = array();
     foreach($results as $row){
-    $jnames[] = $row['publication'];
+    $jnames[] = $row['publisher'];
     }
     echo json_encode($jnames);
    }   
