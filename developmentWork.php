@@ -139,6 +139,7 @@ if (Input::exists() && isset($_POST['edit'])) {
   <title>Development Work</title>
 
   <!-- CSS -->
+  <link rel="stylesheet" href="css/jqueryui.css">
   <link rel="stylesheet" href="css/font-awesome.min.css">
   <!-- <link rel="stylesheet" href="css/bootstrap.css"> -->
   <link rel="stylesheet" href="css/style.css">
@@ -403,7 +404,7 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <div class="form-group">
                       <label> Title of Work<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="title" required value=<?php echo "$title" ?>>
+                      <input type="text" class="form-control" name="title" id="title" required value=<?php echo "$title" ?>>
                     </div>
 
                     
@@ -431,7 +432,7 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <div class="form-group">
                       <label> Title of Project<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="title" required>
+                      <input type="text" class="form-control" name="title" id="title" required>
                     </div>
 
                     
@@ -609,6 +610,9 @@ if (Input::exists() && isset($_POST['edit'])) {
   <script src="js/popper.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/others.js"></script>
+  <script src="js/jquery.js"></script>
+  <script src="js/jqueryui.js"></script>
+  <script src="js/research/developmentWork.js"></script>
 </body>
 
 </html>

@@ -139,6 +139,7 @@ if (Input::exists() && isset($_POST['edit'])) {
   <title>Technology Transfer</title>
 
   <!-- CSS -->
+  <link rel="stylesheet" href="css/jqueryui.css">
   <link rel="stylesheet" href="css/font-awesome.min.css">
   <!-- <link rel="stylesheet" href="css/bootstrap.css"> -->
   <link rel="stylesheet" href="css/style.css">
@@ -405,12 +406,12 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <div class="form-group">
                       <label> Title <span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="title" required value=<?php echo "$title" ?>>
+                      <input type="text" class="form-control" name="title" id="title" required value=<?php echo "$title" ?>>
                     </div>
 
                     <div class="form-group">
                       <label> Client<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="other" required value=<?php echo "$other" ?>>
+                      <input type="text" class="form-control" name="other" id="other" required value=<?php echo "$other" ?>>
                     </div>
 
 
@@ -442,12 +443,12 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <div class="form-group">
                       <label> Title<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="title" required>
+                      <input type="text" class="form-control" name="title" id="title" required>
                     </div>
 
                     <div class="form-group">
                       <label> Client<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="other" required>
+                      <input type="text" class="form-control" name="other" id="other" required>
                     </div>
 
                     
@@ -676,6 +677,9 @@ if (Input::exists() && isset($_POST['edit'])) {
   <script src="js/popper.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/others.js"></script>
+  <script src="js/jquery.js"></script>
+  <script src="js/jqueryui.js"></script>
+  <script src="js/research/technologyTransfer.js"></script>
 </body>
 
 </html>

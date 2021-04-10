@@ -143,6 +143,7 @@ if (Input::exists() && isset($_POST['edit'])) {
   <title>Patents</title>
 
   <!-- CSS -->
+  <link rel="stylesheet" href="css/jqueryui.css">
   <link rel="stylesheet" href="css/font-awesome.min.css">
   <!-- <link rel="stylesheet" href="css/bootstrap.css"> -->
   <link rel="stylesheet" href="css/style.css">
@@ -406,20 +407,20 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <div class="form-group">
                       <label> Title<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="title" required value=<?php echo "$title" ?>>
+                      <input type="text" class="form-control" name="title" id="title" required value=<?php echo "$title" ?>>
                     </div>
 
                     
 
                     <div class="form-group">
                       <label> Ref. No.<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="refn" required value=<?php echo "$refn" ?>>
+                      <input type="text" class="form-control" name="refn" id="refn" required value=<?php echo "$refn" ?>>
                     </div>
 
 
                     <div class="form-group">
                       <label> Status</label>
-                      <input type="text" class="form-control" name="projectStatus" value=<?php echo "$projectStatus" ?>>
+                      <input type="text" class="form-control" name="projectStatus" id="projectStatus" value=<?php echo "$projectStatus" ?>>
                     </div>
 
 
@@ -448,20 +449,20 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <div class="form-group">
                       <label> Title<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="title" required>
+                      <input type="text" class="form-control" name="title" id="title" required>
                     </div>
 
 
                     <div class="form-group">
                       <label> Ref. No.<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="refn" required>
+                      <input type="text" class="form-control" name="refn" id="refn" required>
                     </div>
 
 
 
                     <div class="form-group">
                       <label> Status</label>
-                      <input type="text" class="form-control" name="projectStatus" placeholder="Submitted, Filed, Granted etc">
+                      <input type="text" class="form-control" name="projectStatus" id="projectStatus" placeholder="Submitted, Filed, Granted etc">
                     </div>
 
                     <!-- <div class="form-group">
@@ -685,6 +686,9 @@ if (Input::exists() && isset($_POST['edit'])) {
   <script src="js/popper.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/others.js"></script>
+  <script src="js/jquery.js"></script>
+  <script src="js/jqueryui.js"></script>
+  <script src="js/research/patent.js"></script>
 </body>
 
 </html>

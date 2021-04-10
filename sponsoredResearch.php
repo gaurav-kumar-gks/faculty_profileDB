@@ -139,6 +139,7 @@ if (Input::exists() && isset($_POST['edit'])) {
   <title>Ongoing Research</title>
 
   <!-- CSS -->
+  <link rel="stylesheet" href="css/jqueryui.css">
   <link rel="stylesheet" href="css/font-awesome.min.css">
   <!-- <link rel="stylesheet" href="css/bootstrap.css"> -->
   <link rel="stylesheet" href="css/style.css">
@@ -407,25 +408,25 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <div class="form-group">
                       <label> Title of Project<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="title" required value=<?php echo "$title" ?>>
+                      <input type="text" class="form-control" name="title" id="title" required value=<?php echo "$title" ?>>
                     </div>
 
                     <div class="form-group">
                       <label> Sponsor<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="other" required value=<?php echo "$other" ?>>
+                      <input type="text" class="form-control" name="other" id="other" required value=<?php echo "$other" ?>>
                     </div>
 
 
                     <div class="form-group">
                       <label> Name of PI</label>
-                      <input type="text" class="form-control" name="rpi" value=<?php echo "$rpi" ?>>
+                      <input type="text" class="form-control" name="rpi" id="rpi" value=<?php echo "$rpi" ?>>
                     </div>
 
 
 
                     <div class="form-group">
                       <label> Name of Co-PI</label>
-                      <input type="text" class="form-control" name="rcopi" value=<?php echo "$rcopi" ?>>
+                      <input type="text" class="form-control" name="rcopi" id="rcopi"  value=<?php echo "$rcopi" ?>>
                     </div>
 
                     <div class="form-group">
@@ -456,23 +457,23 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <div class="form-group">
                       <label> Title of Project<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="title" required>
+                      <input type="text" class="form-control" name="title" id="title" required>
                     </div>
 
                     <div class="form-group">
                       <label> Sponsor<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="other" required>
+                      <input type="text" class="form-control" name="other" id="other" required>
                     </div>
 
                     <div class="form-group">
                       <label> Name of PI</label>
-                      <input type="text" class="form-control" name="rpi">
+                      <input type="text" class="form-control" name="rpi" id="rpi">
                     </div>
 
 
                     <div class="form-group">
                       <label> Name of Co-PI</label>
-                      <input type="text" class="form-control" name="rcopi">
+                      <input type="text" class="form-control" name="rcopi" id="rcopi">
                     </div>
 
                     <div class="form-group">
@@ -718,6 +719,9 @@ if (Input::exists() && isset($_POST['edit'])) {
   <script src="js/popper.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/others.js"></script>
+  <script src="js/jquery.js"></script>
+  <script src="js/jqueryui.js"></script>
+  <script src="js/research/sponsoredResearch.js"></script>
 </body>
 
 </html>

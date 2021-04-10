@@ -143,6 +143,7 @@ if (Input::exists() && isset($_POST['edit'])) {
   <title>Copyrights</title>
 
   <!-- CSS -->
+  <link rel="stylesheet" href="css/jqueryui.css">
   <link rel="stylesheet" href="css/font-awesome.min.css">
   <!-- <link rel="stylesheet" href="css/bootstrap.css"> -->
   <link rel="stylesheet" href="css/style.css">
@@ -407,29 +408,29 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <div class="form-group">
                       <label> Title<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="title" required value=<?php echo "$title" ?>>
+                      <input type="text" class="form-control" name="title" id="title" required value=<?php echo "$title" ?>>
                     </div>
 
                     <div class="form-group">
                       <label> Authors<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="other" required value=<?php echo "$other" ?>>
+                      <input type="text" class="form-control" name="other" id="title" required value=<?php echo "$other" ?>>
                     </div>
 
                     <div class="form-group">
                       <label> Ref. No.<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="refn" required value=<?php echo "$refn" ?>>
+                      <input type="text" class="form-control" name="refn" id="refn" required value=<?php echo "$refn" ?>>
                     </div>
 
 
                     <div class="form-group">
                       <label> Status</label>
-                      <input type="text" class="form-control" name="projectStatus" value=<?php echo "$projectStatus" ?>>
+                      <input type="text" class="form-control" name="projectStatus" id="projectStatus" value=<?php echo "$projectStatus" ?>>
                     </div>
 
 
                     <div class="form-group">
                       <label> Jurisdiction</label>
-                      <input type="text" class="form-control" name="juri" value=<?php echo "$juri" ?>>
+                      <input type="text" class="form-control" name="juri" id="juri" value=<?php echo "$juri" ?>>
                     </div>
 
                     <input type="submit" class="btn btn-info" name="edit" value="Edit">
@@ -455,24 +456,24 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <div class="form-group">
                       <label> Title<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="title" required>
+                      <input type="text" class="form-control" name="title" id="title" required>
                     </div>
 
                     <div class="form-group">
                       <label> Authors<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="other" required>
+                      <input type="text" class="form-control" name="other" id="other" required>
                     </div>
 
                     <div class="form-group">
                       <label> Ref. No.<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" name="refn" required>
+                      <input type="text" class="form-control" name="refn" id="refn" required>
                     </div>
 
 
 
                     <div class="form-group">
                       <label> Status</label>
-                      <input type="text" class="form-control" name="projectStatus" placeholder="Submitted, Filed, Granted etc">
+                      <input type="text" class="form-control" name="projectStatus" id="projectStatus"  placeholder="Submitted, Filed, Granted etc">
                     </div>
 
                     <!-- <div class="form-group">
@@ -489,7 +490,7 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <div class="form-group">
                       <label> Jurisdiction</label>
-                      <input type="text" class="form-control" name="juri" placeholder="India, Foreign, International etc">
+                      <input type="text" class="form-control" name="juri" id="juri" placeholder="India, Foreign, International etc">
                     </div>
 
                     <input type="submit" class="btn btn-info" name="csubmit" value="Submit">
@@ -704,6 +705,9 @@ if (Input::exists() && isset($_POST['edit'])) {
   <script src="js/popper.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/others.js"></script>
+  <script src="js/jquery.js"></script>
+  <script src="js/jqueryui.js"></script>
+  <script src="js/research/copyright.js"></script>
 </body>
 
 </html>
