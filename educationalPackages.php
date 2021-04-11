@@ -30,7 +30,7 @@ if (Input::exists() && isset($_POST['csubmit'])) {
     $clink = Input::get('clink');
 
     // connect with localhost
-    $conn=mysqli_connect("localhost","root","jrtalent","faculty_profile_db");
+    $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
     if (!$conn)
       die("Unable to connect to database");
 
@@ -68,7 +68,7 @@ if (Input::exists() && isset($_POST['delete_entry'])) {
 
 
     // connect with localhost
-    $conn=mysqli_connect("localhost","root","jrtalent","faculty_profile_db");
+    $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
     if (!$conn)
       die("Unable to connect to database");
 
@@ -93,72 +93,71 @@ if (Input::exists() && isset($_POST['upgrade_entry_x'])) {
 
   // $validationC = $validatec->checkfreg($user->data()->email);
   // if ($validationC->passed()) {
-    try {
-      //echo "Here4";
+  try {
+    //echo "Here4";
 
-      // we'll run query on this instance
-     // $jins = DB::getInstance();
+    // we'll run query on this instance
+    // $jins = DB::getInstance();
 
-      // fetch variables that are already stored in User from studentinfo table 
-      $fname = $user->data()->Name;
-      $roll = $user->data()->{'Roll No'};
-      $prog = $user->data()->prog;
-      $dept = $user->data()->department;
-      $ptype = 'j';
-      $email = $user->data()->email;
-      $aemail = $user->data()->aemail;
-      // echo $fid;
+    // fetch variables that are already stored in User from studentinfo table 
+    $fname = $user->data()->Name;
+    $roll = $user->data()->{'Roll No'};
+    $prog = $user->data()->prog;
+    $dept = $user->data()->department;
+    $ptype = 'j';
+    $email = $user->data()->email;
+    $aemail = $user->data()->aemail;
+    // echo $fid;
 
-      // columns from the form input 
-      // $cname = Input::get('cname');
-      // $cauthors = Input::get('cauthors');
-      // $ctitle = Input::get('ctitle');
-      // $cyear = Input::get('cyear');
-      // $clink = Input::get('clink');
-      // $clocation = Input::get('clocation');
+    // columns from the form input 
+    // $cname = Input::get('cname');
+    // $cauthors = Input::get('cauthors');
+    // $ctitle = Input::get('ctitle');
+    // $cyear = Input::get('cyear');
+    // $clink = Input::get('clink');
+    // $clocation = Input::get('clocation');
 
-      $SNO=Input::get('sno');
-      // $ltp=Input::get('ltp');
-      // $numOfStudents=Input::get('numOfStudents');
-      // $additionalInformation=Input::get('additionalInformation');
-      // $semester=Input::get('semester');
-      // $date=Input::get('student_activity_date');
-      // // run insert query
-      $conn=mysqli_connect("localhost","root","jrtalent","faculty_profile_db");
-      // if(!$conn)
-      // die("Unable to connect to database");
+    $SNO = Input::get('sno');
+    // $ltp=Input::get('ltp');
+    // $numOfStudents=Input::get('numOfStudents');
+    // $additionalInformation=Input::get('additionalInformation');
+    // $semester=Input::get('semester');
+    // $date=Input::get('student_activity_date');
+    // // run insert query
+    $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+    // if(!$conn)
+    // die("Unable to connect to database");
 
-      // // $stmt="insert into discussion values('$email','$dateTime','$club_id','$text');";
-      // $stmt="Delete from `faculty_profile_teaching` where subCode='$subCode' and ltp='$ltp' and roll='$roll' and numOfStudents=$numOfStudents and activityDate = '$date' and additionalInformation='$additionalInformation' and semester=$semester";
+    // // $stmt="insert into discussion values('$email','$dateTime','$club_id','$text');";
+    // $stmt="Delete from `faculty_profile_teaching` where subCode='$subCode' and ltp='$ltp' and roll='$roll' and numOfStudents=$numOfStudents and activityDate = '$date' and additionalInformation='$additionalInformation' and semester=$semester";
 
-      // echo $SNO;
+    // echo $SNO;
 
-      $stmt="select * from faculty_profile_publications where sno>$SNO and roll='$roll' and ptype='ep' order by sno asc limit 1";
-      $result=mysqli_query($conn,$stmt);
-      $count=0;
-      $val=0;
-      while($row=mysqli_fetch_assoc($result)){
-                $count=$count+1;
-                $val=$row['sno'];
-                // echo $row['sno'];
-        }
-      if($count!=0)
-      {
-        $stmt="update faculty_profile_publications set sno=-1 where sno=$val";
-        $result=mysqli_query($conn,$stmt);
-        $stmt="update faculty_profile_publications set sno=$val where sno=$SNO";
-        $result=mysqli_query($conn,$stmt);
-        $stmt="update faculty_profile_publications set sno=$SNO where sno=-1";
-        $result=mysqli_query($conn,$stmt);
-      }
-      // $result=mysqli_query($conn,$stmt);
-      // // // echo if conference added successfully 
-      // echo "<script type=\"text/javascript\">alert(\"Entry Deleted successfully\");</script>";
-    } catch (Exception $e) {
-      //echo "Here8";
-      die($e->getMessage());
+    $stmt = "select * from faculty_profile_publications where sno>$SNO and roll='$roll' and ptype='ep' order by sno asc limit 1";
+    $result = mysqli_query($conn, $stmt);
+    $count = 0;
+    $val = 0;
+    while ($row = mysqli_fetch_assoc($result)) {
+      $count = $count + 1;
+      $val = $row['sno'];
+      // echo $row['sno'];
     }
-  } 
+    if ($count != 0) {
+      $stmt = "update faculty_profile_publications set sno=-1 where sno=$val";
+      $result = mysqli_query($conn, $stmt);
+      $stmt = "update faculty_profile_publications set sno=$val where sno=$SNO";
+      $result = mysqli_query($conn, $stmt);
+      $stmt = "update faculty_profile_publications set sno=$SNO where sno=-1";
+      $result = mysqli_query($conn, $stmt);
+    }
+    // $result=mysqli_query($conn,$stmt);
+    // // // echo if conference added successfully 
+    // echo "<script type=\"text/javascript\">alert(\"Entry Deleted successfully\");</script>";
+  } catch (Exception $e) {
+    //echo "Here8";
+    die($e->getMessage());
+  }
+}
 
 
 
@@ -188,7 +187,7 @@ if (Input::exists() && isset($_POST['edit'])) {
 
 
     // connect with localhost
-    $conn=mysqli_connect("localhost","root","jrtalent","faculty_profile_db");
+    $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
     if (!$conn)
       die("Unable to connect to database");
 
@@ -302,7 +301,7 @@ if (Input::exists() && isset($_POST['edit'])) {
             </a>
             <ul class="collapse list-unstyled show" id="teachingSubmenu">
               <li>
-                <a href="teaching.php">Teaching</a>
+                <a href="Teaching.php">Teaching</a>
               </li>
             </ul>
           </li>
@@ -346,22 +345,22 @@ if (Input::exists() && isset($_POST['edit'])) {
             </a>
             <ul class="collapse list-unstyled show" id="honoursSubmenu">
               <li>
-                <a href="fellowProfessional.php">Fellow - Professional Body</a>
+                <a href="Honours_FPB.php">Fellow - Professional Body</a>
               </li>
               <li>
-                <a href="memberProfessional.php">Member - Professional Body</a>
+                <a href="Honours_MPB.php">Member - Professional Body</a>
               </li>
               <li>
-                <a href="memberEditorial.php">Member - Editorial Body</a>
+                <a href="Honours_MEBJ.php">Member - Editorial Body</a>
               </li>
               <li>
-                <a href="awards.php">Awards</a>
+                <a href="Honours_A.php">Awards</a>
               </li>
               <li>
-                <a href="fellowships.php">Fellowships</a>
+                <a href="Honours_F.php">Fellowships</a>
               </li>
               <li>
-                <a href="invitedLectures.php">Invited Lectures</a>
+                <a href="Honours_IL.php">Invited Lectures</a>
               </li>
             </ul>
           </li>
@@ -403,31 +402,31 @@ if (Input::exists() && isset($_POST['edit'])) {
             <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Activity</a>
             <ul class="collapse list-unstyled show" id="homeSubmenu">
               <li>
-                <a href="studentActivities.php">Student Activities</a>
+                <a href="Activities_SA.php">Student Activities</a>
               </li>
               <li>
-                <a href="departmentalActivities.php">Departmental Activities</a>
+                <a href="Activities_DA.php">Departmental Activities</a>
               </li>
               <li>
-                <a href="instituteActivites.php">Institute Activities</a>
+                <a href="Activites_IA.php">Institute Activities</a>
               </li>
               <li>
-                <a href="professionalActivities.php">Professional Activities</a>
+                <a href="Activities_PA.php">Professional Activities</a>
               </li>
               <li>
-                <a href="seminar.php">Seminar, Conference, Workshops</a>
+                <a href="Activities_SCW.php">Seminar, Conference, Workshops</a>
               </li>
               <li>
-                <a href="shortTerm.php">Short Term Course</a>
+                <a href="Activities_STC.php">Short Term Course</a>
               </li>
               <li>
                 <a href="Activities_VA.php">Visit Abroad</a>
               </li>
               <li>
-                <a href="otherAcademic.php">Other Academic Activity</a>
+                <a href="Activities_OAA.php">Other Academic Activity</a>
               </li>
               <li>
-                <a href="anyOther.php">Any Other Information</a>
+                <a href="Activities_AOI.php">Any Other Information</a>
               </li>
             </ul>
           </li>
@@ -545,7 +544,7 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <div class="form-group">
                       <label> Educational Package Level</label>
-                      <input type="text" class="form-control" id="jpublisher" name="eduPackageLevel" >
+                      <input type="text" class="form-control" id="jpublisher" name="eduPackageLevel">
                     </div>
 
                     <div class="form-group">
@@ -555,7 +554,7 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <div class="form-group">
                       <label> Educational Package Type (audio/video/multimedia etc)</label>
-                      <input type="text" class="form-control" name="eduPackageType" >
+                      <input type="text" class="form-control" name="eduPackageType">
                     </div>
 
                     <div class="form-group">
@@ -565,7 +564,7 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <div class="form-group">
                       <label> Online link</label>
-                      <input type="text" class="form-control" name="clink" >
+                      <input type="text" class="form-control" name="clink">
                     </div>
 
                     <input type="submit" class="btn btn-info" name="csubmit" value="Submit">
@@ -602,7 +601,7 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <?php
                     $roll = $user->data()->{'Roll No'};
-                    $conn=mysqli_connect("localhost","root","jrtalent","faculty_profile_db");
+                    $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
                     if (!$conn)
                       die("Unable to connect to database");
 
@@ -619,15 +618,15 @@ if (Input::exists() && isset($_POST['edit'])) {
                                                                       echo $row['title'];
                                                                       echo "'"; ?>">
                             <input type="hidden" name="eduPackageLevel" value="<?php echo "'";
-                                                                      echo $row['eduPackageLevel'];
-                                                                      echo "'"; ?>">
+                                                                                echo $row['eduPackageLevel'];
+                                                                                echo "'"; ?>">
                             <input type="hidden" name="cauthors" value="<?php echo "'";
                                                                         echo $row['authors'];
                                                                         echo "'"; ?>">
 
                             <input type="hidden" name="eduPackageType" value="<?php echo "'";
-                                                                          echo $row['eduPackageType'];
-                                                                          echo "'"; ?>">
+                                                                              echo $row['eduPackageType'];
+                                                                              echo "'"; ?>">
                             <input type="hidden" name="cyear" value="<?php echo "'";
                                                                       echo $row['pdate'];
                                                                       echo "'"; ?>">
@@ -648,13 +647,13 @@ if (Input::exists() && isset($_POST['edit'])) {
                         <td><?php echo $row['pdate']; ?></td>
                         <td><?php echo $row['onlineLink']; ?></td>
 
-                         <td>
-                         <form action="educationalPackages.php" method="post">
-                              <input type='hidden' name='sno' value=<?php echo $row['sno'];?> >
-                              <input type="image"  name="upgrade_entry" value="Upgrade" src="./Images/upward_arrow.png" height="50" width="60">
-                        </form>
-                      </td>
-                        
+                        <td>
+                          <form action="educationalPackages.php" method="post">
+                            <input type='hidden' name='sno' value=<?php echo $row['sno']; ?>>
+                            <input type="image" name="upgrade_entry" value="Upgrade" src="./Images/upward_arrow.png" height="50" width="60">
+                          </form>
+                        </td>
+
                         <!-- DELETE -->
                         <td>
                           <form action="educationalPackages.php" method="post">
@@ -662,8 +661,8 @@ if (Input::exists() && isset($_POST['edit'])) {
                                                                       echo $row['title'];
                                                                       echo "'"; ?>">
                             <input type="hidden" name="eduPackageLevel" value="<?php echo "'";
-                                                                      echo $row['eduPackageLevel'];
-                                                                      echo "'"; ?>">
+                                                                                echo $row['eduPackageLevel'];
+                                                                                echo "'"; ?>">
 
                             <input type="hidden" name="cauthors" value="<?php echo "'";
                                                                         echo $row['authors'];
@@ -671,8 +670,8 @@ if (Input::exists() && isset($_POST['edit'])) {
 
 
                             <input type="hidden" name="eduPackageType" value="<?php echo "'";
-                                                                          echo $row['eduPackageType'];
-                                                                          echo "'"; ?>">
+                                                                              echo $row['eduPackageType'];
+                                                                              echo "'"; ?>">
                             <input type="hidden" name="cyear" value="<?php echo "'";
                                                                       echo $row['pdate'];
                                                                       echo "'"; ?>">
