@@ -9,7 +9,7 @@ if ($user->isLoggedIn()) {
   Redirect::to('index.php');
 }
 
-/* CONFERENCE submit */
+/*  submit */
 if (Input::exists() && isset($_POST['csubmit'])) {
   try {
 
@@ -26,7 +26,7 @@ if (Input::exists() && isset($_POST['csubmit'])) {
     $title = Input::get('title');
     $other = Input::get('other');
     $rpi = Input::get('rpi');
-    // $cyear = Input::get('cyear');
+    $cyear = Input::get('cyear');
     $funds = Input::get('funds');
     $rcopi = Input::get('rcopi');
 
@@ -36,7 +36,7 @@ if (Input::exists() && isset($_POST['csubmit'])) {
       die("Unable to connect to database");
 
     // insert query
-    $stmt = "INSERT INTO `faculty_profile_research` (`fname`, `roll`, `dept`, `prog`, `email`, `aemail`, `rtype`, `title`, `other`, `rpi`, `rcopi`, `rlevel`, `remarks`, `funds`, `projectStatus`, `juri`, `ref`) VALUES ('$fname', '$roll', '$dept', '$prog', '$email', '$aemail', 'ocp', '$title', '$other', '$rpi', '$rcopi', NULL, NULL, $funds, NULL, NULL, NULL);";
+    $stmt = "INSERT INTO `faculty_profile_research` (`fname`, `roll`, `dept`, `prog`, `email`, `aemail`, `rtype`, `title`, `other`, `rpi`, `rcopi`, `rlevel`, `remarks`, `funds`, `projectStatus`, `juri`, `ref`,`pdate`) VALUES ('$fname', '$roll', '$dept', '$prog', '$email', '$aemail', 'ocp', '$title', '$other', '$rpi', '$rcopi', NULL, NULL, $funds, NULL, NULL, NULL, '$cyear');";
     // echo $stmt;
     // run insert query
     $result = mysqli_query($conn, $stmt);
@@ -64,7 +64,7 @@ if (Input::exists() && isset($_POST['delete_entry'])) {
     $title = Input::get('title');
     $other = Input::get('other');
     $rpi = Input::get('rpi');
-    //$cyear = Input::get('cyear');
+    $cyear = Input::get('cyear');
     $funds = Input::get('funds');
     $rcopi = Input::get('rcopi');
 
@@ -76,7 +76,7 @@ if (Input::exists() && isset($_POST['delete_entry'])) {
       die("Unable to connect to database");
 
     // delete 
-    $stmt = "DELETE FROM `faculty_profile_research` WHERE roll='$roll' AND rtype='ocp' AND title=$title AND other=$other AND rpi =$rpi AND rcopi = $rcopi AND funds=$funds;";
+    $stmt = "DELETE FROM `faculty_profile_research` WHERE roll='$roll' AND rtype='ocp' AND title=$title AND other=$other AND rpi =$rpi AND rcopi = $rcopi AND funds=$funds AND pdate = $cyear;";
     //echo $stmt;
     // run delete query
     $result = mysqli_query($conn, $stmt);
@@ -96,7 +96,7 @@ if (Input::exists() && isset($_POST['edit'])) {
     $title = Input::get('title');
     $other = Input::get('other');
     $rpi = Input::get('rpi');
-    //$cyear = Input::get('cyear');
+    $cyear = Input::get('cyear');
     $funds = Input::get('funds');
     $rcopi = Input::get('rcopi');
 
@@ -104,7 +104,7 @@ if (Input::exists() && isset($_POST['edit'])) {
     $titlePrev = Input::get('titlePrev');
     $otherPrev = Input::get('otherPrev');
     $rpiPrev = Input::get('rpiPrev');
-    //$cyearPrev = Input::get('cyearPrev');
+    $cyearPrev = Input::get('cyearPrev');
     $fundsPrev = Input::get('fundsPrev');
     $rcopiPrev = Input::get('rcopiPrev');
 
@@ -115,7 +115,7 @@ if (Input::exists() && isset($_POST['edit'])) {
       die("Unable to connect to database");
 
     // update query
-    $stmt = "UPDATE `faculty_profile_research` SET title='$title', other='$other', rpi='$rpi', rcopi='$rcopi', funds=$funds WHERE roll='$roll' AND rtype='ocp' AND  title=$titlePrev AND other=$otherPrev AND rpi=$rpiPrev  AND rcopi=$rcopiPrev AND funds=$fundsPrev;";
+    $stmt = "UPDATE `faculty_profile_research` SET title='$title', other='$other', rpi='$rpi', rcopi='$rcopi', funds=$funds, pdate='$cyear' WHERE roll='$roll' AND rtype='ocp' AND  title=$titlePrev AND other=$otherPrev AND rpi=$rpiPrev  AND rcopi=$rcopiPrev AND funds=$fundsPrev AND pdate=$cyearPrev;";
     //echo $stmt;
     // run query
     $result = mysqli_query($conn, $stmt);
@@ -381,7 +381,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                 $other = Input::get('other');
                 $funds = Input::get('funds');
                 $rpi = Input::get('rpi');
-                //$cyear = Input::get('cyear');
+                $cyear = Input::get('cyear');
                 $rcopi = Input::get('rcopi');
 
               ?>
@@ -403,7 +403,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                     <input type="hidden" name="rpiPrev" value="<?php echo $rpi ?>">
 
                     <input type="hidden" name="rcopiPrev" value="<?php echo $rcopi ?>">
-
+                    <input type="hidden" name="cyearPrev" value="<?php echo $cyear ?>">
 
 
                     <div class="form-group">
@@ -416,6 +416,10 @@ if (Input::exists() && isset($_POST['edit'])) {
                       <input type="text" class="form-control" name="other" id="other" required value=<?php echo "$other" ?>>
                     </div>
 
+                    <div class="form-group">
+                      <label for="cyear"> Date</label>
+                      <input type="date" id="cyear" name="cyear" value=<?php echo "$cyear" ?>>
+                    </div>
 
                     <div class="form-group">
                       <label> Name of PI</label>
@@ -466,6 +470,11 @@ if (Input::exists() && isset($_POST['edit'])) {
                     </div>
 
                     <div class="form-group">
+                      <label for="cyear"> Date</label>
+                      <input type="date" id="cyear" name="cyear" value=<?php echo "$cyear" ?>>
+                    </div>
+
+                    <div class="form-group">
                       <label> Name of PI</label>
                       <input type="text" class="form-control" name="rpi" id="rpi">
                     </div>
@@ -502,6 +511,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                     <tr>
                       <th>Title</th>
                       <th>Agency</th>
+                      <th>Date</th>
                       <th>PI</th>
                       <th>Co-PI</th>
                       <th>Funds</th>
@@ -527,6 +537,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                       <tr>
                         <td><?php echo $row['title']; ?></td>
                         <td><?php echo $row['other']; ?></td>
+                        <td><?php echo $row['pdate']; ?></td>
                         <td><?php echo $row['rpi']; ?></td>
 
                         <td><?php echo $row['rcopi']; ?></td>
@@ -540,6 +551,9 @@ if (Input::exists() && isset($_POST['edit'])) {
                                                                       echo "'"; ?>">
                             <input type="hidden" name="other" value="<?php echo "'";
                                                                       echo $row['other'];
+                                                                      echo "'"; ?>">
+                            <input type="hidden" name="cyear" value="<?php echo "'";
+                                                                      echo $row['pdate'];
                                                                       echo "'"; ?>">
                             <input type="hidden" name="funds" value="<?php echo "'";
                                                                       echo $row['funds'];
@@ -564,6 +578,9 @@ if (Input::exists() && isset($_POST['edit'])) {
                                                                       echo "'"; ?>">
                             <input type="hidden" name="other" value="<?php echo "'";
                                                                       echo $row['other'];
+                                                                      echo "'"; ?>">
+                            <input type="hidden" name="cyear" value="<?php echo "'";
+                                                                      echo $row['pdate'];
                                                                       echo "'"; ?>">
                             <input type="hidden" name="funds" value="<?php echo "'";
                                                                       echo $row['funds'];
@@ -616,16 +633,16 @@ if (Input::exists() && isset($_POST['edit'])) {
                     $cnames = DB::getInstance();
                     $cname = Input::get('CnameS');
 
-                    $cnames->query("SELECT fname,dept,title,other, rpi, rcopi, funds, lastUpdated FROM faculty_profile_research WHERE rtype = 'ocp' AND title LIKE '%$cname%' ORDER BY lastUpdated DESC");
+                    $cnames->query("SELECT fname,dept,title,other,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day, rpi, rcopi, funds, lastUpdated FROM faculty_profile_research WHERE rtype = 'ocp' AND title LIKE '%$cname%' ORDER BY pdate DESC");
 
                     if ($cnames->count()) {
                       echo "<table class=\"table table-striped table-hover\">";
                       echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Agency</th><th>PI</th><th>Co-PI</th><th>Funds</th></tr></thead>";
+                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Agency</th> <th>Date</th> <th>PI</th><th>Co-PI</th><th>Funds</th></tr></thead>";
                       echo "<tbody>";
 
                       foreach ($cnames->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->other</td><td>$row->rpi</td><td>$row->rcopi</td><td>$row->funds</td> </tr>\n";
+                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->other</td> <td>$row->day</td><td>$row->rpi</td><td>$row->rcopi</td><td>$row->funds</td> </tr>\n";
                       }
                       echo "</tbody></table>";
                     }
@@ -650,16 +667,16 @@ if (Input::exists() && isset($_POST['edit'])) {
                     $cpnames = DB::getInstance();
                     $cpname = Input::get('CpnameS');
 
-                    $cpnames->query("SELECT fname,dept,title,other, rpi, rcopi, funds, lastUpdated FROM faculty_profile_research WHERE rtype = 'ocp' AND other LIKE '%$cpname%' ORDER BY lastUpdated DESC");
+                    $cpnames->query("SELECT fname,dept,title,other,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day, rpi, rcopi, funds, lastUpdated FROM faculty_profile_research WHERE rtype = 'ocp' AND other LIKE '%$cpname%' ORDER BY pdate DESC");
 
                     if ($cpnames->count()) {
                       echo "<table class=\"table table-striped table-hover\">";
                       echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Agency</th><th>PI</th><th>Co-PI</th><th>Funds</th></tr></thead>";
+                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Agency</th><th>Date</th><th>PI</th><th>Co-PI</th><th>Funds</th></tr></thead>";
                       echo "<tbody>";
 
                       foreach ($cpnames->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->other</td><td>$row->rpi</td><td>$row->rcopi</td><td>$row->funds</td> </tr>\n";
+                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->other</td><td>$row->day</td><td>$row->rpi</td><td>$row->rcopi</td><td>$row->funds</td> </tr>\n";
                       }
                       echo "</tbody></table>";
                     }
@@ -681,16 +698,16 @@ if (Input::exists() && isset($_POST['edit'])) {
                   if (strlen(Input::get('CfnameS')) > 0) {
                     $cfnames = DB::getInstance();
                     $cfname = Input::get('CfnameS');
-                    $cfnames->query("SELECT fname,dept,title,other, rpi, rcopi, funds, lastUpdated FROM faculty_profile_research WHERE rtype = 'ocp' AND fname LIKE '%$cfname%' ORDER BY lastUpdated DESC");
+                    $cfnames->query("SELECT fname,dept,title,other,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day, rpi, rcopi, funds, lastUpdated FROM faculty_profile_research WHERE rtype = 'ocp' AND fname LIKE '%$cfname%' ORDER BY pdate DESC");
 
                     if ($cfnames->count()) {
                       echo "<table class=\"table table-striped table-hover\">";
                       echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Agency</th><th>PI</th><th>Co-PI</th><th>Funds</th></tr></thead>";
+                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Agency</th><th>Date</th><th>PI</th><th>Co-PI</th><th>Funds</th></tr></thead>";
                       echo "<tbody>";
 
                       foreach ($cfnames->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->other</td><td>$row->rpi</td><td>$row->rcopi</td><td>$row->funds</td> </tr>\n";
+                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->other</td><td>$row->day</td><td>$row->rpi</td><td>$row->rcopi</td><td>$row->funds</td> </tr>\n";
                       }
                       echo "</tbody></table>";
                     }
