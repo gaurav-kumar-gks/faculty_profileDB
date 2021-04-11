@@ -9,7 +9,7 @@ if ($user->isLoggedIn()) {
   Redirect::to('index.php');
 }
 
-/* submit */
+/*  submit */
 if (Input::exists() && isset($_POST['csubmit'])) {
   try {
 
@@ -18,12 +18,17 @@ if (Input::exists() && isset($_POST['csubmit'])) {
     $roll = $user->data()->{'Roll No'};
     $prog = $user->data()->prog;
     $dept = $user->data()->department;
+    //$ptype = 'c';
     $email = $user->data()->email;
     $aemail = $user->data()->aemail;
 
     // columns that we get from form input
     $title = Input::get('title');
+    $other = Input::get('other');
+    $rcopi = Input::get('rcopi');
+    $rlevel = Input::get('rlevel');
     $cyear = Input::get('cyear');
+    $remarks = Input::get('remarks');
 
 
     // connect with localhost
@@ -32,7 +37,7 @@ if (Input::exists() && isset($_POST['csubmit'])) {
       die("Unable to connect to database");
 
     // insert query
-    $stmt = "INSERT INTO `faculty_profile_research` (`fname`, `roll`, `dept`, `prog`, `email`, `aemail`, `rtype`, `title`, `other`, `rpi`, `rcopi`, `rlevel`, `remarks`, `funds`, `projectStatus`, `juri`, `ref`, `pdate`) VALUES ('$fname', '$roll', '$dept', '$prog', '$email', '$aemail', 'rarea', '$title', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$cyear');";
+    $stmt = "INSERT INTO `faculty_profile_research` (`fname`, `roll`, `dept`, `prog`, `email`, `aemail`, `rtype`, `title`, `other`, `rpi`, `rcopi`, `rlevel`, `remarks`, `funds`, `projectStatus`, `juri`, `ref`,`pdate`) VALUES ('$fname', '$roll', '$dept', '$prog', '$email', '$aemail', 'g', '$title', '$other', NULL, '$rcopi', '$rlevel', '$remarks', NULL, NULL, NULL, NULL,'$cyear');";
     // echo $stmt;
     // run insert query
     $result = mysqli_query($conn, $stmt);
@@ -56,7 +61,14 @@ if (Input::exists() && isset($_POST['delete_entry'])) {
 
     // columns that we get from form input
     $title = Input::get('title');
+    $other = Input::get('other');
+    $rlevel = Input::get('rlevel');
     $cyear = Input::get('cyear');
+    $rcopi = Input::get('rcopi');
+    $remarks = Input::get('remarks');
+
+
+
 
     // connect with localhost
     $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
@@ -64,7 +76,7 @@ if (Input::exists() && isset($_POST['delete_entry'])) {
       die("Unable to connect to database");
 
     // delete query
-    $stmt = "DELETE FROM `faculty_profile_research` WHERE roll='$roll' AND rtype='rarea' AND title=$title AND pdate=$cyear;";
+    $stmt = "DELETE FROM `faculty_profile_research` WHERE roll='$roll' AND rtype='g' AND title=$title  AND other=$other AND rlevel=$rlevel AND rcopi=$rcopi AND remarks=$remarks AND pdate=$cyear;";
     //echo $stmt;
     // run delete query
     $result = mysqli_query($conn, $stmt);
@@ -82,10 +94,22 @@ if (Input::exists() && isset($_POST['edit'])) {
 
     // new input
     $title = Input::get('title');
+    $other = Input::get('other');
+    $rlevel = Input::get('rlevel');
     $cyear = Input::get('cyear');
+    $remarks = Input::get('remarks');
+    $rcopi = Input::get('rcopi');
+
+
     // prev input
     $titlePrev = Input::get('titlePrev');
+    $otherPrev = Input::get('otherPrev');
+    $rlevelPrev = Input::get('rlevelPrev');
     $cyearPrev = Input::get('cyearPrev');
+    $remarksPrev = Input::get('remarksPrev');
+    $rcopiPrev = Input::get('rcopiPrev');
+
+
 
     // connect with localhost
     $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
@@ -93,7 +117,7 @@ if (Input::exists() && isset($_POST['edit'])) {
       die("Unable to connect to database");
 
     // update query
-    $stmt = "UPDATE `faculty_profile_research` SET title='$title', pdate='$cyear' WHERE roll='$roll' AND rtype='rarea' AND  title=$titlePrev AND pdate=$cyearPrev;";
+    $stmt = "UPDATE `faculty_profile_research` SET title='$title', other='$other', rlevel='$rlevel', rcopi='$rcopi', remarks='$remarks', pdate='$cyear' WHERE roll='$roll' AND rtype='cpr' AND  title=$titlePrev AND other=$otherPrev AND rlevel=$rlevelPrev AND rcopi=$rcopiPrev AND remarks=$remarksPrev AND pdate=$cyearPrev;";
 
     //echo $stmt;
     // run query
@@ -115,9 +139,10 @@ if (Input::exists() && isset($_POST['edit'])) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <title>Research Area</title>
+  <title>Guidance</title>
 
   <!-- CSS -->
+  <link rel="stylesheet" href="css/jqueryui.css">
   <link rel="stylesheet" href="css/font-awesome.min.css">
   <!-- <link rel="stylesheet" href="css/bootstrap.css"> -->
   <link rel="stylesheet" href="css/style.css">
@@ -356,28 +381,56 @@ if (Input::exists() && isset($_POST['edit'])) {
               <?php if (Input::exists() && isset($_POST['edit_entry'])) {
 
                 $title = Input::get('title');
+                $other = Input::get('other');
+                $remarks = Input::get('remarks');
+                $rlevel = Input::get('rlevel');
+                $rcopi = Input::get('rcopi');
                 $cyear = Input::get('cyear');
-
-
               ?>
                 <!--  EDIT FORM -->
                 <div class="card">
                   <!--  EDIT FORM - HEADER -->
                   <div class="card-header">
-                    <h4><i class='fa fa-edit'></i> Edit Research Area</h4>
+                    <h4><i class='fa fa-edit'></i> Edit Guidance</h4>
                   </div>
                   <br>
                   <!-- EDIT FORM - HEADER ends -->
 
                   <!--  EDIT FORM - BODY -->
-                  <form action="researchArea.php" method="post">
+                  <form action="guidance.php" method="post">
 
                     <input type="hidden" name="titlePrev" value="<?php echo $title ?>">
+                    <input type="hidden" name="otherPrev" value="<?php echo $other ?>">
+                    <input type="hidden" name="remarksPrev" value="<?php echo $remarks ?>">
+                    <input type="hidden" name="rlevelPrev" value="<?php echo $rlevel ?>">
+                    <input type="hidden" name="rcopiPrev" value="<?php echo $rcopi ?>">
                     <input type="hidden" name="cyearPrev" value="<?php echo $cyear ?>">
 
                     <div class="form-group">
-                      <label> Title<span class="m-1 text-primary">*</span></label>
+                      <label> Title of Project<span class="m-1 text-primary">*</span></label>
                       <input type="text" class="form-control" name="title" id="title" required value=<?php echo "$title" ?>>
+                    </div>
+
+                    <div class="form-group">
+                      <label> Name of Student<span class="m-1 text-primary">*</span></label>
+                      <input type="text" class="form-control" name="other" id="title" required value=<?php echo "$other" ?>>
+                    </div>
+
+                    <div class="form-group">
+                      <label>Name of Co-Supervisor</label>
+                      <input type="text" class="form-control" name="rcopi" id="rcopi"  value=<?php echo "$rcopi" ?>>
+                    </div>
+
+
+                    <div class="form-group">
+                      <label> Level</label>
+                      <input type="text" class="form-control" name="rlevel" id="rlevel" placeholder="B.Tech./M.Tech./Ph.D." value=<?php echo "$rlevel" ?>>
+                    </div>
+
+
+                    <div class="form-group">
+                      <label> Remarks</label>
+                      <input type="text" class="form-control" name="remarks" id="remarks" value=<?php echo "$remarks" ?>>
                     </div>
                     <div class="form-group">
                       <label for="cyear"> Date</label>
@@ -396,23 +449,45 @@ if (Input::exists() && isset($_POST['edit'])) {
                 <div class="card">
                   <!--  INSERT FORM - HEADER -->
                   <div class="card-header">
-                    <h4><i class='fa fa-edit'></i> Add Research Area</h4>
+                    <h4><i class='fa fa-edit'></i> Guidance</h4>
                   </div>
                   <br>
                   <!--  INSERT FORM - HEADER ends -->
 
                   <!--  INSERT FORM - BODY -->
-                  <form action="researchArea.php" method="post">
+                  <form action="guidance.php" method="post">
 
                     <div class="form-group">
-                      <label> Title<span class="m-1 text-primary">*</span></label>
-                      <input type="text" class="form-control" id="title" name="title" required>
+                      <label> Title of Project<span class="m-1 text-primary">*</span></label>
+                      <input type="text" class="form-control" name="title" id="title" required>
                     </div>
+
+                    <div class="form-group">
+                      <label> Name of Student<span class="m-1 text-primary">*</span></label>
+                      <input type="text" class="form-control" name="other" id="other" required>
+                    </div>
+
+                    <div class="form-group">
+                      <label> Name of Co-Supervisor</label>
+                      <input type="text" class="form-control" name="rcopi" id="rcopi" >
+                    </div>
+
+
+
+                    <div class="form-group">
+                      <label> Level</label>
+                      <input type="text" class="form-control" name="rlevel" id="rlevel" placeholder="B.Tech./M.Tech./Ph.D.">
+                    </div>
+
+                    <div class="form-group">
+                      <label> Remarks</label>
+                      <input type="text" class="form-control" name="remarks" id="remarks">
+                    </div>
+
                     <div class="form-group">
                       <label for="cyear"> Date</label>
                       <input type="date" id="cyear" name="cyear" value=<?php echo "$cyear" ?>>
                     </div>
-
 
                     <input type="submit" class="btn btn-info" name="csubmit" value="Submit">
 
@@ -427,13 +502,19 @@ if (Input::exists() && isset($_POST['edit'])) {
               <!-- VIEW ADDED  -->
               <div class="card">
                 <div class="card-header">
-                  <h4><i class="fa fa-file-text"></i> Research Areas</h4>
+                  <h4><i class="fa fa-file-text"></i> Added Records</h4>
                 </div>
                 <table class="table table-striped table-hover">
                   <thead class="thead-inverse">
                     <tr>
-                      <th>Title</th>
+                      <th>Project Title</th>
+                      <th>Student</th>
+                      <th>Co-Supervisor</th>
+                      <th>Level</th>
+                      <th>Remarks</th>
                       <th>Date</th>
+
+
                       <th></th>
                       <th></th>
                     </tr>
@@ -448,21 +529,41 @@ if (Input::exists() && isset($_POST['edit'])) {
                       die("Unable to connect to database");
 
                     // echo $roll;
-                    $stmt = "SELECT * FROM faculty_profile_research WHERE roll='$roll' AND rtype='rarea' ORDER BY lastUpdated DESC;";
+                    $stmt = "SELECT * FROM faculty_profile_research WHERE roll='$roll' AND rtype='g' ORDER BY lastUpdated DESC;";
                     // echo $stmt;
                     $result = mysqli_query($conn, $stmt);
                     while ($row = mysqli_fetch_assoc($result)) {
                     ?>
                       <tr>
                         <td><?php echo $row['title']; ?></td>
+                        <td><?php echo $row['other']; ?></td>
+                        <td><?php echo $row['rcopi']; ?></td>
+                        <td><?php echo $row['rlevel']; ?></td>
+                        <td><?php echo $row['remarks']; ?></td>
                         <td><?php echo $row['pdate']; ?></td>
+
 
                         <!-- EDIT -->
                         <td>
-                          <form action="researchArea.php" method="post">
+                          <form action="guidance.php" method="post">
                             <input type="hidden" name="title" value="<?php echo "'";
                                                                       echo $row['title'];
                                                                       echo "'"; ?>">
+                            <input type="hidden" name="rcopi" value="<?php echo "'";
+                                                                      echo $row['rcopi'];
+                                                                      echo "'"; ?>">
+                            <input type="hidden" name="other" value="<?php echo "'";
+                                                                      echo $row['other'];
+                                                                      echo "'"; ?>">
+
+
+                            <input type="hidden" name="rlevel" value="<?php echo "'";
+                                                                      echo $row['rlevel'];
+                                                                      echo "'"; ?>">
+
+                            <input type="hidden" name="remarks" value="<?php echo "'";
+                                                                        echo $row['remarks'];
+                                                                        echo "'"; ?>">
                             <input type="hidden" name="cyear" value="<?php echo "'";
                                                                       echo $row['pdate'];
                                                                       echo "'"; ?>">
@@ -473,14 +574,29 @@ if (Input::exists() && isset($_POST['edit'])) {
                         <!-- EDIT ends -->
                         <!-- DELETE -->
                         <td>
-                          <form action="researchArea.php" method="post">
+                          <form action="guidance.php" method="post">
                             <input type="hidden" name="title" value="<?php echo "'";
                                                                       echo $row['title'];
                                                                       echo "'"; ?>">
+                            <input type="hidden" name="rcopi" value="<?php echo "'";
+                                                                      echo $row['rcopi'];
+                                                                      echo "'"; ?>">
+
+                            <input type="hidden" name="other" value="<?php echo "'";
+                                                                      echo $row['other'];
+                                                                      echo "'"; ?>">
+
+
+                            <input type="hidden" name="rlevel" value="<?php echo "'";
+                                                                      echo $row['rlevel'];
+                                                                      echo "'"; ?>">
+
+                            <input type="hidden" name="remarks" value="<?php echo "'";
+                                                                        echo $row['remarks'];
+                                                                        echo "'"; ?>">
                             <input type="hidden" name="cyear" value="<?php echo "'";
                                                                       echo $row['pdate'];
                                                                       echo "'"; ?>">
-
 
                             <input type="submit" class="btn btn-danger" name="delete_entry" value="Delete">
                           </form>
@@ -503,15 +619,15 @@ if (Input::exists() && isset($_POST['edit'])) {
               <!-- Search Functions -->
               <div class="card">
                 <div class="card-header">
-                  <h4><i class="fa fa-search mr-3"></i> Search Patents </h4>
+                  <h4><i class="fa fa-search mr-3"></i> Search Students guided </h4>
                 </div>
                 <br>
                 <br>
 
-                <!-- Search 0 - by book title -->
-                <form action="researchArea.php">
+                <!-- Search 0 - by project title -->
+                <form action="guidance.php">
                   <div class="input-group">
-                    <input type="text" required name="BnameS" class="form-control" placeholder="Search By Research Area">
+                    <input type="text" required name="BnameS" class="form-control" placeholder="Search By Project Title">
                     <input type="submit" name="BnameSearch" class="btn btn-secondary">
                   </div>
                 </form>
@@ -522,16 +638,16 @@ if (Input::exists() && isset($_POST['edit'])) {
                     $bnames = DB::getInstance();
                     $bname = Input::get('BnameS');
 
-                    $bnames->query("SELECT fname,dept,title,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day FROM faculty_profile_research WHERE rtype = 'rarea' AND title LIKE '%$bname%' ORDER BY lastUpdated DESC");
+                    $bnames->query("SELECT fname,dept,title,other,rcopi, rlevel,remarks,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day FROM faculty_profile_research WHERE rtype = 'g' AND title LIKE '%$bname%' ORDER BY lastUpdated DESC");
 
                     if ($bnames->count()) {
                       echo "<table class=\"table table-striped table-hover\">";
                       echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Date</th></tr></thead>";
+                      echo "<tr><th>Supervisor</th><th>Dept</th><th>Project Title</th><th>Student</th><th>Co-Supervisor</th><th>Level</th><th>Remarks</th><th>Date</th></tr></thead>";
                       echo "<tbody>";
 
                       foreach ($bnames->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->day</td> </tr>\n";
+                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->other</td><td>$row->copi</td><td>$row->rlevel</td><td>$row->remarks</td><td>$row->day</td> </tr>\n";
                       }
                       echo "</tbody></table>";
                     }
@@ -542,8 +658,8 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                 <br>
 
-                <!-- Search 4 - by faculty name -->
-                <form action="researchArea.php">
+                <!-- Search 4 - by student name -->
+                <form action="guidance.php">
                   <div class="input-group">
                     <input type="text" name="CfnameS" required class="form-control" placeholder="Search By Faculty Name">
                     <input type="submit" name="CfnameSearch" class="btn btn-secondary">
@@ -556,16 +672,16 @@ if (Input::exists() && isset($_POST['edit'])) {
                     $cfnames = DB::getInstance();
                     $cfname = Input::get('CfnameS');
 
-                    $cfnames->query("SELECT fname,dept,title,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day FROM faculty_profile_research WHERE rtype = 'rarea' AND fname LIKE '%$cfname%' ORDER BY lastUpdated DESC");
+                    $cfnames->query("SELECT fname,dept,title,other,rcopi, rlevel,remarks,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day FROM faculty_profile_research WHERE rtype = 'g' AND fname LIKE '%$cfname%' ORDER BY lastUpdated DESC");
 
                     if ($cfnames->count()) {
                       echo "<table class=\"table table-striped table-hover\">";
                       echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Date</th></tr></thead>";
+                      echo "<tr><th>Name</th><th>Dept</th><th>Project Title</th><th>Student</th><th>Co-Supervisor</th><th>Level</th><th>Remarks</th><th>Date</th></tr></thead>";
                       echo "<tbody>";
 
                       foreach ($cfnames->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->day</td></tr>\n";
+                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->other</td><td>$row->rcopi</td><td>$row->rlevel</td><td>$row->remarks</td><td>$row->day</td> </tr>\n";
                       }
                       echo "</tbody></table>";
                     }
@@ -594,6 +710,9 @@ if (Input::exists() && isset($_POST['edit'])) {
   <script src="js/popper.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/others.js"></script>
+  <script src="js/jquery.js"></script>
+  <script src="js/jqueryui.js"></script>
+  <script src="js/research/guidance.js"></script>
 </body>
 
 </html>
