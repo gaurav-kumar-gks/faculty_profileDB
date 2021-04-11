@@ -33,13 +33,13 @@ if (Input::exists() && isset($_POST['jsubmit'])) {
     $jlink = Input::get('jlink');
 
     // connect with localhost
-    $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+    $conn=mysqli_connect("localhost","root","jrtalent","faculty_profile_db");
     if (!$conn)
       die("Unable to connect to database");
 
     // insert query
     $stmt = "INSERT INTO `faculty_profile_publications` (`sno`, `fname`, `roll`, `dept`, `prog`, `ptype`, `title`, `authors`, `publication`, `publisher`, `pdate`, `location`, `pages`, `onlineLink`, `duration`, `impactFactor`, `bookTitle`, `bookType`, `editedVolume`, `eduPackageType`, `eduPackageLevel`, `patentNo`, `projectBudget`, `projectSponser`, `projectRole`, `projectStatus`, `email`, `aemail`) VALUES (NULL, '$fname', '$roll', '$dept', '$prog', 'j', '$jtitle', '$jauthors', '$jpublication', '$jpublisher', '$jyear', NULL, '$jpages', '$jlink', NULL, '$jimpact', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$email', '$aemail');";
-    // echo $stmt;
+
     // run insert query
     $result = mysqli_query($conn, $stmt);
   } catch (Exception $e) {
@@ -74,7 +74,7 @@ if (Input::exists() && isset($_POST['delete_entry'])) {
 
 
     // connect with localhost
-    $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+    $conn=mysqli_connect("localhost","root","jrtalent","faculty_profile_db");
     if (!$conn)
       die("Unable to connect to database");
 
@@ -88,6 +88,84 @@ if (Input::exists() && isset($_POST['delete_entry'])) {
     die($e->getMessage());
   }
 }
+
+
+ if (Input::exists() && isset($_POST['upgrade_entry_x'])) {
+
+  // $validatec = new Validate();
+  //echo "Here1";
+
+
+  // $validationC = $validatec->checkfreg($user->data()->email);
+  // if ($validationC->passed()) {
+    try {
+      //echo "Here4";
+
+      // we'll run query on this instance
+     // $jins = DB::getInstance();
+
+      // fetch variables that are already stored in User from studentinfo table 
+      $fname = $user->data()->Name;
+      $roll = $user->data()->{'Roll No'};
+      $prog = $user->data()->prog;
+      $dept = $user->data()->department;
+      $ptype = 'j';
+      $email = $user->data()->email;
+      $aemail = $user->data()->aemail;
+      // echo $fid;
+
+      // columns from the form input 
+      // $cname = Input::get('cname');
+      // $cauthors = Input::get('cauthors');
+      // $ctitle = Input::get('ctitle');
+      // $cyear = Input::get('cyear');
+      // $clink = Input::get('clink');
+      // $clocation = Input::get('clocation');
+
+      $SNO=Input::get('sno');
+      // $ltp=Input::get('ltp');
+      // $numOfStudents=Input::get('numOfStudents');
+      // $additionalInformation=Input::get('additionalInformation');
+      // $semester=Input::get('semester');
+      // $date=Input::get('student_activity_date');
+      // // run insert query
+      $conn=mysqli_connect("localhost","root","jrtalent","faculty_profile_db");
+      // if(!$conn)
+      // die("Unable to connect to database");
+
+      // // $stmt="insert into discussion values('$email','$dateTime','$club_id','$text');";
+      // $stmt="Delete from `faculty_profile_teaching` where subCode='$subCode' and ltp='$ltp' and roll='$roll' and numOfStudents=$numOfStudents and activityDate = '$date' and additionalInformation='$additionalInformation' and semester=$semester";
+
+      // echo $SNO;
+
+      $stmt="select * from faculty_profile_publications where sno>$SNO and roll='$roll' and ptype='j' order by sno asc limit 1";
+      $result=mysqli_query($conn,$stmt);
+      $count=0;
+      $val=0;
+      while($row=mysqli_fetch_assoc($result)){
+                $count=$count+1;
+                $val=$row['sno'];
+                // echo $row['sno'];
+        }
+      if($count!=0)
+      {
+        $stmt="update faculty_profile_publications set sno=-1 where sno=$val";
+        $result=mysqli_query($conn,$stmt);
+        $stmt="update faculty_profile_publications set sno=$val where sno=$SNO";
+        $result=mysqli_query($conn,$stmt);
+        $stmt="update faculty_profile_publications set sno=$SNO where sno=-1";
+        $result=mysqli_query($conn,$stmt);
+      }
+      // $result=mysqli_query($conn,$stmt);
+      // // // echo if conference added successfully 
+      // echo "<script type=\"text/javascript\">alert(\"Entry Deleted successfully\");</script>";
+    } catch (Exception $e) {
+      //echo "Here8";
+      die($e->getMessage());
+    }
+  } 
+
+
 
 /* edit */
 if (Input::exists() && isset($_POST['edit'])) {
@@ -117,7 +195,7 @@ if (Input::exists() && isset($_POST['edit'])) {
 
 
     // connect with localhost
-    $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+    $conn=mysqli_connect("localhost","root","jrtalent","faculty_profile_db");
     if (!$conn)
       die("Unable to connect to database");
 
@@ -536,6 +614,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                 <table class="table table-striped table-hover">
                   <thead class="thead-inverse">
                     <tr>
+                      <th></th>
                       <th>Title</th>
                       <th>Authors</th>
                       <th>Publication</th>
@@ -553,26 +632,17 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <?php
                     $roll = $user->data()->{'Roll No'};
-                    $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+                    $conn=mysqli_connect("localhost","root","jrtalent","faculty_profile_db");
                     if (!$conn)
                       die("Unable to connect to database");
 
                     // echo $roll;
-                    $stmt = "SELECT * FROM faculty_profile_publications WHERE roll='$roll' AND ptype='j' ORDER BY lastUpdated DESC;";
+                    $stmt = "SELECT * FROM faculty_profile_publications WHERE roll='$roll' AND ptype='j' order by sno desc";
                     // echo $stmt;
                     $result = mysqli_query($conn, $stmt);
                     while ($row = mysqli_fetch_assoc($result)) {
                     ?>
                       <tr>
-                        <td><?php echo $row['title']; ?></td>
-                        <td><?php echo $row['authors']; ?></td>
-                        <td><?php echo $row['publication']; ?></td>
-                        <td><?php echo $row['publisher']; ?></td>
-                        <td><?php echo $row['pages']; ?></td>
-                        <td><?php echo $row['pdate']; ?></td>
-                        <td><?php echo $row['onlineLink']; ?></td>
-                        <td><?php echo $row['impactFactor']; ?></td>
-                        <!-- EDIT -->
                         <td>
                           <form action="journal.php" method="post">
                             <input type="hidden" name="jtitle" value="<?php echo "'";
@@ -603,8 +673,26 @@ if (Input::exists() && isset($_POST['edit'])) {
                             <input type="submit" class="btn btn-primary" name="edit_entry" value="Edit" style="background-color: green">
                           </form>
                         </td>
+                        <td><?php echo $row['title']; ?></td>
+                        <td><?php echo $row['authors']; ?></td>
+                        <td><?php echo $row['publication']; ?></td>
+                        <td><?php echo $row['publisher']; ?></td>
+                        <td><?php echo $row['pages']; ?></td>
+                        <td><?php echo $row['pdate']; ?></td>
+                        <td><?php echo $row['onlineLink']; ?></td>
+                        <td><?php echo $row['impactFactor']; ?></td>
+                        <!-- EDIT -->
+                        
                         <!-- EDIT ends -->
                         <!-- DELETE -->
+                        <td>
+                        
+                         <form action="journal.php" method="post">
+                              <input type='hidden' name='sno' value=<?php echo $row['sno'];?> >
+                              <input type="image"  name="upgrade_entry" value="Upgrade" src="./Images/upward_arrow.png" height="50" width="60">
+                        </form>
+
+                      </td>
                         <td>
                           <form action="journal.php" method="post">
                             <input type="hidden" name="jtitle" value="<?php echo "'";

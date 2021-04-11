@@ -30,7 +30,7 @@ if (Input::exists() && isset($_POST['csubmit'])) {
     $clink = Input::get('clink');
 
     // connect with localhost
-    $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+    $conn=mysqli_connect("localhost","root","jrtalent","faculty_profile_db");
     if (!$conn)
       die("Unable to connect to database");
 
@@ -68,7 +68,7 @@ if (Input::exists() && isset($_POST['delete_entry'])) {
 
 
     // connect with localhost
-    $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+    $conn=mysqli_connect("localhost","root","jrtalent","faculty_profile_db");
     if (!$conn)
       die("Unable to connect to database");
 
@@ -82,6 +82,83 @@ if (Input::exists() && isset($_POST['delete_entry'])) {
     die($e->getMessage());
   }
 }
+
+
+if (Input::exists() && isset($_POST['upgrade_entry_x'])) {
+
+  // $validatec = new Validate();
+  //echo "Here1";
+
+
+  // $validationC = $validatec->checkfreg($user->data()->email);
+  // if ($validationC->passed()) {
+    try {
+      //echo "Here4";
+
+      // we'll run query on this instance
+     // $jins = DB::getInstance();
+
+      // fetch variables that are already stored in User from studentinfo table 
+      $fname = $user->data()->Name;
+      $roll = $user->data()->{'Roll No'};
+      $prog = $user->data()->prog;
+      $dept = $user->data()->department;
+      $ptype = 'j';
+      $email = $user->data()->email;
+      $aemail = $user->data()->aemail;
+      // echo $fid;
+
+      // columns from the form input 
+      // $cname = Input::get('cname');
+      // $cauthors = Input::get('cauthors');
+      // $ctitle = Input::get('ctitle');
+      // $cyear = Input::get('cyear');
+      // $clink = Input::get('clink');
+      // $clocation = Input::get('clocation');
+
+      $SNO=Input::get('sno');
+      // $ltp=Input::get('ltp');
+      // $numOfStudents=Input::get('numOfStudents');
+      // $additionalInformation=Input::get('additionalInformation');
+      // $semester=Input::get('semester');
+      // $date=Input::get('student_activity_date');
+      // // run insert query
+      $conn=mysqli_connect("localhost","root","jrtalent","faculty_profile_db");
+      // if(!$conn)
+      // die("Unable to connect to database");
+
+      // // $stmt="insert into discussion values('$email','$dateTime','$club_id','$text');";
+      // $stmt="Delete from `faculty_profile_teaching` where subCode='$subCode' and ltp='$ltp' and roll='$roll' and numOfStudents=$numOfStudents and activityDate = '$date' and additionalInformation='$additionalInformation' and semester=$semester";
+
+      // echo $SNO;
+
+      $stmt="select * from faculty_profile_publications where sno>$SNO and roll='$roll' and ptype='ev' order by sno asc limit 1";
+      $result=mysqli_query($conn,$stmt);
+      $count=0;
+      $val=0;
+      while($row=mysqli_fetch_assoc($result)){
+                $count=$count+1;
+                $val=$row['sno'];
+                // echo $row['sno'];
+        }
+      if($count!=0)
+      {
+        $stmt="update faculty_profile_publications set sno=-1 where sno=$val";
+        $result=mysqli_query($conn,$stmt);
+        $stmt="update faculty_profile_publications set sno=$val where sno=$SNO";
+        $result=mysqli_query($conn,$stmt);
+        $stmt="update faculty_profile_publications set sno=$SNO where sno=-1";
+        $result=mysqli_query($conn,$stmt);
+      }
+      // $result=mysqli_query($conn,$stmt);
+      // // // echo if conference added successfully 
+      // echo "<script type=\"text/javascript\">alert(\"Entry Deleted successfully\");</script>";
+    } catch (Exception $e) {
+      //echo "Here8";
+      die($e->getMessage());
+    }
+  } 
+
 
 /* edit */
 if (Input::exists() && isset($_POST['edit'])) {
@@ -109,7 +186,7 @@ if (Input::exists() && isset($_POST['edit'])) {
 
 
     // connect with localhost
-    $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+    $conn=mysqli_connect("localhost","root","jrtalent","faculty_profile_db");
     if (!$conn)
       die("Unable to connect to database");
 
@@ -486,7 +563,7 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <div class="form-group">
                       <label> Online link</label>
-                      <input type="text" class="form-control" name="clink" value=<?php echo "$clink" ?>>
+                      <input type="text" class="form-control" name="clink" >
                     </div>
 
                     <input type="submit" class="btn btn-info" name="csubmit" value="Submit">
@@ -507,6 +584,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                 <table class="table table-striped table-hover">
                   <thead class="thead-inverse">
                     <tr>
+                      <th></th>
                       <th>Paper Title</th>
                       <th>Edited Volume Title</th>
                       <th>Authors</th>
@@ -522,24 +600,17 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <?php
                     $roll = $user->data()->{'Roll No'};
-                    $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+                    $conn=mysqli_connect("localhost","root","jrtalent","faculty_profile_db");
                     if (!$conn)
                       die("Unable to connect to database");
 
                     // echo $roll;
-                    $stmt = "SELECT * FROM faculty_profile_publications WHERE roll='$roll' AND ptype='ev' ORDER BY lastUpdated DESC;";
+                    $stmt = "SELECT * FROM faculty_profile_publications WHERE roll='$roll' AND ptype='ev' ORDER BY sno DESC;";
                     // echo $stmt;
                     $result = mysqli_query($conn, $stmt);
                     while ($row = mysqli_fetch_assoc($result)) {
                     ?>
                       <tr>
-                        <td><?php echo $row['title']; ?></td>
-                        <td><?php echo $row['editedVolume']; ?></td>
-                        <td><?php echo $row['authors']; ?></td>
-                        <td><?php echo $row['publisher']; ?></td>
-                        <td><?php echo $row['pdate']; ?></td>
-                        <td><?php echo $row['onlineLink']; ?></td>
-
 
                         <!-- EDIT -->
                         <td>
@@ -569,6 +640,24 @@ if (Input::exists() && isset($_POST['edit'])) {
                           </form>
                         </td>
                         <!-- EDIT ends -->
+
+                        <td><?php echo $row['title']; ?></td>
+                        <td><?php echo $row['editedVolume']; ?></td>
+                        <td><?php echo $row['authors']; ?></td>
+                        <td><?php echo $row['publisher']; ?></td>
+                        <td><?php echo $row['pdate']; ?></td>
+                        <td><?php echo $row['onlineLink']; ?></td>
+
+
+                        
+
+                        <td>
+                         <form action="editedVolumes.php" method="post">
+                              <input type='hidden' name='sno' value=<?php echo $row['sno'];?> >
+                              <input type="image"  name="upgrade_entry" value="Upgrade" src="./Images/upward_arrow.png" height="50" width="60">
+                        </form>
+                      </td>
+
                         <!-- DELETE -->
                         <td>
                           <form action="editedVolumes.php" method="post">
