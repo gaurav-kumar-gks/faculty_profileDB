@@ -44,6 +44,40 @@ if (Input::exists() && isset($_POST['csubmit'])) {
   }
 }
 
+/*   FILL */
+if (Input::exists() && isset($_POST['cfill'])) {
+
+  try {
+    // fetch variables that are already stored in User from studentinfo table 
+    $fname = $user->data()->Name;
+    $roll = $user->data()->{'Roll No'};
+    $prog = $user->data()->prog;
+    $dept = $user->data()->department;
+    $ptype = 'j';
+    $email = $user->data()->email;
+    $aemail = $user->data()->aemail;
+
+
+    $placeOfVisit = Input::get('placeOfVisit');
+    $lectureTitle = Input::get('lectureTitle');
+    $duration = Input::get('duration');
+    $year = Input::get('year');
+    $activityDate = Input::get('activityDate');
+    // run insert query
+    $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+    if (!$conn)
+      die("Unable to connect to database");
+
+    // $stmt="insert into discussion values('$email','$dateTime','$club_id','$text');";
+
+    $stmt = "INSERT INTO `faculty_profile_honours_il` (`sno`, `name`, `roll`, `dept`, `placeOfVisit`,`lectureTitle`,`duration`,`year`, `activityDate`, `lastUpdated`) VALUES (NULL, '$fname', '$roll', '$dept', '$placeOfVisit','$lectureTitle','$duration', $year, '$activityDate',NULL)";
+    // echo "<br><br><br><br><br><br><br>";
+    // echo $stmt;
+    $result = mysqli_query($conn, $stmt);
+  } catch (Exception $e) {
+    die($e->getMessage());
+  }
+}
 
 if (Input::exists() && isset($_POST['delete_entry'])) {
 
@@ -241,184 +275,184 @@ if (Input::exists() && isset($_POST['edit'])) {
 
   <br><br>
   <div class="wrapper d-flex align-items-stretch">
- <!-- MAIN BODY - SIDEBAR  -->
- <nav id="sidebar">
+    <!-- MAIN BODY - SIDEBAR  -->
+    <nav id="sidebar">
 
-<!-- SIDEBAR TOGGLER -->
-<div class="custom-menu">
-  <button type="button" id="sidebarCollapse" class="btn btn-primary">
-    <i class="fa fa-bars"></i>
-    <span class="sr-only">Toggle Menu</span>
-  </button>
-</div>
-<!-- SIDEBAR TOGGLER ends -->
+      <!-- SIDEBAR TOGGLER -->
+      <div class="custom-menu">
+        <button type="button" id="sidebarCollapse" class="btn btn-primary">
+          <i class="fa fa-bars"></i>
+          <span class="sr-only">Toggle Menu</span>
+        </button>
+      </div>
+      <!-- SIDEBAR TOGGLER ends -->
 
-<!-- SIDEBAR CONTENT -->
-<div class="p-4 pt-5">
+      <!-- SIDEBAR CONTENT -->
+      <div class="p-4 pt-5">
 
-  <!-- SIDEBAR HEADER -->
-  <h1><a href="#" class="logo">Dashboard</a></h1>
-  <!-- SIDEBAR HEADING ends -->
+        <!-- SIDEBAR HEADER -->
+        <h1><a href="#" class="logo">Dashboard</a></h1>
+        <!-- SIDEBAR HEADING ends -->
 
-  <!-- SIDEBAR LISTS -->
-  <ul class="list-unstyled components mb-5">
+        <!-- SIDEBAR LISTS -->
+        <ul class="list-unstyled components mb-5">
 
-    <!-- AREA list -->
-    <li>
-      <a href="#areaSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-        Area
-      </a>
-      <ul class="collapse list-unstyled show" id="areaSubmenu">
-        <li>
-          <a href="researchArea.php">Research Area</a>
-        </li>
-      </ul>
-    </li>
-    <!-- AREA list ends -->
+          <!-- AREA list -->
+          <li>
+            <a href="#areaSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+              Area
+            </a>
+            <ul class="collapse list-unstyled show" id="areaSubmenu">
+              <li>
+                <a href="researchArea.php">Research Area</a>
+              </li>
+            </ul>
+          </li>
+          <!-- AREA list ends -->
 
-    <!-- TEACHING list -->
-    <li>
-      <a href="#teachingSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-        Teaching
-      </a>
-      <ul class="collapse list-unstyled show" id="teachingSubmenu">
-        <li>
-          <a href="Teaching.php">Teaching</a>
-        </li>
-      </ul>
-    </li>
-    <!-- TEACHING list ends -->
+          <!-- TEACHING list -->
+          <li>
+            <a href="#teachingSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+              Teaching
+            </a>
+            <ul class="collapse list-unstyled show" id="teachingSubmenu">
+              <li>
+                <a href="Teaching.php">Teaching</a>
+              </li>
+            </ul>
+          </li>
+          <!-- TEACHING list ends -->
 
-    <!-- RESEARCH list -->
-    <li>
-      <a href="#researchSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-        Research
-      </a>
-      <ul class="collapse list-unstyled show" id="researchSubmenu">
-        <li>
-          <a href="guidance.php">Guidance</a>
-        </li>
-        <li>
-          <a href="sponsoredResearch.php">Sponsored Research</a>
-        </li>
-        <li>
-          <a href="consultancy.php">Consultancy</a>
-        </li>
-        <li>
-          <a href="developmentWork.php">Development Work</a>
-        </li>
-        <li>
-          <a href="patent.php">Patent</a>
-        </li>
-        <li>
-          <a href="copyright.php">CopyRight</a>
-        </li>
-        <li>
-          <a href="technologyTransfer.php">Technology Transfer</a>
-        </li>
-      </ul>
-    </li>
-    <!-- RESEARCH list ends -->
+          <!-- RESEARCH list -->
+          <li>
+            <a href="#researchSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+              Research
+            </a>
+            <ul class="collapse list-unstyled show" id="researchSubmenu">
+              <li>
+                <a href="guidance.php">Guidance</a>
+              </li>
+              <li>
+                <a href="sponsoredResearch.php">Sponsored Research</a>
+              </li>
+              <li>
+                <a href="consultancy.php">Consultancy</a>
+              </li>
+              <li>
+                <a href="developmentWork.php">Development Work</a>
+              </li>
+              <li>
+                <a href="patent.php">Patent</a>
+              </li>
+              <li>
+                <a href="copyright.php">CopyRight</a>
+              </li>
+              <li>
+                <a href="technologyTransfer.php">Technology Transfer</a>
+              </li>
+            </ul>
+          </li>
+          <!-- RESEARCH list ends -->
 
-    <!-- Honours list -->
-    <li>
-      <a href="#honoursSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-        Honours
-      </a>
-      <ul class="collapse list-unstyled show" id="honoursSubmenu">
-        <li>
-          <a href="Honours_FPB.php">Fellow - Professional Body</a>
-        </li>
-        <li>
-          <a href="Honours_MPB.php">Member - Professional Body</a>
-        </li>
-        <li>
-          <a href="Honours_MEBJ.php">Member - Editorial Body</a>
-        </li>
-        <li>
-          <a href="Honours_A.php">Awards</a>
-        </li>
-        <li>
-          <a href="Honours_F.php">Fellowships</a>
-        </li>
-        <li>
-          <a href="Honours_IL.php">Invited Lectures</a>
-        </li>
-      </ul>
-    </li>
-    <!-- HONOURS list ends -->
+          <!-- Honours list -->
+          <li>
+            <a href="#honoursSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+              Honours
+            </a>
+            <ul class="collapse list-unstyled show" id="honoursSubmenu">
+              <li>
+                <a href="Honours_FPB.php">Fellow - Professional Body</a>
+              </li>
+              <li>
+                <a href="Honours_MPB.php">Member - Professional Body</a>
+              </li>
+              <li>
+                <a href="Honours_MEBJ.php">Member - Editorial Body</a>
+              </li>
+              <li>
+                <a href="Honours_A.php">Awards</a>
+              </li>
+              <li>
+                <a href="Honours_F.php">Fellowships</a>
+              </li>
+              <li>
+                <a href="Honours_IL.php">Invited Lectures</a>
+              </li>
+            </ul>
+          </li>
+          <!-- HONOURS list ends -->
 
-    <!-- PUBLICATIONS list -->
-    <li class="active">
-      <a href="#publicationsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-        Publications
-      </a>
-      <ul class="collapse list-unstyled show" id="publicationsSubmenu">
-        <li>
-          <a href="journal.php">Journals</a>
-        </li>
-        <li>
-          <a href="conference.php">Conference</a>
-        </li>
-        <li>
-          <a href="textBooks.php">Text Books</a>
-        </li>
-        <li>
-          <a href="bookChapter.php">Book Chapter</a>
-        </li>
-        <li>
-          <a href="editedVolumes.php">Edited Volumes</a>
-        </li>
-        <li>
-          <a href="educationalPackages.php">Educational Packages</a>
-        </li>
-        <li>
-          <a href="otherPublications.php">Other Publications</a>
-        </li>
-      </ul>
-    </li>
-    <!-- PUBLICATIONS ends -->
+          <!-- PUBLICATIONS list -->
+          <li class="active">
+            <a href="#publicationsSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+              Publications
+            </a>
+            <ul class="collapse list-unstyled show" id="publicationsSubmenu">
+              <li>
+                <a href="journal.php">Journals</a>
+              </li>
+              <li>
+                <a href="conference.php">Conference</a>
+              </li>
+              <li>
+                <a href="textBooks.php">Text Books</a>
+              </li>
+              <li>
+                <a href="bookChapter.php">Book Chapter</a>
+              </li>
+              <li>
+                <a href="editedVolumes.php">Edited Volumes</a>
+              </li>
+              <li>
+                <a href="educationalPackages.php">Educational Packages</a>
+              </li>
+              <li>
+                <a href="otherPublications.php">Other Publications</a>
+              </li>
+            </ul>
+          </li>
+          <!-- PUBLICATIONS ends -->
 
-    <!-- ACTIVITIES list -->
-    <li>
-      <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Activity</a>
-      <ul class="collapse list-unstyled show" id="homeSubmenu">
-        <li>
-          <a href="Activities_SA.php">Student Activities</a>
-        </li>
-        <li>
-          <a href="Activities_DA.php">Departmental Activities</a>
-        </li>
-        <li>
-          <a href="Activites_IA.php">Institute Activities</a>
-        </li>
-        <li>
-          <a href="Activities_PA.php">Professional Activities</a>
-        </li>
-        <li>
-          <a href="Activities_SCW.php">Seminar, Conference, Workshops</a>
-        </li>
-        <li>
-          <a href="Activities_STC.php">Short Term Course</a>
-        </li>
-        <li>
-          <a href="Activities_VA.php">Visit Abroad</a>
-        </li>
-        <li>
-          <a href="Activities_OAA.php">Other Academic Activity</a>
-        </li>
-        <li>
-          <a href="Activities_AOI.php">Any Other Information</a>
-        </li>
-      </ul>
-    </li>
-    <!-- ACTIVITIES list ends -->
-  </ul>
-  <!-- SIDEBAR LISTS ends -->
-</div>
-<!-- SIDEBAR CONTENT ends -->
-</nav>
-<!-- MAIN BODY - SIDEBAR ends -->
+          <!-- ACTIVITIES list -->
+          <li>
+            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Activity</a>
+            <ul class="collapse list-unstyled show" id="homeSubmenu">
+              <li>
+                <a href="Activities_SA.php">Student Activities</a>
+              </li>
+              <li>
+                <a href="Activities_DA.php">Departmental Activities</a>
+              </li>
+              <li>
+                <a href="Activites_IA.php">Institute Activities</a>
+              </li>
+              <li>
+                <a href="Activities_PA.php">Professional Activities</a>
+              </li>
+              <li>
+                <a href="Activities_SCW.php">Seminar, Conference, Workshops</a>
+              </li>
+              <li>
+                <a href="Activities_STC.php">Short Term Course</a>
+              </li>
+              <li>
+                <a href="Activities_VA.php">Visit Abroad</a>
+              </li>
+              <li>
+                <a href="Activities_OAA.php">Other Academic Activity</a>
+              </li>
+              <li>
+                <a href="Activities_AOI.php">Any Other Information</a>
+              </li>
+            </ul>
+          </li>
+          <!-- ACTIVITIES list ends -->
+        </ul>
+        <!-- SIDEBAR LISTS ends -->
+      </div>
+      <!-- SIDEBAR CONTENT ends -->
+    </nav>
+    <!-- MAIN BODY - SIDEBAR ends -->
 
     <!-- Page Content  -->
     <div id="content" class="p-4 p-md-5 pt-5">
@@ -475,11 +509,51 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                 </div>
                 <br>
+              <?php } else if (Input::exists() && isset($_POST['fill_entry'])) {
+
+                $placeOfVisit = Input::get('placeOfVisit');
+                $lectureTitle = Input::get('lectureTitle');
+                $duration = Input::get('duration');
+                $year = Input::get('year');
+                $activityDate = Input::get('activityDate');
+              ?>
+
+                <div class="card">
+                  <div class="card-header">
+                    <h4><i class='fa fa-edit'></i>Insert Information</h4>
+                  </div>
+                  <br>
+                  <form action="Honours_IL.php" method="post">
+                    <div class="form-group">
+                      <label>Place of Visit<span class="m-1 text-primary">*</span></label>
+                      <input type="text" value=<?php echo "$placeOfVisit" ?> class="form-control" name="placeOfVisit" id="placeOfVisit" placeholder="Place of Visit" required>
+                    </div>
+                    <div class="form-group">
+                      <label>Lecture Title<span class="m-1 text-primary">*</span></label>
+                      <input type="text" value=<?php echo "$lectureTitle" ?> class="form-control" name="lectureTitle" id="lectureTitle" placeholder="Lecture Title" required>
+                    </div>
+                    <div class="form-group">
+                      <label>Duration<span class="m-1 text-primary">*</span></label>
+                      <input type="integer" value=<?php echo "$duration" ?> class="form-control" name="duration" placeholder="Duration" required>
+                    </div>
+                    <div class="form-group">
+                      <label>Year<span class="m-1 text-primary">*</span></label>
+                      <input type="number" value=<?php echo "$year" ?> class="form-control" name="year" placeholder="Year" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="student_activity_date">Activity Date:</label>
+                      <input type="date" id="student_activity_date" value=<?php echo "$activityDate" ?> name="activityDate">
+                    </div>
+                    <input type="submit" class="btn btn-info" name="cfill" value="Insert">
+                  </form>
+
+                </div>
+                <br>
               <?php
               } else { ?>
                 <div class="card">
                   <div class="card-header">
-                    <h4><i class="fa fa-plus"></i> Invited Lectures during 2020-21</h4>
+                    <h4><i class="fa fa-plus"></i> Invited Lectures during </h4>
                   </div>
                   <br>
                   <form action="Honours_IL.php" method="post">
@@ -610,12 +684,186 @@ if (Input::exists() && isset($_POST['edit'])) {
               </div>
               <br>
 
-              <!-- SEARCH JOURNALS -->
+              <!-- SEARCH INVITED LECTURES -->
+              <!-- Search 1 - by conference paper title  -->
+              <div class="card">
+                <div class="card-header">
+                  <form action="Honours_IL.php">
+                    <h4><i class="fa fa-search mr-3"></i>Search by Lecture Title</h4>
+                    <div class="input-group">
+                      <input type="text" name="CtitleS" required class="form-control" placeholder="Search By Lecture Title">
+                      <input type="submit" name="CtitleSearch" class="btn btn-secondary">
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <br>
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th>Name</th>
+                      <th>Dept</th>
+                      <th>Place of Visit</th>
+                      <th>Lecture Title</th>
+                      <th>Duration</th>
+                      <th>Year</th>
+                      <th>Activity Date</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+                    <?php
+                    if (strlen(Input::get(CtitleS)) > 0) {
+                      $roll = $user->data()->{'Roll No'};
+                      $ctitle = Input::get('CtitleS');
+                      $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+                      if (!$conn)
+                        die("Unable to connect to database");
+
+                      // echo $roll;
+                      $stmt = "SELECT * FROM faculty_profile_honours_il WHERE  lectureTitle LIKE '%$ctitle%' ORDER BY activityDate DESC";
+                      // echo $stmt;
+                      $result = mysqli_query($conn, $stmt);
+                      while ($row = mysqli_fetch_assoc($result)) {
+                    ?>
+                        <tr>
+                          <td><?php echo $row['name']; ?></td>
+                          <td><?php echo $row['dept']; ?></td>
+                          <td><?php echo $row['placeOfVisit']; ?></td>
+                          <td><?php echo $row['lectureTitle']; ?></td>
+                          <td><?php echo $row['duration']; ?></td>
+                          <td><?php echo $row['year']; ?></td>
+                          <td><?php echo $row['activityDate']; ?></td>
+
+                          <!-- Fill -->
+                          <td>
+                            <form action="Honours_IL.php" method="post">
+                              <input type="hidden" name="lectureTitle" value="<?php echo "'";
+                                                                              echo $row['lectureTitle'];
+                                                                              echo "'"; ?>">
+                              <input type="hidden" name="placeOfVisit" value="<?php echo "'";
+                                                                              echo $row['placeOfVisit'];
+                                                                              echo "'"; ?>">
+                              <input type="hidden" name="duration" value="<?php echo "'";
+                                                                          echo $row['duration'];
+                                                                          echo "'"; ?>">
+                              <input type="hidden" name="year" value="<?php echo "'";
+                                                                      echo $row['year'];
+                                                                      echo "'"; ?>">
+                              <input type="hidden" name="activityDate" value="<?php echo "'";
+                                                                              echo $row['activityDate'];
+                                                                              echo "'"; ?>">
+
+                              <input type="submit" class="btn btn-info" name="fill_entry" value="Fill">
+                            </form>
+                          </td>
+                          <!-- Fill ends -->
+                        </tr>
+                    <?php
+                      }
+                    }
+                    ?>
+                  </tbody>
+                </table>
+              </div>
+              <!-- Search 1 - by conference paper title ends -->
+              
+              <br>
+
+              <!-- Search 2 - by place of Visit  -->
+              <div class="card">
+                <div class="card-header">
+                  <form action="Honours_IL.php">
+                    <h4><i class="fa fa-search mr-3"></i>Search by Place of Visit</h4>
+                    <div class="input-group">
+                      <input type="text" name="CpovS" required class="form-control" placeholder="Search By Place of Visit">
+                      <input type="submit" name="CpovSearch" class="btn btn-secondary">
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <br>
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th>Name</th>
+                      <th>Dept</th>
+                      <th>Place of Visit</th>
+                      <th>Lecture Title</th>
+                      <th>Duration</th>
+                      <th>Year</th>
+                      <th>Activity Date</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+                    <?php
+                    if (strlen(Input::get(CpovS)) > 0) {
+                      $roll = $user->data()->{'Roll No'};
+                      $cpov = Input::get('CpovS');
+                      $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+                      if (!$conn)
+                        die("Unable to connect to database");
+
+                      // echo $roll;
+                      $stmt = "SELECT * FROM faculty_profile_honours_il WHERE  placeOfVisit LIKE '%$cpov%' ORDER BY activityDate DESC";
+                      // echo $stmt;
+                      $result = mysqli_query($conn, $stmt);
+                      while ($row = mysqli_fetch_assoc($result)) {
+                    ?>
+                        <tr>
+                          <td><?php echo $row['name']; ?></td>
+                          <td><?php echo $row['dept']; ?></td>
+                          <td><?php echo $row['placeOfVisit']; ?></td>
+                          <td><?php echo $row['lectureTitle']; ?></td>
+                          <td><?php echo $row['duration']; ?></td>
+                          <td><?php echo $row['year']; ?></td>
+                          <td><?php echo $row['activityDate']; ?></td>
+
+                          <!-- Fill -->
+                          <td>
+                            <form action="Honours_IL.php" method="post">
+                              <input type="hidden" name="lectureTitle" value="<?php echo "'";
+                                                                              echo $row['lectureTitle'];
+                                                                              echo "'"; ?>">
+                              <input type="hidden" name="placeOfVisit" value="<?php echo "'";
+                                                                              echo $row['placeOfVisit'];
+                                                                              echo "'"; ?>">
+                              <input type="hidden" name="duration" value="<?php echo "'";
+                                                                          echo $row['duration'];
+                                                                          echo "'"; ?>">
+                              <input type="hidden" name="year" value="<?php echo "'";
+                                                                      echo $row['year'];
+                                                                      echo "'"; ?>">
+                              <input type="hidden" name="activityDate" value="<?php echo "'";
+                                                                              echo $row['activityDate'];
+                                                                              echo "'"; ?>">
+
+                              <input type="submit" class="btn btn-info" name="fill_entry" value="Fill">
+                            </form>
+                          </td>
+                          <!-- Fill ends -->
+                        </tr>
+                    <?php
+                      }
+                    }
+                    ?>
+                  </tbody>
+                </table>
+              </div>
+              <!-- Search 2 - by place of visit ends -->
+
+
+
+              <!-- SEARCH INVITED LECTURES ENDS -->
+
             </div>
-
-            <!-- SIDEBAR -->
-
-
           </div>
         </div>
       </section>

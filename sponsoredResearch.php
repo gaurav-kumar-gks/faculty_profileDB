@@ -45,6 +45,41 @@ if (Input::exists() && isset($_POST['csubmit'])) {
   }
 }
 
+/* fill */
+if (Input::exists() && isset($_POST['cfill'])) {
+  try {
+
+    // fetch variables that are already stored in User from studentinfo table 
+    $fname = $user->data()->Name;
+    $roll = $user->data()->{'Roll No'};
+    $prog = $user->data()->prog;
+    $dept = $user->data()->department;
+    //$rtype = 'c';
+    $email = $user->data()->email;
+    $aemail = $user->data()->aemail;
+
+    // columns that we get from form input
+    $title = Input::get('title');
+    $other = Input::get('other');
+    $rpi = Input::get('rpi');
+    $cyear = Input::get('cyear');
+    $funds = Input::get('funds');
+    $rcopi = Input::get('rcopi');
+
+    // connect with localhost
+    $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+    if (!$conn)
+      die("Unable to connect to database");
+
+    // insert query
+    $stmt = "INSERT INTO `faculty_profile_research` (`fname`, `roll`, `dept`, `prog`, `email`, `aemail`, `rtype`, `title`, `other`, `rpi`, `rcopi`, `rlevel`, `remarks`, `funds`, `projectStatus`, `juri`, `ref`,`pdate`) VALUES ('$fname', '$roll', '$dept', '$prog', '$email', '$aemail', 'orp', '$title', '$other', '$rpi', '$rcopi', NULL, NULL, $funds, NULL, NULL, NULL, '$cyear');";
+    // echo $stmt;
+    // run insert query
+    $result = mysqli_query($conn, $stmt);
+  } catch (Exception $e) {
+    die($e->getMessage());
+  }
+}
 
 /* delete */
 if (Input::exists() && isset($_POST['delete_entry'])) {
@@ -224,7 +259,7 @@ if (Input::exists() && isset($_POST['edit'])) {
             </a>
             <ul class="collapse list-unstyled show" id="teachingSubmenu">
               <li>
-                <a href="teaching.php">Teaching</a>
+                <a href="Teaching.php">Teaching</a>
               </li>
             </ul>
           </li>
@@ -268,22 +303,22 @@ if (Input::exists() && isset($_POST['edit'])) {
             </a>
             <ul class="collapse list-unstyled show" id="honoursSubmenu">
               <li>
-                <a href="fellowProfessional.php">Fellow - Professional Body</a>
+                <a href="Honours_FPB.php">Fellow - Professional Body</a>
               </li>
               <li>
-                <a href="memberProfessional.php">Member - Professional Body</a>
+                <a href="Honours_MPB.php">Member - Professional Body</a>
               </li>
               <li>
-                <a href="memberEditorial.php">Member - Editorial Body</a>
+                <a href="Honours_MEBJ.php">Member - Editorial Body</a>
               </li>
               <li>
-                <a href="awards.php">Awards</a>
+                <a href="Honours_A.php">Awards</a>
               </li>
               <li>
-                <a href="fellowships.php">Fellowships</a>
+                <a href="Honours_F.php">Fellowships</a>
               </li>
               <li>
-                <a href="invitedLectures.php">Invited Lectures</a>
+                <a href="Honours_IL.php">Invited Lectures</a>
               </li>
             </ul>
           </li>
@@ -325,31 +360,31 @@ if (Input::exists() && isset($_POST['edit'])) {
             <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Activity</a>
             <ul class="collapse list-unstyled show" id="homeSubmenu">
               <li>
-                <a href="studentActivities.php">Student Activities</a>
+                <a href="Activities_SA.php">Student Activities</a>
               </li>
               <li>
-                <a href="departmentalActivities.php">Departmental Activities</a>
+                <a href="Activities_DA.php">Departmental Activities</a>
               </li>
               <li>
-                <a href="instituteActivites.php">Institute Activities</a>
+                <a href="Activites_IA.php">Institute Activities</a>
               </li>
               <li>
-                <a href="professionalActivities.php">Professional Activities</a>
+                <a href="Activities_PA.php">Professional Activities</a>
               </li>
               <li>
-                <a href="seminar.php">Seminar, Conference, Workshops</a>
+                <a href="Activities_SCW.php">Seminar, Conference, Workshops</a>
               </li>
               <li>
-                <a href="shortTerm.php">Short Term Course</a>
+                <a href="Activities_STC.php">Short Term Course</a>
               </li>
               <li>
                 <a href="Activities_VA.php">Visit Abroad</a>
               </li>
               <li>
-                <a href="otherAcademic.php">Other Academic Activity</a>
+                <a href="Activities_OAA.php">Other Academic Activity</a>
               </li>
               <li>
-                <a href="anyOther.php">Any Other Information</a>
+                <a href="Activities_AOI.php">Any Other Information</a>
               </li>
             </ul>
           </li>
@@ -446,6 +481,69 @@ if (Input::exists() && isset($_POST['edit'])) {
                 </div>
                 <br>
                 <!-- EDIT FORM ends -->
+
+              <?php  } else if (Input::exists() && isset($_POST['fill_entry'])) {
+
+                $title = Input::get('title');
+                $other = Input::get('other');
+                $funds = Input::get('funds');
+                $rpi = Input::get('rpi');
+                $cyear = Input::get('cyear');
+                $rcopi = Input::get('rcopi');
+
+              ?>
+                <!--  Fill FORM -->
+                <div class="card">
+                  <!--  EDIT FORM - HEADER -->
+                  <div class="card-header">
+                    <h4><i class='fa fa-edit'></i> Insert Research Project</h4>
+                  </div>
+                  <br>
+                  <!--  EDIT FORM - HEADER ends -->
+
+                  <!--  EDIT FORM - BODY -->
+                  <form action="sponsoredResearch.php" method="post">
+
+                    <div class="form-group">
+                      <label> Title of Project<span class="m-1 text-primary">*</span></label>
+                      <input type="text" class="form-control" name="title" id="title" required value=<?php echo "$title" ?>>
+                    </div>
+
+                    <div class="form-group">
+                      <label> Sponsor<span class="m-1 text-primary">*</span></label>
+                      <input type="text" class="form-control" name="other" id="other" required value=<?php echo "$other" ?>>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="cyear"> Date</label>
+                      <input type="date" id="cyear" name="cyear" value=<?php echo "$cyear" ?>>
+                    </div>
+
+                    <div class="form-group">
+                      <label> Name of PI</label>
+                      <input type="text" class="form-control" name="rpi" id="rpi" value=<?php echo "$rpi" ?>>
+                    </div>
+
+
+
+                    <div class="form-group">
+                      <label> Name of Co-PI</label>
+                      <input type="text" class="form-control" name="rcopi" id="rcopi" value=<?php echo "$rcopi" ?>>
+                    </div>
+
+                    <div class="form-group">
+                      <label> Funds (In Rs. Lakhs)<span class="m-1 text-primary">*</span></label>
+                      <input type="number" value=<?php echo "$funds" ?> class="form-control" name="funds">
+                    </div>
+
+                    <input type="submit" class="btn btn-info" name="cfill" value="Insert">
+
+                  </form>
+                  <!-- EDIT FORM - BODY ends -->
+                </div>
+                <br>
+                <!-- Fill FORM ends -->
+
               <?php
               } else { ?>
                 <!--  INSERT FORM -->
@@ -609,115 +707,288 @@ if (Input::exists() && isset($_POST['edit'])) {
               <br>
               <!-- VIEW ADDED  ends -->
 
-
-
-              <!-- Search Functions -->
+              <!-- Search 1 - by  title  -->
               <div class="card">
                 <div class="card-header">
-                  <h4><i class="fa fa-search mr-3"></i>Search Ongoing Research Projects</h4>
+                  <form action="sponsoredResearch.php">
+                    <h4><i class="fa fa-search mr-3"></i>Search by Research Project Title</h4>
+                    <div class="input-group">
+                      <input type="text" name="CnameS" required class="form-control" placeholder="Search By Research Project Title">
+                      <input type="submit" name="CnameSearch" class="btn btn-secondary">
+                    </div>
+                  </form>
                 </div>
-                <br>
-                <br>
-
-                <!-- Search 1- by  name -->
-                <form action="sponsoredResearch.php">
-                  <div class="input-group">
-                    <input type="text" required name="CnameS" class="form-control" placeholder="Search By Project Title">
-                    <input type="submit" name="CnameSearch" class="btn btn-secondary">
-                  </div>
-                </form>
-                <br>
-                <div class="table-responsive">
-                  <?php
-                  if (strlen(Input::get('CnameS')) > 0) {
-                    $cnames = DB::getInstance();
-                    $cname = Input::get('CnameS');
-
-                    $cnames->query("SELECT fname,dept,title,other,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day, rpi, rcopi, funds, lastUpdated FROM faculty_profile_research WHERE rtype = 'orp' AND title LIKE '%$cname%' ORDER BY pdate DESC");
-
-                    if ($cnames->count()) {
-                      echo "<table class=\"table table-striped table-hover\">";
-                      echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Sponsor</th><th>Date</th><th>PI</th><th>Co-PI</th><th>Funds</th></tr></thead>";
-                      echo "<tbody>";
-
-                      foreach ($cnames->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->other</td><td>$row->day</td> <td>$row->rpi</td><td>$row->rcopi</td><td>$row->funds</td> </tr>\n";
-                      }
-                      echo "</tbody></table>";
-                    }
-                  }
-                  ?>
-                </div>
-                <!-- Search 1- by  name ends -->
-
-                <br>
-
-                <!-- Search 2 - by sponsor name -->
-                <form action="sponsoredResearch.php">
-                  <div class="input-group">
-                    <input type="text" name="CpnameS" required class="form-control" placeholder="Search By Sponsor Name">
-                    <input type="submit" name="JpnameSearch" class="btn btn-secondary">
-                  </div>
-                </form>
-                <br>
-                <div class="table-responsive">
-                  <?php
-                  if (strlen(Input::get('CpnameS')) > 0) {
-                    $cpnames = DB::getInstance();
-                    $cpname = Input::get('CpnameS');
-
-                    $cpnames->query("SELECT fname,dept,title,other,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day, rpi, rcopi, funds, lastUpdated FROM faculty_profile_research WHERE rtype = 'orp' AND other LIKE '%$cpname%' ORDER BY pdate DESC");
-
-                    if ($cpnames->count()) {
-                      echo "<table class=\"table table-striped table-hover\">";
-                      echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Sponsor</th> <th>Year</th><th>PI</th><th>Co-PI</th><th>Funds</th></tr></thead>";
-                      echo "<tbody>";
-
-                      foreach ($cpnames->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->other</td><td>$row->day</td><td>$row->rpi</td><td>$row->rcopi</td><td>$row->funds</td> </tr>\n";
-                      }
-                      echo "</tbody></table>";
-                    }
-                  }
-                  ?>
-                </div>
-                <!-- Search 2 - by rpi name ends -->
-                <br>
-                <!-- Search 3 - by faculty name -->
-                <form action="sponsoredResearch.php">
-                  <div class="input-group">
-                    <input type="text" name="CfnameS" required class="form-control" placeholder="Search By Faculty Name">
-                    <input type="submit" name="CfnameSearch" class="btn btn-secondary">
-                  </div>
-                </form>
-                <br>
-                <div class="table-responsive">
-                  <?php
-                  if (strlen(Input::get('CfnameS')) > 0) {
-                    $cfnames = DB::getInstance();
-                    $cfname = Input::get('CfnameS');
-                    $cfnames->query("SELECT fname,dept,title,other,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day , rpi, rcopi, funds, lastUpdated FROM faculty_profile_research WHERE rtype = 'orp' AND fname LIKE '%$cfname%' ORDER BY pdate DESC");
-
-                    if ($cfnames->count()) {
-                      echo "<table class=\"table table-striped table-hover\">";
-                      echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Sponsor</th><th>Date</th><th>PI</th><th>Co-PI</th><th>Funds</th></tr></thead>";
-                      echo "<tbody>";
-
-                      foreach ($cfnames->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->other</td><td>$row->day</td><td>$row->rpi</td><td>$row->rcopi</td><td>$row->funds</td> </tr>\n";
-                      }
-                      echo "</tbody></table>";
-                    }
-                  }
-                  ?>
-                </div>
-                <!-- Search 3 ends - by faculty name -->
               </div>
               <br>
-              <!-- Search Functions ends -->
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th>Name</th>
+                      <th>Dept</th>
+                      <th>Title</th>
+                      <th>Sponsor</th>
+                      <th>PI</th>
+                      <th>Co-PI</th>
+                      <th>Funds</th>
+                      <th>Date</th>
+
+                      <th></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+                    <?php
+                    if (strlen(Input::get(CnameS)) > 0) {
+                      $roll = $user->data()->{'Roll No'};
+                      $cname = Input::get('CnameS');
+                      $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+                      if (!$conn)
+                        die("Unable to connect to database");
+
+                      // echo $roll;
+                      $stmt = "SELECT fname,dept,title, other, rpi, rcopi, funds, pdate FROM faculty_profile_research WHERE rtype = 'orp' AND title LIKE '%$cname%' ORDER BY pdate DESC";
+                      // echo $stmt;
+                      $result = mysqli_query($conn, $stmt);
+                      while ($row = mysqli_fetch_assoc($result)) {
+                    ?>
+                        <tr>
+                          <td><?php echo $row['fname']; ?></td>
+                          <td><?php echo $row['dept']; ?></td>
+                          <td><?php echo $row['title']; ?></td>
+                          <td><?php echo $row['other']; ?></td>
+                          <td><?php echo $row['rpi']; ?></td>
+                          <td><?php echo $row['rcopi']; ?></td>
+                          <td><?php echo $row['funds']; ?></td>
+                          <td><?php echo $row['pdate']; ?></td>
+
+                          <!-- Fill -->
+                          <td>
+                            <form action="sponsoredResearch.php" method="post">
+                              <input type="hidden" name="title" value="<?php echo "'";
+                                                                        echo $row['title'];
+                                                                        echo "'"; ?>">
+
+                              <input type="hidden" name="funds" value="<?php echo "'";
+                                                                        echo $row['funds'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="other" value="<?php echo "'";
+                                                                        echo $row['other'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="cyear" value="<?php echo "'";
+                                                                        echo $row['pdate'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="rpi" value="<?php echo "'";
+                                                                      echo $row['rpi'];
+                                                                      echo "'"; ?>">
+                              <input type="hidden" name="rcopi" value="<?php echo "'";
+                                                                        echo $row['rcopi'];
+                                                                        echo "'"; ?>">
+
+                              <input type="submit" class="btn btn-info" name="fill_entry" value="Fill">
+                            </form>
+                          </td>
+                          <!-- Fill ends -->
+                        </tr>
+                    <?php
+                      }
+                    }
+                    ?>
+                  </tbody>
+                </table>
+              </div>
+              <!-- Search 1 - by  title -->
+              <br>
+
+              <!-- Search 2 - by  sponsor name  -->
+              <div class="card">
+                <div class="card-header">
+                  <form action="sponsoredResearch.php">
+                    <h4><i class="fa fa-search mr-3"></i>Search by Sponsor Name</h4>
+                    <div class="input-group">
+                      <input type="text" name="CotherS" required class="form-control" placeholder="Search By Sponsor Name">
+                      <input type="submit" name="CotherSearch" class="btn btn-secondary">
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <br>
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th>Name</th>
+                      <th>Dept</th>
+                      <th>Title</th>
+                      <th>Sponsor</th>
+                      <th>PI</th>
+                      <th>Co-PI</th>
+                      <th>Funds</th>
+                      <th>Date</th>
+
+                      <th></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+                    <?php
+                    if (strlen(Input::get(CotherS)) > 0) {
+                      $roll = $user->data()->{'Roll No'};
+                      $cother = Input::get('CotherS');
+                      $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+                      if (!$conn)
+                        die("Unable to connect to database");
+
+                      // echo $roll;
+                      $stmt = "SELECT fname,dept,title, other, rpi, rcopi, funds, pdate FROM faculty_profile_research WHERE rtype = 'orp' AND other LIKE '%$cother%' ORDER BY pdate DESC";
+                      // echo $stmt;
+                      $result = mysqli_query($conn, $stmt);
+                      while ($row = mysqli_fetch_assoc($result)) {
+                    ?>
+                        <tr>
+                          <td><?php echo $row['fname']; ?></td>
+                          <td><?php echo $row['dept']; ?></td>
+                          <td><?php echo $row['title']; ?></td>
+                          <td><?php echo $row['other']; ?></td>
+                          <td><?php echo $row['rpi']; ?></td>
+                          <td><?php echo $row['rcopi']; ?></td>
+                          <td><?php echo $row['funds']; ?></td>
+                          <td><?php echo $row['pdate']; ?></td>
+
+                          <!-- Fill -->
+                          <td>
+                            <form action="consultancy.php" method="post">
+                              <input type="hidden" name="title" value="<?php echo "'";
+                                                                        echo $row['title'];
+                                                                        echo "'"; ?>">
+
+                              <input type="hidden" name="funds" value="<?php echo "'";
+                                                                        echo $row['funds'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="other" value="<?php echo "'";
+                                                                        echo $row['other'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="cyear" value="<?php echo "'";
+                                                                        echo $row['pdate'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="rpi" value="<?php echo "'";
+                                                                      echo $row['rpi'];
+                                                                      echo "'"; ?>">
+                              <input type="hidden" name="rcopi" value="<?php echo "'";
+                                                                        echo $row['rcopi'];
+                                                                        echo "'"; ?>">
+
+                              <input type="submit" class="btn btn-info" name="fill_entry" value="Fill">
+                            </form>
+                          </td>
+                          <!-- Fill ends -->
+                        </tr>
+                    <?php
+                      }
+                    }
+                    ?>
+                  </tbody>
+                </table>
+              </div>
+              <!-- Search 2 - by  sponsor name -->
+              <br>
+
+              <!-- Search 3 - by  faculty name  -->
+              <div class="card">
+                <div class="card-header">
+                  <form action="sponsoredResearch.php">
+                    <h4><i class="fa fa-search mr-3"></i>Search by Faculty Name</h4>
+                    <div class="input-group">
+                      <input type="text" name="CfnameS" required class="form-control" placeholder="Search By Faculty Name">
+                      <input type="submit" name="CfnameSearch" class="btn btn-secondary">
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <br>
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th>Name</th>
+                      <th>Dept</th>
+                      <th>Title</th>
+                      <th>Sponsor</th>
+                      <th>PI</th>
+                      <th>Co-PI</th>
+                      <th>Funds</th>
+                      <th>Date</th>
+
+                      <th></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+                    <?php
+                    if (strlen(Input::get(CfnameS)) > 0) {
+                      $roll = $user->data()->{'Roll No'};
+                      $cfname = Input::get('CfnameS');
+                      $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+                      if (!$conn)
+                        die("Unable to connect to database");
+
+                      // echo $roll;
+                      $stmt = "SELECT fname,dept,title, other, rpi, rcopi, funds, pdate FROM faculty_profile_research WHERE rtype = 'orp' AND fname LIKE '%$cfname%' ORDER BY pdate DESC";
+                      // echo $stmt;
+                      $result = mysqli_query($conn, $stmt);
+                      while ($row = mysqli_fetch_assoc($result)) {
+                    ?>
+                        <tr>
+                          <td><?php echo $row['fname']; ?></td>
+                          <td><?php echo $row['dept']; ?></td>
+                          <td><?php echo $row['title']; ?></td>
+                          <td><?php echo $row['other']; ?></td>
+                          <td><?php echo $row['rpi']; ?></td>
+                          <td><?php echo $row['rcopi']; ?></td>
+                          <td><?php echo $row['funds']; ?></td>
+                          <td><?php echo $row['pdate']; ?></td>
+
+                          <!-- Fill -->
+                          <td>
+                            <form action="consultancy.php" method="post">
+                              <input type="hidden" name="title" value="<?php echo "'";
+                                                                        echo $row['title'];
+                                                                        echo "'"; ?>">
+
+                              <input type="hidden" name="funds" value="<?php echo "'";
+                                                                        echo $row['funds'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="other" value="<?php echo "'";
+                                                                        echo $row['other'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="cyear" value="<?php echo "'";
+                                                                        echo $row['pdate'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="rpi" value="<?php echo "'";
+                                                                      echo $row['rpi'];
+                                                                      echo "'"; ?>">
+                              <input type="hidden" name="rcopi" value="<?php echo "'";
+                                                                        echo $row['rcopi'];
+                                                                        echo "'"; ?>">
+
+                              <input type="submit" class="btn btn-info" name="fill_entry" value="Fill">
+                            </form>
+                          </td>
+                          <!-- Fill ends -->
+                        </tr>
+                    <?php
+                      }
+                    }
+                    ?>
+                  </tbody>
+                </table>
+              </div>
+              <!-- Search 3 - by  faculty name -->
+
+
 
             </div>
           </div>

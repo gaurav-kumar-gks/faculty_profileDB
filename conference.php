@@ -9,6 +9,42 @@ if ($user->isLoggedIn()) {
   Redirect::to('index.php');
 }
 
+/* CONFERENCE fill */
+if (Input::exists() && isset($_POST['cfill'])) {
+  try {
+
+    // fetch variables that are already stored in User from studentinfo table 
+    $fname = $user->data()->Name;
+    $roll = $user->data()->{'Roll No'};
+    $prog = $user->data()->prog;
+    $dept = $user->data()->department;
+    //$ptype = 'c';
+    $email = $user->data()->email;
+    $aemail = $user->data()->aemail;
+
+    // columns that we get from form input
+    $ctitle = Input::get('ctitle');
+    $cauthors = Input::get('cauthors');
+    $cpublisher = Input::get('cpublisher');
+    $cyear = Input::get('cyear');
+    $cduration = Input::get('cduration');
+    $clink = Input::get('clink');
+
+    // connect with localhost
+    $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+    if (!$conn)
+      die("Unable to connect to database");
+
+    // insert query
+    $stmt = "INSERT INTO `faculty_profile_publications` (`sno`, `fname`, `roll`, `dept`, `prog`, `ptype`, `title`, `authors`, `publication`, `publisher`, `pdate`, `location`, `pages`, `onlineLink`, `duration`, `impactFactor`, `bookTitle`, `bookType`, `editedVolume`, `eduPackageType`, `eduPackageLevel`, `patentNo`, `projectBudget`, `projectSponser`, `projectRole`, `projectStatus`, `email`, `aemail`) VALUES (NULL, '$fname', '$roll', '$dept', '$prog', 'c', '$ctitle', '$cauthors', NULL, '$cpublisher', '$cyear', NULL, NULL, '$clink', $cduration, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$email', '$aemail');";
+    // echo $stmt;
+    // run insert query
+    $result = mysqli_query($conn, $stmt);
+  } catch (Exception $e) {
+    die($e->getMessage());
+  }
+}
+
 /* CONFERENCE submit */
 if (Input::exists() && isset($_POST['csubmit'])) {
   try {
@@ -451,7 +487,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                 if edit btn is clicked then edit form will be displayed else insert form will be displayed
                -->
 
-              <!-- CONFERENCES EDIT/INSERT form -->
+              <!-- CONFERENCES EDIT/INSERT/FILL form -->
               <?php if (Input::exists() && isset($_POST['edit_entry'])) {
 
                 $ctitle = Input::get('ctitle');
@@ -521,6 +557,66 @@ if (Input::exists() && isset($_POST['edit'])) {
                 </div>
                 <br>
                 <!-- CONFERENCE EDIT FORM ends -->
+              <?php } else if (Input::exists() && isset($_POST['fill_entry'])) {
+
+                $ctitle = Input::get('ctitle');
+                $cauthors = Input::get('cauthors');
+                $cduration = Input::get('cduration');
+                $cpublisher = Input::get('cpublisher');
+                $cyear = Input::get('cyear');
+                $clink = Input::get('clink');
+
+              ?>
+                <!-- CONFERENCE FILL FORM -->
+                <div class="card">
+                  <!-- CONFERENCE FILL FORM - HEADER -->
+                  <div class="card-header">
+                    <h4><i class='fa fa-edit'></i> Insert Conference</h4>
+                  </div>
+                  <br>
+                  <!-- CONFERENCE FILL FORM - HEADER ends -->
+
+                  <!-- CONFERENCE FILL FORM - BODY -->
+                  <form action="conference.php" method="post">
+
+                    <div class="form-group">
+                      <label> Title of Paper<span class="m-1 text-primary">*</span></label>
+                      <input type="text" class="form-control" id="jtitle" name="ctitle" required value=<?php echo "$ctitle" ?>>
+                    </div>
+
+                    <div class="form-group">
+                      <label> Authors<span class="m-1 text-primary">*</span></label>
+                      <input type="text" class="form-control" id="jauthors" name="cauthors" required value=<?php echo "$cauthors" ?>>
+                    </div>
+
+
+                    <div class="form-group">
+                      <label> Name of Conference<span class="m-1 text-primary">*</span></label>
+                      <input type="text" class="form-control" id="jpublisher" name="cpublisher" required value=<?php echo "$cpublisher" ?>>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="cyear"> Published Date</label>
+                      <input type="date" value=<?php echo "$cyear" ?> id="cyear" name="cyear">
+                    </div>
+
+                    <div class="form-group">
+                      <label> Conference Online link</label>
+                      <input type="text" class="form-control" name="clink" value=<?php echo "$clink" ?>>
+                    </div>
+
+                    <div class="form-group">
+                      <label> Duration (In no. of days)<span class="m-1 text-primary">*</span></label>
+                      <input type="number" value=<?php echo "$cduration" ?> required class="form-control" name="cduration">
+                    </div>
+
+                    <input type="submit" class="btn btn-info" name="cfill" value="Insert">
+
+                  </form>
+                  <!-- CONFERENCE FILL FORM - BODY ends -->
+                </div>
+                <br>
+                <!-- CONFERENCE FILL FORM ends -->
               <?php
               } else { ?>
                 <!-- CONFERENCE INSERT FORM -->
@@ -695,152 +791,274 @@ if (Input::exists() && isset($_POST['edit'])) {
               <br>
               <!-- VIEW ADDED CONFERENCES ends -->
 
-
-
-              <!-- Search Functions -->
+              <!-- Search 1 - by conference paper title  -->
               <div class="card">
                 <div class="card-header">
-                  <h4><i class="fa fa-search mr-3"></i>Search Conferences</h4>
+                  <form action="conference.php">
+                    <h4><i class="fa fa-search mr-3"></i>Search by Conferences Paper Title</h4>
+                    <div class="input-group">
+                      <input type="text" name="CnameS" required class="form-control" placeholder="Search By Conference Paper Title">
+                      <input type="submit" name="CnameSearch" class="btn btn-secondary">
+                    </div>
+                  </form>
                 </div>
-                <br>
-                <br>
-
-                <!-- Search 1- by CONFERENCE name -->
-                <form action="conference.php">
-                  <div class="input-group">
-                    <input type="text" required name="CnameS" class="form-control" placeholder="Search By Conference Paper Title">
-                    <input type="submit" name="CnameSearch" class="btn btn-secondary">
-                  </div>
-                </form>
-                <br>
-                <div class="table-responsive">
-                  <?php
-                  if (strlen(Input::get('CnameS')) > 0) {
-                    $cnames = DB::getInstance();
-                    $cname = Input::get('CnameS');
-
-                    $cnames->query("SELECT fname,dept,title,authors, publisher,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day, duration FROM faculty_profile_publications WHERE ptype = 'c' AND title LIKE '%$cname%' ORDER BY pdate DESC");
-
-                    if ($cnames->count()) {
-                      echo "<table class=\"table table-striped table-hover\">";
-                      echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Authors</th><th>Conference Name</th><th>Year</th><th>Duration</th></tr></thead>";
-                      echo "<tbody>";
-
-                      foreach ($cnames->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->authors</td><td>$row->publisher</td><td>$row->day</td><td>$row->duration</td> </tr>\n";
-                      }
-                      echo "</tbody></table>";
-                    }
-                  }
-                  ?>
-                </div>
-                <!-- Search 1- by CONFERENCE name ends -->
-
-                <br>
-
-                <!-- Search 2 - by publisher name -->
-                <form action="conference.php">
-                  <div class="input-group">
-                    <input type="text" name="CpnameS" required class="form-control" placeholder="Search By Conference Name">
-                    <input type="submit" name="JpnameSearch" class="btn btn-secondary">
-                  </div>
-                </form>
-                <br>
-                <div class="table-responsive">
-                  <?php
-                  if (strlen(Input::get('CpnameS')) > 0) {
-                    $cpnames = DB::getInstance();
-                    $cpname = Input::get('CpnameS');
-
-                    $cpnames->query("SELECT fname,dept,title,authors, publisher,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day, duration FROM faculty_profile_publications WHERE ptype = 'c' AND publisher LIKE '%$cpname%' ORDER BY pdate DESC");
-
-                    if ($cpnames->count()) {
-                      echo "<table class=\"table table-striped table-hover\">";
-                      echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Authors</th><th>Publisher</th><th>Year</th> <th>Duration</th></tr></thead>";
-                      echo "<tbody>";
-
-                      foreach ($cpnames->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->authors</td><td>$row->publisher</td><td>$row->day</td><td>$row->duration</td></tr>\n";
-                      }
-                      echo "</tbody></table>";
-                    }
-                  }
-                  ?>
-                </div>
-                <!-- Search 2 - by publisher name ends -->
-                <br>
-
-
-                <!-- Search 3 - by year -->
-                <form action="conference.php">
-                  <div class="input-group">
-                    <input type="text" name="cyearS" required class="form-control" placeholder="Search By Conference Paper published in last X years">
-                    <input type="submit" name="jyearSearch" class="btn btn-secondary">
-                  </div>
-                </form>
-                <br>
-                <div class="table-responsive">
-                  <?php
-                  if (strlen(Input::get('cyearS') && is_numeric(Input::get('cyearS'))) > 0) {
-                    $cyears = DB::getInstance();
-                    $cyear = Input::get('cyearS');
-
-                    $cyears->query("SELECT fname,dept,title,authors, publisher, CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day, duration  FROM faculty_profile_publications WHERE ptype = 'c' AND DATEDIFF(CURRENT_DATE, pdate)/365 < $cyear ORDER BY pdate DESC");
-
-                    if ($cyears->count()) {
-                      echo "<table class=\"table table-striped table-hover\">";
-                      echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Duration</th></tr></thead>";
-                      echo "<tbody>";
-
-                      foreach ($cyears->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->authors</td><td>$row->publisher</td><td>$row->day</td><td>$row->duration</td></tr>\n";
-                      }
-                      echo "</tbody></table>";
-                    }
-                  }
-                  ?>
-                </div>
-                <!-- Search 3 - by year ends-->
-
-                <br>
-
-
-                <!-- Search 4 - by faculty name -->
-                <form action="conference.php">
-                  <div class="input-group">
-                    <input type="text" name="CfnameS" required class="form-control" placeholder="Search By Faculty Name">
-                    <input type="submit" name="CfnameSearch" class="btn btn-secondary">
-                  </div>
-                </form>
-                <br>
-                <div class="table-responsive">
-                  <?php
-                  if (strlen(Input::get('CfnameS')) > 0) {
-                    $cfnames = DB::getInstance();
-                    $cfname = Input::get('CfnameS');
-                    $cfnames->query("SELECT fname,dept,title,authors,  publisher,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day, duration FROM faculty_profile_publications WHERE ptype = 'c' AND fname LIKE '%$cfname%' ORDER BY pdate DESC");
-
-                    if ($cfnames->count()) {
-                      echo "<table class=\"table table-striped table-hover\">";
-                      echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Duration</th></tr></thead>";
-                      echo "<tbody>";
-
-                      foreach ($cfnames->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->authors</td><td>$row->publisher</td><td>$row->day</td><td>$row->duration</td></tr>\n";
-                      }
-                      echo "</tbody></table>";
-                    }
-                  }
-                  ?>
-                </div>
-                <!-- Search 4 ends - by faculty name -->
               </div>
               <br>
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th>Name</th>
+                      <th>Dept</th>
+                      <th>Title</th>
+                      <th>Authors</th>
+                      <th>Conference Name</th>
+                      <th>Date</th>
+                      <th>Duration</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+                    <?php
+                    if (strlen(Input::get(CnameS)) > 0) {
+                      $roll = $user->data()->{'Roll No'};
+                      $cname = Input::get('CnameS');
+                      $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+                      if (!$conn)
+                        die("Unable to connect to database");
+
+                      // echo $roll;
+                      $stmt = "SELECT fname,dept,title,authors, publisher, pdate, onlineLink, duration FROM faculty_profile_publications WHERE ptype = 'c' AND title LIKE '%$cname%' ORDER BY pdate DESC";
+                      // echo $stmt;
+                      $result = mysqli_query($conn, $stmt);
+                      while ($row = mysqli_fetch_assoc($result)) {
+                    ?>
+                        <tr>
+                          <td><?php echo $row['fname']; ?></td>
+                          <td><?php echo $row['dept']; ?></td>
+                          <td><?php echo $row['title']; ?></td>
+                          <td><?php echo $row['authors']; ?></td>
+                          <td><?php echo $row['publisher']; ?></td>
+                          <td><?php echo $row['pdate']; ?></td>
+                          <td><?php echo $row['duration']; ?></td>
+
+                          <!-- Fill -->
+                          <td>
+                            <form action="conference.php" method="post">
+                              <input type="hidden" name="ctitle" value="<?php echo "'";
+                                                                        echo $row['title'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="cauthors" value="<?php echo "'";
+                                                                          echo $row['authors'];
+                                                                          echo "'"; ?>">
+                              <input type="hidden" name="cpublisher" value="<?php echo "'";
+                                                                            echo $row['publisher'];
+                                                                            echo "'"; ?>">
+                              <input type="hidden" name="cyear" value="<?php echo "'";
+                                                                        echo $row['pdate'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="cduration" value="<?php echo "'";
+                                                                        echo $row['duration'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="clink" value="<?php echo "'";
+                                                                        echo $row['onlineLink'];
+                                                                        echo "'"; ?>">
+
+                              <input type="submit" class="btn btn-info" name="fill_entry" value="Fill">
+                            </form>
+                          </td>
+                          <!-- Fill ends -->
+                        </tr>
+                    <?php
+                      }
+                    }
+                    ?>
+                  </tbody>
+                </table>
+              </div>
+              <!-- Search 1 - by conference paper title -->
+              <br>
+              <!-- Search 2 - by conference name -->
+              <div class="card">
+                <div class="card-header">
+                  <form action="conference.php">
+                    <h4><i class="fa fa-search mr-3"></i>Search by Conferences Name</h4>
+                    <div class="input-group">
+                      <input type="text" name="CpnameS" required class="form-control" placeholder="Search By Conference Name">
+                      <input type="submit" name="CpnameSearch" class="btn btn-secondary">
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <br>
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th>Name</th>
+                      <th>Dept</th>
+                      <th>Title</th>
+                      <th>Authors</th>
+                      <th>Conference Name</th>
+                      <th>Date</th>
+                      <th>Duration</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+                    <?php
+                    if (strlen(Input::get(CpnameS)) > 0) {
+                      $roll = $user->data()->{'Roll No'};
+                      $cpname = Input::get('CpnameS');
+                      $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+                      if (!$conn)
+                        die("Unable to connect to database");
+
+                      // echo $roll;
+                      $stmt = "SELECT fname,dept,title,authors, publisher, pdate, onlineLink, duration FROM faculty_profile_publications WHERE ptype = 'c' AND publisher LIKE '%$cpname%' ORDER BY pdate DESC";
+                      // echo $stmt;
+                      $result = mysqli_query($conn, $stmt);
+                      while ($row = mysqli_fetch_assoc($result)) {
+                    ?>
+                        <tr>
+                          <td><?php echo $row['fname']; ?></td>
+                          <td><?php echo $row['dept']; ?></td>
+                          <td><?php echo $row['title']; ?></td>
+                          <td><?php echo $row['authors']; ?></td>
+                          <td><?php echo $row['publisher']; ?></td>
+                          <td><?php echo $row['pdate']; ?></td>
+                          <td><?php echo $row['duration']; ?></td>
+
+                          <!-- Fill -->
+                          <td>
+                            <form action="conference.php" method="post">
+                              <input type="hidden" name="ctitle" value="<?php echo "'";
+                                                                        echo $row['title'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="cauthors" value="<?php echo "'";
+                                                                          echo $row['authors'];
+                                                                          echo "'"; ?>">
+                              <input type="hidden" name="cpublisher" value="<?php echo "'";
+                                                                            echo $row['publisher'];
+                                                                            echo "'"; ?>">
+                              <input type="hidden" name="cyear" value="<?php echo "'";
+                                                                        echo $row['pdate'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="cduration" value="<?php echo "'";
+                                                                        echo $row['duration'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="clink" value="<?php echo "'";
+                                                                        echo $row['onlineLink'];
+                                                                        echo "'"; ?>">
+
+                              <input type="submit" class="btn btn-info" name="fill_entry" value="Fill">
+                            </form>
+                          </td>
+                          <!-- Fill ends -->
+                        </tr>
+                    <?php
+                      }
+                    }
+                    ?>
+                  </tbody>
+                </table>
+              </div>
+              <!-- Search 2 - by conference name ends -->
+              <br>
+              <!-- Search 3 - by faculty name -->
+              <div class="card">
+                <div class="card-header">
+                  <form action="conference.php">
+                    <h4><i class="fa fa-search mr-3"></i>Search by Faculty Name</h4>
+                    <div class="input-group">
+                      <input type="text" name="CfnameS" required class="form-control" placeholder="Search By Faculty Name">
+                      <input type="submit" name="CfnameSearch" class="btn btn-secondary">
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <br>
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th>Name</th>
+                      <th>Dept</th>
+                      <th>Title</th>
+                      <th>Authors</th>
+                      <th>Conference Name</th>
+                      <th>Date</th>
+                      <th>Duration</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+                    <?php
+                    if (strlen(Input::get(CfnameS)) > 0) {
+                      $roll = $user->data()->{'Roll No'};
+                      $cfname = Input::get('CfnameS');
+                      $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+                      if (!$conn)
+                        die("Unable to connect to database");
+
+                      // echo $roll;
+                      $stmt = "SELECT fname,dept,title,authors, publisher, pdate, onlineLink, duration FROM faculty_profile_publications WHERE ptype = 'c' AND fname LIKE '%$cfname%' ORDER BY pdate DESC";
+                      // echo $stmt;
+                      $result = mysqli_query($conn, $stmt);
+                      while ($row = mysqli_fetch_assoc($result)) {
+                    ?>
+                        <tr>
+                          <td><?php echo $row['fname']; ?></td>
+                          <td><?php echo $row['dept']; ?></td>
+                          <td><?php echo $row['title']; ?></td>
+                          <td><?php echo $row['authors']; ?></td>
+                          <td><?php echo $row['publisher']; ?></td>
+                          <td><?php echo $row['pdate']; ?></td>
+                          <td><?php echo $row['duration']; ?></td>
+
+                          <!-- Fill -->
+                          <td>
+                            <form action="conference.php" method="post">
+                              <input type="hidden" name="ctitle" value="<?php echo "'";
+                                                                        echo $row['title'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="cauthors" value="<?php echo "'";
+                                                                          echo $row['authors'];
+                                                                          echo "'"; ?>">
+                              <input type="hidden" name="cpublisher" value="<?php echo "'";
+                                                                            echo $row['publisher'];
+                                                                            echo "'"; ?>">
+                              <input type="hidden" name="cyear" value="<?php echo "'";
+                                                                        echo $row['pdate'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="cduration" value="<?php echo "'";
+                                                                        echo $row['duration'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="clink" value="<?php echo "'";
+                                                                        echo $row['onlineLink'];
+                                                                        echo "'"; ?>">
+
+                              <input type="submit" class="btn btn-info" name="fill_entry" value="Fill">
+                            </form>
+                          </td>
+                          <!-- Fill ends -->
+                        </tr>
+                    <?php
+                      }
+                    }
+                    ?>
+                  </tbody>
+                </table>
+              </div>
+              <!-- Search 3 - by faculty ends -->
               <!-- Search Functions ends -->
+
 
             </div>
           </div>

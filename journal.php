@@ -47,6 +47,44 @@ if (Input::exists() && isset($_POST['jsubmit'])) {
   }
 }
 
+/* journal fill */
+if (Input::exists() && isset($_POST['jfill'])) {
+  try {
+
+    // fetch variables that are already stored in User from studentinfo table 
+    $fname = $user->data()->Name;
+    $roll = $user->data()->{'Roll No'};
+    $prog = $user->data()->prog;
+    $dept = $user->data()->department;
+    //$ptype = 'j';
+    $email = $user->data()->email;
+    $aemail = $user->data()->aemail;
+
+    // columns that we get from form input
+    $jtitle = Input::get('jtitle');
+    $jauthors = Input::get('jauthors');
+    $jimpact = Input::get('jimpact');
+    $jpublication = Input::get('jpublication');
+    $jpublisher = Input::get('jpublisher');
+    $jyear = Input::get('jyear');
+    $jpages = Input::get('jpages');
+    $jlink = Input::get('jlink');
+
+    // connect with localhost
+    $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+    if (!$conn)
+      die("Unable to connect to database");
+
+    // insert query
+    $stmt = "INSERT INTO `faculty_profile_publications` (`sno`, `fname`, `roll`, `dept`, `prog`, `ptype`, `title`, `authors`, `publication`, `publisher`, `pdate`, `location`, `pages`, `onlineLink`, `duration`, `impactFactor`, `bookTitle`, `bookType`, `editedVolume`, `eduPackageType`, `eduPackageLevel`, `patentNo`, `projectBudget`, `projectSponser`, `projectRole`, `projectStatus`, `email`, `aemail`) VALUES (NULL, '$fname', '$roll', '$dept', '$prog', 'j', '$jtitle', '$jauthors', '$jpublication', '$jpublisher', '$jyear', NULL, '$jpages', '$jlink', NULL, '$jimpact', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$email', '$aemail');";
+
+    // run insert query
+    $result = mysqli_query($conn, $stmt);
+  } catch (Exception $e) {
+    die($e->getMessage());
+  }
+}
+
 /* delete */
 if (Input::exists() && isset($_POST['delete_entry'])) {
 
@@ -458,7 +496,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                 if edit btn is clicked then edit form will be displayed else insert form will be displayed
                -->
 
-              <!-- JOURNALS EDIT/INSERT form -->
+              <!-- JOURNALS EDIT/INSERT/FILL form -->
               <?php if (Input::exists() && isset($_POST['edit_entry'])) {
 
                 $jtitle = Input::get('jtitle');
@@ -542,6 +580,79 @@ if (Input::exists() && isset($_POST['edit'])) {
                 <br>
                 <!-- JOURNAL EDIT FORM ends -->
               <?php
+              } else if (Input::exists() && isset($_POST['fill_entry'])) {
+
+                $jtitle = Input::get('jtitle');
+                $jauthors = Input::get('jauthors');
+                $jimpact = Input::get('jimpact');
+                $jpublication = Input::get('jpublication');
+                $jpublisher = Input::get('jpublisher');
+                $jyear = Input::get('jyear');
+                $jpages = Input::get('jpages');
+                $jlink = Input::get('jlink');
+
+              ?>
+                <!-- JOURNAL Fill FORM -->
+                <div class="card">
+                  <!-- JOURNAL Fill FORM - HEADER -->
+                  <div class="card-header">
+                    <h4><i class='fa fa-edit'></i> Insert Journal</h4>
+                  </div>
+                  <br>
+                  <!-- JOURNAL Fill FORM - HEADER ends -->
+
+                  <!-- JOURNAL Fill FORM - BODY -->
+                  <form action="journal.php" method="post">
+
+                    <div class="form-group">
+                      <label> Title of Paper<span class="m-1 text-primary">*</span></label>
+                      <input type="text" class="form-control" id="jtitle" name="jtitle" required value=<?php echo "$jtitle" ?>>
+                    </div>
+
+                    <div class="form-group">
+                      <label> Authors<span class="m-1 text-primary">*</span></label>
+                      <input type="text" class="form-control" id="jauthors" name="jauthors" required value=<?php echo "$jauthors" ?>>
+                    </div>
+
+                    <div class="form-group">
+                      <label> Name of journal<span class="m-1 text-primary">*</span></label>
+                      <input type="text" class="form-control" id="jpublication" name="jpublication" required value=<?php echo "$jpublication" ?>>
+                    </div>
+
+                    <div class="form-group">
+                      <label> Name of Publisher<span class="m-1 text-primary">*</span></label>
+                      <input type="text" class="form-control" id="jpublisher" name="jpublisher" required value=<?php echo "$jpublisher" ?>>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="jyear"> Published Date</label>
+                      <input type="date" value=<?php echo "$jyear" ?> id="jyear" name="jyear">
+                    </div>
+
+                    <div class="form-group">
+                      <label> Journal Volume Pages</label>
+                      <input type="text" class="form-control" name="jpages" value=<?php echo "$jpages" ?>>
+                    </div>
+
+                    <div class="form-group">
+                      <label> Journal Online link</label>
+                      <input type="text" class="form-control" name="jlink" value=<?php echo "$jlink" ?>>
+                    </div>
+
+                    <div class="form-group">
+                      <label> Journal Impact factor</label>
+                      <input type="text" class="form-control" name="jimpact" value=<?php echo "$jimpact" ?>>
+                    </div>
+
+                    <input type="submit" class="btn btn-info" name="jfill" value="Submit">
+
+                  </form>
+                  <!-- JOURNAL Fill FORM - BODY ends -->
+                </div>
+                <br>
+                <!-- JOURNAL Fill FORM ends -->
+
+              <?php
               } else { ?>
                 <!-- JOURNAL INSERT FORM -->
                 <div class="card">
@@ -602,7 +713,9 @@ if (Input::exists() && isset($_POST['edit'])) {
                 </div>
                 <br>
                 <!-- JOURNAL INSERT FORM ends -->
-              <?php } ?>
+              <?php
+              }
+              ?>
               <!-- JOURNALS EDIT/INSERT form ends -->
 
               <!-- VIEW ADDED JOURNALS -->
@@ -610,10 +723,152 @@ if (Input::exists() && isset($_POST['edit'])) {
                 <div class="card-header">
                   <h4><i class="fa fa-file-text"></i> Added Records</h4>
                 </div>
+                <div class="table-responsive">
+                  <table class="table table-striped table-hover">
+                    <thead class="thead-inverse">
+                      <tr>
+                        <th></th>
+                        <th>Title</th>
+                        <th>Authors</th>
+                        <th>Publication</th>
+                        <th>Publisher</th>
+                        <th>Pages</th>
+                        <th>Date</th>
+                        <th>Online Link</th>
+                        <th>Impact Factor</th>
+                        <th></th>
+                        <th></th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+
+                      <?php
+                      $roll = $user->data()->{'Roll No'};
+                      $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+                      if (!$conn)
+                        die("Unable to connect to database");
+
+                      // echo $roll;
+                      $stmt = "SELECT * FROM faculty_profile_publications WHERE roll='$roll' AND ptype='j' order by sno desc";
+                      // echo $stmt;
+                      $result = mysqli_query($conn, $stmt);
+                      while ($row = mysqli_fetch_assoc($result)) {
+                      ?>
+                        <tr>
+                          <td>
+                            <form action="journal.php" method="post">
+                              <input type="hidden" name="jtitle" value="<?php echo "'";
+                                                                        echo $row['title'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="jauthors" value="<?php echo "'";
+                                                                          echo $row['authors'];
+                                                                          echo "'"; ?>">
+                              <input type="hidden" name="jimpact" value="<?php echo "'";
+                                                                          echo $row['impactFactor'];
+                                                                          echo "'"; ?>">
+                              <input type="hidden" name="jpublication" value="<?php echo "'";
+                                                                              echo $row['publication'];
+                                                                              echo "'"; ?>">
+                              <input type="hidden" name="jpublisher" value="<?php echo "'";
+                                                                            echo $row['publisher'];
+                                                                            echo "'"; ?>">
+                              <input type="hidden" name="jyear" value="<?php echo "'";
+                                                                        echo $row['pdate'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="jpages" value="<?php echo "'";
+                                                                        echo $row['pages'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="jlink" value="<?php echo "'";
+                                                                        echo $row['onlineLink'];
+                                                                        echo "'"; ?>">
+
+                              <input type="submit" class="btn btn-primary" name="edit_entry" value="Edit" style="background-color: green">
+                            </form>
+                          </td>
+                          <td><?php echo $row['title']; ?></td>
+                          <td><?php echo $row['authors']; ?></td>
+                          <td><?php echo $row['publication']; ?></td>
+                          <td><?php echo $row['publisher']; ?></td>
+                          <td><?php echo $row['pages']; ?></td>
+                          <td><?php echo $row['pdate']; ?></td>
+                          <td><?php echo $row['onlineLink']; ?></td>
+                          <td><?php echo $row['impactFactor']; ?></td>
+                          <!-- EDIT -->
+
+                          <!-- EDIT ends -->
+                          <!-- DELETE -->
+                          <td>
+
+                            <form action="journal.php" method="post">
+                              <input type='hidden' name='sno' value=<?php echo $row['sno']; ?>>
+                              <input type="image" name="upgrade_entry" value="Upgrade" src="./Images/upward_arrow.png" height="50" width="60">
+                            </form>
+
+                          </td>
+                          <td>
+                            <form action="journal.php" method="post">
+                              <input type="hidden" name="jtitle" value="<?php echo "'";
+                                                                        echo $row['title'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="jauthors" value="<?php echo "'";
+                                                                          echo $row['authors'];
+                                                                          echo "'"; ?>">
+                              <input type="hidden" name="jimpact" value="<?php echo "'";
+                                                                          echo $row['impactFactor'];
+                                                                          echo "'"; ?>">
+                              <input type="hidden" name="jpublication" value="<?php echo "'";
+                                                                              echo $row['publication'];
+                                                                              echo "'"; ?>">
+                              <input type="hidden" name="jpublisher" value="<?php echo "'";
+                                                                            echo $row['publisher'];
+                                                                            echo "'"; ?>">
+                              <input type="hidden" name="jyear" value="<?php echo "'";
+                                                                        echo $row['pdate'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="jpages" value="<?php echo "'";
+                                                                        echo $row['pages'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="jlink" value="<?php echo "'";
+                                                                        echo $row['onlineLink'];
+                                                                        echo "'"; ?>">
+
+                              <input type="submit" class="btn btn-danger" name="delete_entry" value="Delete">
+                            </form>
+                          </td>
+                          <!-- DELETE ends -->
+                        </tr>
+                      <?php
+                      }
+                      ?>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <br>
+              <br>
+              <!-- VIEW ADDED JOURNALS ends -->
+
+
+
+              <!-- Search 1- by journal name -->
+              <div class="card">
+                <div class="card-header">
+                  <form action="journal.php">
+                    <h4><i class="fa fa-search mr-3"></i>Search Journals by name</h4>
+                    <div class="input-group">
+                      <input type="text" name="JnameS" required class="form-control" placeholder="Search By Journal Name">
+                      <input type="submit" name="JnameSearch" class="btn btn-secondary">
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <br>
+              <div class="table-responsive">
                 <table class="table table-striped table-hover">
-                  <thead class="thead-inverse">
+                  <thead class="thead-dark">
                     <tr>
-                      <th></th>
+                      <th>Faculty</th>
                       <th>Title</th>
                       <th>Authors</th>
                       <th>Publication</th>
@@ -623,6 +878,106 @@ if (Input::exists() && isset($_POST['edit'])) {
                       <th>Online Link</th>
                       <th>Impact Factor</th>
                       <th></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+                    <?php
+                    if (strlen(Input::get(JnameS)) > 0) {
+                      $roll = $user->data()->{'Roll No'};
+                      $jname = Input::get('JnameS');
+                      $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+                      if (!$conn)
+                        die("Unable to connect to database");
+
+                      // echo $roll;
+                      $stmt = "SELECT fname,dept,title,authors, publication, publisher, pages, pdate, onlineLink, impactFactor FROM faculty_profile_publications WHERE ptype = 'j' AND title LIKE '%$jname%' ORDER BY pdate DESC";
+                      // echo $stmt;
+                      $result = mysqli_query($conn, $stmt);
+                      while ($row = mysqli_fetch_assoc($result)) {
+                    ?>
+                        <tr>
+                          <td><?php echo $row['fname']; ?></td>
+                          <td><?php echo $row['title']; ?></td>
+                          <td><?php echo $row['authors']; ?></td>
+                          <td><?php echo $row['publication']; ?></td>
+                          <td><?php echo $row['publisher']; ?></td>
+                          <td><?php echo $row['pages']; ?></td>
+                          <td><?php echo $row['pdate']; ?></td>
+                          <td><?php echo $row['onlineLink']; ?></td>
+                          <td><?php echo $row['impactFactor']; ?></td>
+
+                          <!-- Fill -->
+                          <td>
+                            <form action="journal.php" method="post">
+                              <input type="hidden" name="jtitle" value="<?php echo "'";
+                                                                        echo $row['title'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="jauthors" value="<?php echo "'";
+                                                                          echo $row['authors'];
+                                                                          echo "'"; ?>">
+                              <input type="hidden" name="jimpact" value="<?php echo "'";
+                                                                          echo $row['impactFactor'];
+                                                                          echo "'"; ?>">
+                              <input type="hidden" name="jpublication" value="<?php echo "'";
+                                                                              echo $row['publication'];
+                                                                              echo "'"; ?>">
+                              <input type="hidden" name="jpublisher" value="<?php echo "'";
+                                                                            echo $row['publisher'];
+                                                                            echo "'"; ?>">
+                              <input type="hidden" name="jyear" value="<?php echo "'";
+                                                                        echo $row['pdate'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="jpages" value="<?php echo "'";
+                                                                        echo $row['pages'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="jlink" value="<?php echo "'";
+                                                                        echo $row['onlineLink'];
+                                                                        echo "'"; ?>">
+
+                              <input type="submit" class="btn btn-info" name="fill_entry" value="Fill">
+                            </form>
+                          </td>
+                          <!-- Fill ends -->
+                        </tr>
+                    <?php
+                      }
+                    }
+                    ?>
+                  </tbody>
+                </table>
+              </div>
+              <!-- Search 1- by journal name ends -->
+              <br>
+              
+              <!-- Search 2 - by publisher name -->
+              <div class="card">
+                <div class="card-header">
+                  <form action="journal.php">
+                    <h4><i class="fa fa-search mr-3"></i>Search Journals by publisher name</h4>
+
+                    <div class="input-group">
+                      <input type="text" name="JpnameS" required class="form-control" placeholder="Search By publisher Name">
+                      <input type="submit" name="JpnameSearch" class="btn btn-secondary">
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <br>
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th>Faculty</th>
+                      <th>Title</th>
+                      <th>Authors</th>
+                      <th>Publication</th>
+                      <th>Publisher</th>
+                      <th>Pages</th>
+                      <th>Date</th>
+                      <th>Online Link</th>
+                      <th>Impact Factor</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -630,257 +985,173 @@ if (Input::exists() && isset($_POST['edit'])) {
                   <tbody>
 
                     <?php
-                    $roll = $user->data()->{'Roll No'};
-                    $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
-                    if (!$conn)
-                      die("Unable to connect to database");
+                    if (strlen(Input::get(JpnameS)) > 0) {
+                      $roll = $user->data()->{'Roll No'};
+                      $jpname = Input::get('JpnameS');
+                      $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+                      if (!$conn)
+                        die("Unable to connect to database");
 
-                    // echo $roll;
-                    $stmt = "SELECT * FROM faculty_profile_publications WHERE roll='$roll' AND ptype='j' order by sno desc";
-                    // echo $stmt;
-                    $result = mysqli_query($conn, $stmt);
-                    while ($row = mysqli_fetch_assoc($result)) {
+                      // echo $roll;
+                      $stmt = "SELECT fname,dept,title,authors, publication, publisher, pages, pdate, onlineLink, impactFactor FROM faculty_profile_publications WHERE ptype = 'j' AND publisher LIKE '%$jpname%' ORDER BY pdate DESC";
+                      // echo $stmt;
+                      $result = mysqli_query($conn, $stmt);
+                      while ($row = mysqli_fetch_assoc($result)) {
                     ?>
-                      <tr>
-                        <td>
-                          <form action="journal.php" method="post">
-                            <input type="hidden" name="jtitle" value="<?php echo "'";
-                                                                      echo $row['title'];
-                                                                      echo "'"; ?>">
-                            <input type="hidden" name="jauthors" value="<?php echo "'";
-                                                                        echo $row['authors'];
+                        <tr>
+                          <td><?php echo $row['fname']; ?></td>
+                          <td><?php echo $row['title']; ?></td>
+                          <td><?php echo $row['authors']; ?></td>
+                          <td><?php echo $row['publication']; ?></td>
+                          <td><?php echo $row['publisher']; ?></td>
+                          <td><?php echo $row['pages']; ?></td>
+                          <td><?php echo $row['pdate']; ?></td>
+                          <td><?php echo $row['onlineLink']; ?></td>
+                          <td><?php echo $row['impactFactor']; ?></td>
+
+                          <!-- Fill -->
+                          <td>
+                            <form action="journal.php" method="post">
+                              <input type="hidden" name="jtitle" value="<?php echo "'";
+                                                                        echo $row['title'];
                                                                         echo "'"; ?>">
-                            <input type="hidden" name="jimpact" value="<?php echo "'";
-                                                                        echo $row['impactFactor'];
-                                                                        echo "'"; ?>">
-                            <input type="hidden" name="jpublication" value="<?php echo "'";
-                                                                            echo $row['publication'];
-                                                                            echo "'"; ?>">
-                            <input type="hidden" name="jpublisher" value="<?php echo "'";
-                                                                          echo $row['publisher'];
+                              <input type="hidden" name="jauthors" value="<?php echo "'";
+                                                                          echo $row['authors'];
                                                                           echo "'"; ?>">
-                            <input type="hidden" name="jyear" value="<?php echo "'";
-                                                                      echo $row['pdate'];
-                                                                      echo "'"; ?>">
-                            <input type="hidden" name="jpages" value="<?php echo "'";
-                                                                      echo $row['pages'];
-                                                                      echo "'"; ?>">
-                            <input type="hidden" name="jlink" value="<?php echo "'";
-                                                                      echo $row['onlineLink'];
-                                                                      echo "'"; ?>">
-
-                            <input type="submit" class="btn btn-primary" name="edit_entry" value="Edit" style="background-color: green">
-                          </form>
-                        </td>
-                        <td><?php echo $row['title']; ?></td>
-                        <td><?php echo $row['authors']; ?></td>
-                        <td><?php echo $row['publication']; ?></td>
-                        <td><?php echo $row['publisher']; ?></td>
-                        <td><?php echo $row['pages']; ?></td>
-                        <td><?php echo $row['pdate']; ?></td>
-                        <td><?php echo $row['onlineLink']; ?></td>
-                        <td><?php echo $row['impactFactor']; ?></td>
-                        <!-- EDIT -->
-
-                        <!-- EDIT ends -->
-                        <!-- DELETE -->
-                        <td>
-
-                          <form action="journal.php" method="post">
-                            <input type='hidden' name='sno' value=<?php echo $row['sno']; ?>>
-                            <input type="image" name="upgrade_entry" value="Upgrade" src="./Images/upward_arrow.png" height="50" width="60">
-                          </form>
-
-                        </td>
-                        <td>
-                          <form action="journal.php" method="post">
-                            <input type="hidden" name="jtitle" value="<?php echo "'";
-                                                                      echo $row['title'];
-                                                                      echo "'"; ?>">
-                            <input type="hidden" name="jauthors" value="<?php echo "'";
-                                                                        echo $row['authors'];
-                                                                        echo "'"; ?>">
-                            <input type="hidden" name="jimpact" value="<?php echo "'";
-                                                                        echo $row['impactFactor'];
-                                                                        echo "'"; ?>">
-                            <input type="hidden" name="jpublication" value="<?php echo "'";
-                                                                            echo $row['publication'];
-                                                                            echo "'"; ?>">
-                            <input type="hidden" name="jpublisher" value="<?php echo "'";
-                                                                          echo $row['publisher'];
+                              <input type="hidden" name="jimpact" value="<?php echo "'";
+                                                                          echo $row['impactFactor'];
                                                                           echo "'"; ?>">
-                            <input type="hidden" name="jyear" value="<?php echo "'";
-                                                                      echo $row['pdate'];
-                                                                      echo "'"; ?>">
-                            <input type="hidden" name="jpages" value="<?php echo "'";
-                                                                      echo $row['pages'];
-                                                                      echo "'"; ?>">
-                            <input type="hidden" name="jlink" value="<?php echo "'";
-                                                                      echo $row['onlineLink'];
-                                                                      echo "'"; ?>">
+                              <input type="hidden" name="jpublication" value="<?php echo "'";
+                                                                              echo $row['publication'];
+                                                                              echo "'"; ?>">
+                              <input type="hidden" name="jpublisher" value="<?php echo "'";
+                                                                            echo $row['publisher'];
+                                                                            echo "'"; ?>">
+                              <input type="hidden" name="jyear" value="<?php echo "'";
+                                                                        echo $row['pdate'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="jpages" value="<?php echo "'";
+                                                                        echo $row['pages'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="jlink" value="<?php echo "'";
+                                                                        echo $row['onlineLink'];
+                                                                        echo "'"; ?>">
 
-                            <input type="submit" class="btn btn-danger" name="delete_entry" value="Delete">
-                          </form>
-                        </td>
-                        <!-- DELETE ends -->
-                      </tr>
+                              <input type="submit" class="btn btn-info" name="fill_entry" value="Fill">
+                            </form>
+                          </td>
+                          <!-- Fill ends -->
+                        </tr>
                     <?php
+                      }
                     }
                     ?>
                   </tbody>
                 </table>
-
               </div>
+              <!-- Search 2 - by publisher name ends -->
               <br>
-              <br>
-              <!-- VIEW ADDED JOURNALS ends -->
-
-
-
-              <!-- Search Functions -->
+              <!-- Search 3 - by faculty name -->
               <div class="card">
                 <div class="card-header">
-                  <h4><i class="fa fa-search mr-3"></i>Search Journals</h4>
+                  <form action="journal.php">
+                    <h4><i class="fa fa-search mr-3"></i>Search Journals by faculty name</h4>
+
+                    <div class="input-group">
+                      <input type="text" name="JfnameS" required class="form-control" placeholder="Search By Faculty Name">
+                      <input type="submit" name="JfnameSearch" class="btn btn-secondary">
+                    </div>
+                  </form>
                 </div>
-                <br>
-                <br>
-
-                <!-- Search 1- by journal name -->
-                <form action="journal.php">
-                  <div class="input-group">
-                    <input type="text" required name="JnameS" class="form-control" placeholder="Search By Journal Name">
-                    <input type="submit" name="JnameSearch" class="btn btn-secondary">
-                  </div>
-                </form>
-                <br>
-                <div class="table-responsive">
-                  <?php
-                  if (strlen(Input::get('JnameS')) > 0) {
-                    $jnames = DB::getInstance();
-                    $jname = Input::get('JnameS');
-
-                    $jnames->query("SELECT fname,dept,title,authors, publication, publisher,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day FROM faculty_profile_publications WHERE ptype = 'j' AND title LIKE '%$jname%' ORDER BY pdate DESC");
-
-                    if ($jnames->count()) {
-                      echo "<table class=\"table table-striped table-hover\">";
-                      echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Authors</th><th>Publication</th><th>Publisher</th><th>Year</th></tr></thead>";
-                      echo "<tbody>";
-
-                      foreach ($jnames->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->authors</td><td>$row->publication</td><td>$row->publisher</td><td>$row->day</td></tr>\n";
-                      }
-                      echo "</tbody></table>";
-                    }
-                  }
-                  ?>
-                </div>
-                <!-- Search 1- by journal name ends -->
-
-                <br>
-                <br>
-                <!-- Search 2 - by publisher name -->
-                <form action="journal.php">
-                  <div class="input-group">
-                    <input type="text" name="JpnameS" required class="form-control" placeholder="Search By Publisher Name">
-                    <input type="submit" name="JpnameSearch" class="btn btn-secondary">
-                  </div>
-                </form>
-                <br>
-                <div class="table-responsive">
-                  <?php
-                  if (strlen(Input::get('JpnameS')) > 0) {
-                    $jpnames = DB::getInstance();
-                    $jpname = Input::get('JpnameS');
-
-                    $jpnames->query("SELECT fname,dept,title,authors, publication, publisher,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day FROM faculty_profile_publications WHERE ptype = 'j' AND publisher LIKE '%$jpname%' ORDER BY pdate DESC");
-
-                    if ($jpnames->count()) {
-                      echo "<table class=\"table table-striped table-hover\">";
-                      echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Authors</th><th>Publication</th><th>Publisher</th><th>Year</th></tr></thead>";
-                      echo "<tbody>";
-
-                      foreach ($jpnames->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->authors</td><td>$row->publication</td><td>$row->publisher</td><td>$row->day</td></tr>\n";
-                      }
-                      echo "</tbody></table>";
-                    }
-                  }
-                  ?>
-                </div>
-                <!-- Search 2 - by publisher name ends -->
-                <br>
-                <br>
-
-                <!-- Search 3 - by year -->
-                <form action="journal.php">
-                  <div class="input-group">
-                    <input type="text" name="JyearS" required class="form-control" placeholder="Search By Journals published in last X years">
-                    <input type="submit" name="JyearSearch" class="btn btn-secondary">
-                  </div>
-                </form>
-                <br>
-                <div class="table-responsive">
-                  <?php
-                  if (strlen(Input::get('JyearS') && is_numeric(Input::get('JyearS'))) > 0) {
-                    $jyears = DB::getInstance();
-                    $jyear = Input::get('JyearS');
-
-                    $jyears->query("SELECT fname,dept,title,authors, publication, publisher, CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day  FROM faculty_profile_publications WHERE ptype = 'j' AND DATEDIFF(CURRENT_DATE, pdate)/365 < $jyear ORDER BY pdate DESC");
-
-                    if ($jyears->count()) {
-                      echo "<table class=\"table table-striped table-hover\">";
-                      echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Authors</th><th>Publication</th><th>Publisher</th><th>Year</th></tr></thead>";
-                      echo "<tbody>";
-
-                      foreach ($jyears->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->authors</td><td>$row->publication</td><td>$row->publisher</td><td>$row->day</td></tr>\n";
-                      }
-                      echo "</tbody></table>";
-                    }
-                  }
-                  ?>
-                </div>
-                <!-- Search 3 - by year ends-->
-
-                <br>
-                <br>
-
-                <!-- Search 4 - by faculty name -->
-                <form action="journal.php">
-                  <div class="input-group">
-                    <input type="text" name="JfnameS" required class="form-control" placeholder="Search By Faculty Name">
-                    <input type="submit" name="JfnameSearch" class="btn btn-secondary">
-                  </div>
-                </form>
-                <br>
-                <div class="table-responsive">
-                  <?php
-                  if (strlen(Input::get('JfnameS')) > 0) {
-                    $jfnames = DB::getInstance();
-                    $jfname = Input::get('JfnameS');
-                    $jfnames->query("SELECT fname,dept,title,authors, publication, publisher,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day FROM faculty_profile_publications WHERE ptype = 'j' AND fname LIKE '%$jfname%' ORDER BY pdate DESC");
-
-                    if ($jfnames->count()) {
-                      echo "<table class=\"table table-striped table-hover\">";
-                      echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Authors</th><th>Publication</th><th>Publisher</th><th>Year</th></tr></thead>";
-                      echo "<tbody>";
-
-                      foreach ($jfnames->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->authors</td><td>$row->publication</td><td>$row->publisher</td><td>$row->day</td></tr>\n";
-                      }
-                      echo "</tbody></table>";
-                    }
-                  }
-                  ?>
-                </div>
-                <!-- Search 4 ends - by faculty name -->
               </div>
               <br>
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th>Faculty</th>
+                      <th>Title</th>
+                      <th>Authors</th>
+                      <th>Publication</th>
+                      <th>Publisher</th>
+                      <th>Pages</th>
+                      <th>Date</th>
+                      <th>Online Link</th>
+                      <th>Impact Factor</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+                    <?php
+                    if (strlen(Input::get(JfnameS)) > 0) {
+                      $roll = $user->data()->{'Roll No'};
+                      $jfname = Input::get('JfnameS');
+                      $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+                      if (!$conn)
+                        die("Unable to connect to database");
+
+                      // echo $roll;
+                      $stmt = "SELECT fname,dept,title,authors, publication, publisher, pages, pdate, onlineLink, impactFactor FROM faculty_profile_publications WHERE ptype = 'j' AND fname LIKE '%$jfname%' ORDER BY pdate DESC";
+                      // echo $stmt;
+                      $result = mysqli_query($conn, $stmt);
+                      while ($row = mysqli_fetch_assoc($result)) {
+                    ?>
+                        <tr>
+                          <td><?php echo $row['fname']; ?></td>
+                          <td><?php echo $row['title']; ?></td>
+                          <td><?php echo $row['authors']; ?></td>
+                          <td><?php echo $row['publication']; ?></td>
+                          <td><?php echo $row['publisher']; ?></td>
+                          <td><?php echo $row['pages']; ?></td>
+                          <td><?php echo $row['pdate']; ?></td>
+                          <td><?php echo $row['onlineLink']; ?></td>
+                          <td><?php echo $row['impactFactor']; ?></td>
+
+                          <!-- Fill -->
+                          <td>
+                            <form action="journal.php" method="post">
+                              <input type="hidden" name="jtitle" value="<?php echo "'";
+                                                                        echo $row['title'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="jauthors" value="<?php echo "'";
+                                                                          echo $row['authors'];
+                                                                          echo "'"; ?>">
+                              <input type="hidden" name="jimpact" value="<?php echo "'";
+                                                                          echo $row['impactFactor'];
+                                                                          echo "'"; ?>">
+                              <input type="hidden" name="jpublication" value="<?php echo "'";
+                                                                              echo $row['publication'];
+                                                                              echo "'"; ?>">
+                              <input type="hidden" name="jpublisher" value="<?php echo "'";
+                                                                            echo $row['publisher'];
+                                                                            echo "'"; ?>">
+                              <input type="hidden" name="jyear" value="<?php echo "'";
+                                                                        echo $row['pdate'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="jpages" value="<?php echo "'";
+                                                                        echo $row['pages'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="jlink" value="<?php echo "'";
+                                                                        echo $row['onlineLink'];
+                                                                        echo "'"; ?>">
+
+                              <input type="submit" class="btn btn-info" name="fill_entry" value="Fill">
+                            </form>
+                          </td>
+                          <!-- Fill ends -->
+                        </tr>
+                    <?php
+                      }
+                    }
+                    ?>
+                  </tbody>
+                </table>
+              </div>
+              <!-- Search 3 ends - by faculty name -->
               <!-- Search Functions ends -->
+
 
             </div>
           </div>

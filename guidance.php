@@ -227,7 +227,7 @@ if (Input::exists() && isset($_POST['edit'])) {
             </a>
             <ul class="collapse list-unstyled show" id="teachingSubmenu">
               <li>
-                <a href="teaching.php">Teaching</a>
+                <a href="Teaching.php">Teaching</a>
               </li>
             </ul>
           </li>
@@ -271,22 +271,22 @@ if (Input::exists() && isset($_POST['edit'])) {
             </a>
             <ul class="collapse list-unstyled show" id="honoursSubmenu">
               <li>
-                <a href="fellowProfessional.php">Fellow - Professional Body</a>
+                <a href="Honours_FPB.php">Fellow - Professional Body</a>
               </li>
               <li>
-                <a href="memberProfessional.php">Member - Professional Body</a>
+                <a href="Honours_MPB.php">Member - Professional Body</a>
               </li>
               <li>
-                <a href="memberEditorial.php">Member - Editorial Body</a>
+                <a href="Honours_MEBJ.php">Member - Editorial Body</a>
               </li>
               <li>
-                <a href="awards.php">Awards</a>
+                <a href="Honours_A.php">Awards</a>
               </li>
               <li>
-                <a href="fellowships.php">Fellowships</a>
+                <a href="Honours_F.php">Fellowships</a>
               </li>
               <li>
-                <a href="invitedLectures.php">Invited Lectures</a>
+                <a href="Honours_IL.php">Invited Lectures</a>
               </li>
             </ul>
           </li>
@@ -328,31 +328,31 @@ if (Input::exists() && isset($_POST['edit'])) {
             <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Activity</a>
             <ul class="collapse list-unstyled show" id="homeSubmenu">
               <li>
-                <a href="studentActivities.php">Student Activities</a>
+                <a href="Activities_SA.php">Student Activities</a>
               </li>
               <li>
-                <a href="departmentalActivities.php">Departmental Activities</a>
+                <a href="Activities_DA.php">Departmental Activities</a>
               </li>
               <li>
-                <a href="instituteActivites.php">Institute Activities</a>
+                <a href="Activites_IA.php">Institute Activities</a>
               </li>
               <li>
-                <a href="professionalActivities.php">Professional Activities</a>
+                <a href="Activities_PA.php">Professional Activities</a>
               </li>
               <li>
-                <a href="seminar.php">Seminar, Conference, Workshops</a>
+                <a href="Activities_SCW.php">Seminar, Conference, Workshops</a>
               </li>
               <li>
-                <a href="shortTerm.php">Short Term Course</a>
+                <a href="Activities_STC.php">Short Term Course</a>
               </li>
               <li>
                 <a href="Activities_VA.php">Visit Abroad</a>
               </li>
               <li>
-                <a href="otherAcademic.php">Other Academic Activity</a>
+                <a href="Activities_OAA.php">Other Academic Activity</a>
               </li>
               <li>
-                <a href="anyOther.php">Any Other Information</a>
+                <a href="Activities_AOI.php">Any Other Information</a>
               </li>
             </ul>
           </li>
@@ -418,7 +418,7 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <div class="form-group">
                       <label>Name of Co-Supervisor</label>
-                      <input type="text" class="form-control" name="rcopi" id="rcopi"  value=<?php echo "$rcopi" ?>>
+                      <input type="text" class="form-control" name="rcopi" id="rcopi" value=<?php echo "$rcopi" ?>>
                     </div>
 
 
@@ -469,7 +469,7 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <div class="form-group">
                       <label> Name of Co-Supervisor</label>
-                      <input type="text" class="form-control" name="rcopi" id="rcopi" >
+                      <input type="text" class="form-control" name="rcopi" id="rcopi">
                     </div>
 
 

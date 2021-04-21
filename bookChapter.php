@@ -9,8 +9,44 @@ if ($user->isLoggedIn()) {
   Redirect::to('index.php');
 }
 
-/* TEXT BOOK submit */
+/* book chapter submit */
 if (Input::exists() && isset($_POST['csubmit'])) {
+  try {
+
+    // fetch variables that are already stored in User from studentinfo table 
+    $fname = $user->data()->Name;
+    $roll = $user->data()->{'Roll No'};
+    $prog = $user->data()->prog;
+    $dept = $user->data()->department;
+    //$ptype = 'c';
+    $email = $user->data()->email;
+    $aemail = $user->data()->aemail;
+
+    // columns that we get from form input
+    $ctitle = Input::get('ctitle');
+    $cauthors = Input::get('cauthors');
+    $btitle = Input::get('btitle');
+    $cpublisher = Input::get('cpublisher');
+    $cyear = Input::get('cyear');
+    $cbook = Input::get('cbook');
+    $clink = Input::get('clink');
+
+    // connect with localhost
+    $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+    if (!$conn)
+      die("Unable to connect to database");
+
+    // insert query
+    $stmt = "INSERT INTO `faculty_profile_publications` (`sno`, `fname`, `roll`, `dept`, `prog`, `ptype`, `title`, `authors`, `publication`, `publisher`, `pdate`, `location`, `pages`, `onlineLink`, `duration`, `impactFactor`, `bookTitle`, `bookType`, `editedVolume`, `eduPackageType`, `eduPackageLevel`, `patentNo`, `projectBudget`, `projectSponser`, `projectRole`, `projectStatus`, `email`, `aemail`) VALUES (NULL, '$fname', '$roll', '$dept', '$prog', 'bc', '$ctitle', '$cauthors', NULL, '$cpublisher', '$cyear', NULL, NULL, '$clink', NULL, NULL, '$btitle', '$cbook', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$email', '$aemail');";
+    // echo $stmt;
+    // run insert query
+    $result = mysqli_query($conn, $stmt);
+  } catch (Exception $e) {
+    die($e->getMessage());
+  }
+}
+/* TEXT BOOK fill */
+if (Input::exists() && isset($_POST['cfill'])) {
   try {
 
     // fetch variables that are already stored in User from studentinfo table 
@@ -532,6 +568,74 @@ if (Input::exists() && isset($_POST['edit'])) {
                 </div>
                 <br>
                 <!-- TEXT BOOK EDIT FORM ends -->
+                <!-- TEXT BOOKS EDIT/INSERT form -->
+              <?php } else if (Input::exists() && isset($_POST['fill_entry'])) {
+
+                $ctitle = Input::get('ctitle');
+                $cauthors = Input::get('cauthors');
+                $cbook = Input::get('cbook');
+                $cpublisher = Input::get('cpublisher');
+                $cyear = Input::get('cyear');
+                $btitle = Input::get('btitle');
+                $clink = Input::get('clink');
+
+              ?>
+                <!-- TEXT BOOK Fill FORM -->
+                <div class="card">
+                  <!-- TEXT BOOK Fill FORM - HEADER -->
+                  <div class="card-header">
+                    <h4><i class='fa fa-edit'></i> Insert Book Chapters</h4>
+                  </div>
+                  <br>
+                  <!-- TEXT BOOK Fill FORM - HEADER ends -->
+
+                  <!-- TEXT BOOK Fill FORM - BODY -->
+                  <form action="bookChapter.php" method="post">
+
+
+                    <div class="form-group">
+                      <label> Chapter Title<span class="m-1 text-primary">*</span></label>
+                      <input type="text" class="form-control" id="jtitle" name="ctitle" required value=<?php echo "$ctitle" ?>>
+                    </div>
+
+                    <div class="form-group">
+                      <label> Book Title<span class="m-1 text-primary">*</span></label>
+                      <input type="text" class="form-control" id="btitle" name="btitle" required value=<?php echo "$btitle" ?>>
+                    </div>
+
+                    <div class="form-group">
+                      <label> Authors<span class="m-1 text-primary">*</span></label>
+                      <input type="text" class="form-control" id="jauthors" name="cauthors" required value=<?php echo "$cauthors" ?>>
+                    </div>
+
+
+                    <div class="form-group">
+                      <label> Publisher<span class="m-1 text-primary">*</span></label>
+                      <input type="text" class="form-control" id="jpublisher" name="cpublisher" required value=<?php echo "$cpublisher" ?>>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="cyear"> Published Date</label>
+                      <input type="date" id="cyear" name="cyear" value=<?php echo "$cyear" ?>>
+                    </div>
+
+                    <div class="form-group">
+                      <label> Online link</label>
+                      <input type="text" class="form-control" name="clink" value=<?php echo "$clink" ?>>
+                    </div>
+
+                    <div class="form-group">
+                      <label> Book Type</label>
+                      <input type="text" class="form-control" name="cbook" value=<?php echo "$cbook" ?>>
+                    </div>
+
+                    <input type="submit" class="btn btn-info" name="cfill" value="Insert">
+
+                  </form>
+                  <!-- TEXT BOOK EDIT FORM - BODY ends -->
+                </div>
+                <br>
+                <!-- TEXT BOOK EDIT FORM ends -->
               <?php
               } else { ?>
                 <!-- TEXT BOOK INSERT FORM -->
@@ -722,186 +826,395 @@ if (Input::exists() && isset($_POST['edit'])) {
               <br>
               <!-- VIEW ADDED TEXT BOOKS ends -->
 
-
-
-              <!-- Search Functions -->
+              <!-- Search 1 - by chapter title -->
               <div class="card">
                 <div class="card-header">
-                  <h4><i class="fa fa-search mr-3"></i> Search Book Chapter </h4>
+                  <form action="bookChapter.php">
+                    <h4><i class="fa fa-search mr-3"></i>Search by Chapter Title</h4>
+                    <div class="input-group">
+                      <input type="text" name="CnameS" required class="form-control" placeholder="Search By Chapter Title">
+                      <input type="submit" name="CnameSearch" class="btn btn-secondary">
+                    </div>
+                  </form>
                 </div>
-                <br>
-                <br>
-
-                <!-- Search 0 - by book title -->
-                <form action="bookChapter.php">
-                  <div class="input-group">
-                    <input type="text" required name="BnameS" class="form-control" placeholder="Search By Book Title">
-                    <input type="submit" name="BnameSearch" class="btn btn-secondary">
-                  </div>
-                </form>
-                <br>
-                <div class="table-responsive">
-                  <?php
-                  if (strlen(Input::get('BnameS')) > 0) {
-                    $bnames = DB::getInstance();
-                    $bname = Input::get('BnameS');
-
-                    $bnames->query("SELECT fname,dept,title,bookTitle,authors, publisher,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day, bookType FROM faculty_profile_publications WHERE ptype = 'bc' AND bookTitle LIKE '%$bname%' ORDER BY pdate DESC");
-
-                    if ($bnames->count()) {
-                      echo "<table class=\"table table-striped table-hover\">";
-                      echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Chapter Title</th><th>Book Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Book Type</th></tr></thead>";
-                      echo "<tbody>";
-
-                      foreach ($bnames->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->bookTitle</td><td>$row->authors</td><td>$row->publisher</td><td>$row->day</td><td>$row->bookType</td> </tr>\n";
-                      }
-                      echo "</tbody></table>";
-                    }
-                  }
-                  ?>
-                </div>
-                <!-- Search 0 - by book title ends -->
-
-                <br>
-
-                <!-- Search 1- by chapter title -->
-                <form action="bookChapter.php">
-                  <div class="input-group">
-                    <input type="text" required name="CnameS" class="form-control" placeholder="Search By Chapter Title">
-                    <input type="submit" name="CnameSearch" class="btn btn-secondary">
-                  </div>
-                </form>
-                <br>
-                <div class="table-responsive">
-                  <?php
-                  if (strlen(Input::get('CnameS')) > 0) {
-                    $cnames = DB::getInstance();
-                    $cname = Input::get('CnameS');
-
-                    $cnames->query("SELECT fname,dept,title,bookTitle,authors, publisher,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day, bookType FROM faculty_profile_publications WHERE ptype = 'bc' AND title LIKE '%$cname%' ORDER BY pdate DESC");
-
-                    if ($cnames->count()) {
-                      echo "<table class=\"table table-striped table-hover\">";
-                      echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Chapter Title</th><th>Book Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Book Type</th></tr></thead>";
-                      echo "<tbody>";
-
-                      foreach ($cnames->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->bookTitle</td><td>$row->authors</td><td>$row->publisher</td><td>$row->day</td><td>$row->bookType</td> </tr>\n";
-                      }
-                      echo "</tbody></table>";
-                    }
-                  }
-                  ?>
-                </div>
-                <!-- Search 1- by chapter title ends -->
-
-                <br>
-
-                <!-- Search 2 - by publisher name -->
-                <form action="bookChapter.php">
-                  <div class="input-group">
-                    <input type="text" name="CpnameS" required class="form-control" placeholder="Search By Publisher Name">
-                    <input type="submit" name="JpnameSearch" class="btn btn-secondary">
-                  </div>
-                </form>
-                <br>
-                <div class="table-responsive">
-                  <?php
-                  if (strlen(Input::get('CpnameS')) > 0) {
-                    $cpnames = DB::getInstance();
-                    $cpname = Input::get('CpnameS');
-
-                    $cpnames->query("SELECT fname,dept,title,bookTitle,authors, publisher,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day, bookType FROM faculty_profile_publications WHERE ptype = 'bc' AND publisher LIKE '%$cpname%' ORDER BY pdate DESC");
-
-                    if ($cpnames->count()) {
-                      echo "<table class=\"table table-striped table-hover\">";
-                      echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Chapter Title</th><th>Book Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Book Type</th></tr></thead>";
-                      echo "<tbody>";
-
-                      foreach ($cpnames->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->bookTitle</td><td>$row->authors</td><td>$row->publisher</td><td>$row->day</td><td>$row->bookType</td></tr>\n";
-                      }
-                      echo "</tbody></table>";
-                    }
-                  }
-                  ?>
-                </div>
-                <!-- Search 2 - by publisher name ends -->
-                <br>
-
-
-                <!-- Search 3 - by year -->
-                <form action="bookChapter.php">
-                  <div class="input-group">
-                    <input type="text" name="cyearS" required class="form-control" placeholder="Search By Text Books published in last X years">
-                    <input type="submit" name="jyearSearch" class="btn btn-secondary">
-                  </div>
-                </form>
-                <br>
-                <div class="table-responsive">
-                  <?php
-                  if (strlen(Input::get('cyearS') && is_numeric(Input::get('cyearS'))) > 0) {
-                    $cyears = DB::getInstance();
-                    $cyear = Input::get('cyearS');
-
-                    $cyears->query("SELECT fname,dept,title,bookTitle,authors, publisher, CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day, bookType  FROM faculty_profile_publications WHERE ptype = 'bc' AND DATEDIFF(CURRENT_DATE, pdate)/365 < $cyear ORDER BY pdate DESC");
-
-                    if ($cyears->count()) {
-                      echo "<table class=\"table table-striped table-hover\">";
-                      echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Chapter Title</th><th>Book Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Book Type</th></tr></thead>";
-                      echo "<tbody>";
-
-                      foreach ($cyears->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->bookTitle</td><td>$row->authors</td><td>$row->publisher</td><td>$row->day</td><td>$row->bookType</td></tr>\n";
-                      }
-                      echo "</tbody></table>";
-                    }
-                  }
-                  ?>
-                </div>
-                <!-- Search 3 - by year ends-->
-
-                <br>
-
-
-                <!-- Search 4 - by faculty name -->
-                <form action="bookChapter.php">
-                  <div class="input-group">
-                    <input type="text" name="CfnameS" required class="form-control" placeholder="Search By Faculty Name">
-                    <input type="submit" name="CfnameSearch" class="btn btn-secondary">
-                  </div>
-                </form>
-                <br>
-                <div class="table-responsive">
-                  <?php
-                  if (strlen(Input::get('CfnameS')) > 0) {
-                    $cfnames = DB::getInstance();
-                    $cfname = Input::get('CfnameS');
-                    $cfnames->query("SELECT fname,dept,title,bookTitle,authors,  publisher,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day, bookType FROM faculty_profile_publications WHERE ptype = 'bc' AND fname LIKE '%$cfname%' ORDER BY pdate DESC");
-
-                    if ($cfnames->count()) {
-                      echo "<table class=\"table table-striped table-hover\">";
-                      echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Chapter Title</th><th>Book Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Book Type</th></tr></thead>";
-                      echo "<tbody>";
-
-                      foreach ($cfnames->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->bookTitle</td><td>$row->authors</td><td>$row->publisher</td><td>$row->day</td><td>$row->bookType</td></tr>\n";
-                      }
-                      echo "</tbody></table>";
-                    }
-                  }
-                  ?>
-                </div>
-                <!-- Search 4 ends - by faculty name -->
               </div>
               <br>
-              <!-- Search Functions ends -->
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th>Name</th>
+                      <th>Dept</th>
+                      <th>Chapter Title</th>
+                      <th>Book Title</th>
+                      <th>Authors</th>
+                      <th>Publisher</th>
+                      <th>Date</th>
+                      <th>Book Type</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+                    <?php
+                    if (strlen(Input::get(CnameS)) > 0) {
+                      $roll = $user->data()->{'Roll No'};
+                      $cname = Input::get('CnameS');
+                      $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+                      if (!$conn)
+                        die("Unable to connect to database");
+
+                      // echo $roll;
+                      $stmt = "SELECT fname,dept,title, bookTitle, authors, publisher, pdate, onlineLink, bookType FROM faculty_profile_publications WHERE ptype = 'bc' AND title LIKE '%$cname%' ORDER BY pdate DESC";
+                      // echo $stmt;
+                      $result = mysqli_query($conn, $stmt);
+                      while ($row = mysqli_fetch_assoc($result)) {
+                    ?>
+                        <tr>
+                          <td><?php echo $row['fname']; ?></td>
+                          <td><?php echo $row['dept']; ?></td>
+                          <td><?php echo $row['title']; ?></td>
+                          <td><?php echo $row['bookTitle']; ?></td>
+
+                          <td><?php echo $row['authors']; ?></td>
+                          <td><?php echo $row['publisher']; ?></td>
+                          <td><?php echo $row['pdate']; ?></td>
+                          <td><?php echo $row['bookType']; ?></td>
+
+                          <!-- Fill -->
+                          <td>
+                            <form action="bookChapter.php" method="post">
+                              <input type="hidden" name="ctitle" value="<?php echo "'";
+                                                                        echo $row['title'];
+                                                                        echo "'"; ?>">
+
+                              <input type="hidden" name="btitle" value="<?php echo "'";
+                                                                        echo $row['bookTitle'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="cauthors" value="<?php echo "'";
+                                                                          echo $row['authors'];
+                                                                          echo "'"; ?>">
+                              <input type="hidden" name="cpublisher" value="<?php echo "'";
+                                                                            echo $row['publisher'];
+                                                                            echo "'"; ?>">
+                              <input type="hidden" name="cyear" value="<?php echo "'";
+                                                                        echo $row['pdate'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="cbook" value="<?php echo "'";
+                                                                        echo $row['bookType'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="clink" value="<?php echo "'";
+                                                                        echo $row['onlineLink'];
+                                                                        echo "'"; ?>">
+
+                              <input type="submit" class="btn btn-info" name="fill_entry" value="Fill">
+                            </form>
+                          </td>
+                          <!-- Fill ends -->
+                        </tr>
+                    <?php
+                      }
+                    }
+                    ?>
+                  </tbody>
+                </table>
+              </div>
+              <!-- Search 1 - by chapter title -->
+              <br>
+
+              <!-- Search 2 - by book title -->
+              <div class="card">
+                <div class="card-header">
+                  <form action="bookChapter.php">
+                    <h4><i class="fa fa-search mr-3"></i>Search by Book Title</h4>
+                    <div class="input-group">
+                      <input type="text" name="CbnameS" required class="form-control" placeholder="Search By Book Title">
+                      <input type="submit" name="CbnameSearch" class="btn btn-secondary">
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <br>
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th>Name</th>
+                      <th>Dept</th>
+                      <th>Chapter Title</th>
+                      <th>Book Title</th>
+                      <th>Authors</th>
+                      <th>Publisher</th>
+                      <th>Date</th>
+                      <th>Book Type</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+                    <?php
+                    if (strlen(Input::get(CbnameS)) > 0) {
+                      $roll = $user->data()->{'Roll No'};
+                      $cbname = Input::get('CbnameS');
+                      $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+                      if (!$conn)
+                        die("Unable to connect to database");
+
+                      // echo $roll;
+                      $stmt = "SELECT fname,dept,title, bookTitle, authors, publisher, pdate, onlineLink, bookType FROM faculty_profile_publications WHERE ptype = 'bc' AND bookTitle LIKE '%$cbname%' ORDER BY pdate DESC";
+                      // echo $stmt;
+                      $result = mysqli_query($conn, $stmt);
+                      while ($row = mysqli_fetch_assoc($result)) {
+                    ?>
+                        <tr>
+                          <td><?php echo $row['fname']; ?></td>
+                          <td><?php echo $row['dept']; ?></td>
+                          <td><?php echo $row['title']; ?></td>
+                          <td><?php echo $row['bookTitle']; ?></td>
+
+                          <td><?php echo $row['authors']; ?></td>
+                          <td><?php echo $row['publisher']; ?></td>
+                          <td><?php echo $row['pdate']; ?></td>
+                          <td><?php echo $row['bookType']; ?></td>
+
+                          <!-- Fill -->
+                          <td>
+                            <form action="bookChapter.php" method="post">
+                              <input type="hidden" name="ctitle" value="<?php echo "'";
+                                                                        echo $row['title'];
+                                                                        echo "'"; ?>">
+
+                              <input type="hidden" name="btitle" value="<?php echo "'";
+                                                                        echo $row['bookTitle'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="cauthors" value="<?php echo "'";
+                                                                          echo $row['authors'];
+                                                                          echo "'"; ?>">
+                              <input type="hidden" name="cpublisher" value="<?php echo "'";
+                                                                            echo $row['publisher'];
+                                                                            echo "'"; ?>">
+                              <input type="hidden" name="cyear" value="<?php echo "'";
+                                                                        echo $row['pdate'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="cbook" value="<?php echo "'";
+                                                                        echo $row['bookType'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="clink" value="<?php echo "'";
+                                                                        echo $row['onlineLink'];
+                                                                        echo "'"; ?>">
+
+                              <input type="submit" class="btn btn-info" name="fill_entry" value="Fill">
+                            </form>
+                          </td>
+                          <!-- Fill ends -->
+                        </tr>
+                    <?php
+                      }
+                    }
+                    ?>
+                  </tbody>
+                </table>
+              </div>
+              <!-- Search 2 - by  book title -->
+              <br>
+
+              <!-- Search 3 - by book title -->
+              <div class="card">
+                <div class="card-header">
+                  <form action="bookChapter.php">
+                    <h4><i class="fa fa-search mr-3"></i>Search by Publisher Name</h4>
+                    <div class="input-group">
+                      <input type="text" name="CpnameS" required class="form-control" placeholder="Search By Publisher Name">
+                      <input type="submit" name="CpnameSearch" class="btn btn-secondary">
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <br>
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th>Name</th>
+                      <th>Dept</th>
+                      <th>Chapter Title</th>
+                      <th>Book Title</th>
+                      <th>Authors</th>
+                      <th>Publisher</th>
+                      <th>Date</th>
+                      <th>Book Type</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+                    <?php
+                    if (strlen(Input::get(CpnameS)) > 0) {
+                      $roll = $user->data()->{'Roll No'};
+                      $cpname = Input::get('CpnameS');
+                      $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+                      if (!$conn)
+                        die("Unable to connect to database");
+
+                      // echo $roll;
+                      $stmt = "SELECT fname,dept,title, bookTitle, authors, publisher, pdate, onlineLink, bookType FROM faculty_profile_publications WHERE ptype = 'bc' AND publisher LIKE '%$cpname%' ORDER BY pdate DESC";
+                      // echo $stmt;
+                      $result = mysqli_query($conn, $stmt);
+                      while ($row = mysqli_fetch_assoc($result)) {
+                    ?>
+                        <tr>
+                          <td><?php echo $row['fname']; ?></td>
+                          <td><?php echo $row['dept']; ?></td>
+                          <td><?php echo $row['title']; ?></td>
+                          <td><?php echo $row['bookTitle']; ?></td>
+
+                          <td><?php echo $row['authors']; ?></td>
+                          <td><?php echo $row['publisher']; ?></td>
+                          <td><?php echo $row['pdate']; ?></td>
+                          <td><?php echo $row['bookType']; ?></td>
+
+                          <!-- Fill -->
+                          <td>
+                            <form action="bookChapter.php" method="post">
+                              <input type="hidden" name="ctitle" value="<?php echo "'";
+                                                                        echo $row['title'];
+                                                                        echo "'"; ?>">
+
+                              <input type="hidden" name="btitle" value="<?php echo "'";
+                                                                        echo $row['bookTitle'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="cauthors" value="<?php echo "'";
+                                                                          echo $row['authors'];
+                                                                          echo "'"; ?>">
+                              <input type="hidden" name="cpublisher" value="<?php echo "'";
+                                                                            echo $row['publisher'];
+                                                                            echo "'"; ?>">
+                              <input type="hidden" name="cyear" value="<?php echo "'";
+                                                                        echo $row['pdate'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="cbook" value="<?php echo "'";
+                                                                        echo $row['bookType'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="clink" value="<?php echo "'";
+                                                                        echo $row['onlineLink'];
+                                                                        echo "'"; ?>">
+
+                              <input type="submit" class="btn btn-info" name="fill_entry" value="Fill">
+                            </form>
+                          </td>
+                          <!-- Fill ends -->
+                        </tr>
+                    <?php
+                      }
+                    }
+                    ?>
+                  </tbody>
+                </table>
+              </div>
+              <!-- Search 3 - by  publisher name -->
+              <br>
+
+              <!-- Search 4 - by faculty Name -->
+              <div class="card">
+                <div class="card-header">
+                  <form action="bookChapter.php">
+                    <h4><i class="fa fa-search mr-3"></i>Search by Faculty Name</h4>
+                    <div class="input-group">
+                      <input type="text" name="CfnameS" required class="form-control" placeholder="Search By Faculty Name">
+                      <input type="submit" name="CfnameSearch" class="btn btn-secondary">
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <br>
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th>Name</th>
+                      <th>Dept</th>
+                      <th>Chapter Title</th>
+                      <th>Book Title</th>
+                      <th>Authors</th>
+                      <th>Publisher</th>
+                      <th>Date</th>
+                      <th>Book Type</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+                    <?php
+                    if (strlen(Input::get(CfnameS)) > 0) {
+                      $roll = $user->data()->{'Roll No'};
+                      $cfname = Input::get('CfnameS');
+                      $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+                      if (!$conn)
+                        die("Unable to connect to database");
+
+                      // echo $roll;
+                      $stmt = "SELECT fname,dept,title, bookTitle, authors, publisher, pdate, onlineLink, bookType FROM faculty_profile_publications WHERE ptype = 'bc' AND fname LIKE '%$cfname%' ORDER BY pdate DESC";
+                      // echo $stmt;
+                      $result = mysqli_query($conn, $stmt);
+                      while ($row = mysqli_fetch_assoc($result)) {
+                    ?>
+                        <tr>
+                          <td><?php echo $row['fname']; ?></td>
+                          <td><?php echo $row['dept']; ?></td>
+                          <td><?php echo $row['title']; ?></td>
+                          <td><?php echo $row['bookTitle']; ?></td>
+
+                          <td><?php echo $row['authors']; ?></td>
+                          <td><?php echo $row['publisher']; ?></td>
+                          <td><?php echo $row['pdate']; ?></td>
+                          <td><?php echo $row['bookType']; ?></td>
+
+                          <!-- Fill -->
+                          <td>
+                            <form action="bookChapter.php" method="post">
+                              <input type="hidden" name="ctitle" value="<?php echo "'";
+                                                                        echo $row['title'];
+                                                                        echo "'"; ?>">
+
+                              <input type="hidden" name="btitle" value="<?php echo "'";
+                                                                        echo $row['bookTitle'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="cauthors" value="<?php echo "'";
+                                                                          echo $row['authors'];
+                                                                          echo "'"; ?>">
+                              <input type="hidden" name="cpublisher" value="<?php echo "'";
+                                                                            echo $row['publisher'];
+                                                                            echo "'"; ?>">
+                              <input type="hidden" name="cyear" value="<?php echo "'";
+                                                                        echo $row['pdate'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="cbook" value="<?php echo "'";
+                                                                        echo $row['bookType'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="clink" value="<?php echo "'";
+                                                                        echo $row['onlineLink'];
+                                                                        echo "'"; ?>">
+
+                              <input type="submit" class="btn btn-info" name="fill_entry" value="Fill">
+                            </form>
+                          </td>
+                          <!-- Fill ends -->
+                        </tr>
+                    <?php
+                      }
+                    }
+                    ?>
+                  </tbody>
+                </table>
+              </div>
+              <!-- Search 4 - by  faculty name -->
+              <br>
+
+
 
             </div>
           </div>

@@ -46,6 +46,43 @@ if (Input::exists() && isset($_POST['csubmit'])) {
   }
 }
 
+/* fill */
+if (Input::exists() && isset($_POST['cfill'])) {
+  try {
+
+    // fetch variables that are already stored in User from studentinfo table 
+    $fname = $user->data()->Name;
+    $roll = $user->data()->{'Roll No'};
+    $prog = $user->data()->prog;
+    $dept = $user->data()->department;
+    //$ptype = 'c';
+    $email = $user->data()->email;
+    $aemail = $user->data()->aemail;
+
+    // columns that we get from form input
+    $title = Input::get('title');
+    // $other = Input::get('other');
+    $refn = Input::get('refn');
+    $projectStatus = Input::get('projectStatus');
+    $cyear = Input::get('cyear');
+    // $juri = Input::get('juri');
+
+
+    // connect with localhost
+    $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+    if (!$conn)
+      die("Unable to connect to database");
+
+    // insert query
+    $stmt = "INSERT INTO `faculty_profile_research` (`fname`, `roll`, `dept`, `prog`, `email`, `aemail`, `rtype`, `title`, `other`, `rpi`, `rcopi`, `rlevel`, `remarks`, `funds`, `projectStatus`, `juri`, `ref`,`pdate`) VALUES ('$fname', '$roll', '$dept', '$prog', '$email', '$aemail', 'pat', '$title', NULL, NULL, NULL, NULL, NULL, NULL, '$projectStatus', NULL, '$refn','$cyear');";
+    // echo $stmt;
+    // run insert query
+    $result = mysqli_query($conn, $stmt);
+  } catch (Exception $e) {
+    die($e->getMessage());
+  }
+}
+
 /* delete */
 if (Input::exists() && isset($_POST['delete_entry'])) {
 
@@ -228,7 +265,7 @@ if (Input::exists() && isset($_POST['edit'])) {
             </a>
             <ul class="collapse list-unstyled show" id="teachingSubmenu">
               <li>
-                <a href="teaching.php">Teaching</a>
+                <a href="Teaching.php">Teaching</a>
               </li>
             </ul>
           </li>
@@ -272,22 +309,22 @@ if (Input::exists() && isset($_POST['edit'])) {
             </a>
             <ul class="collapse list-unstyled show" id="honoursSubmenu">
               <li>
-                <a href="fellowProfessional.php">Fellow - Professional Body</a>
+                <a href="Honours_FPB.php">Fellow - Professional Body</a>
               </li>
               <li>
-                <a href="memberProfessional.php">Member - Professional Body</a>
+                <a href="Honours_MPB.php">Member - Professional Body</a>
               </li>
               <li>
-                <a href="memberEditorial.php">Member - Editorial Body</a>
+                <a href="Honours_MEBJ.php">Member - Editorial Body</a>
               </li>
               <li>
-                <a href="awards.php">Awards</a>
+                <a href="Honours_A.php">Awards</a>
               </li>
               <li>
-                <a href="fellowships.php">Fellowships</a>
+                <a href="Honours_F.php">Fellowships</a>
               </li>
               <li>
-                <a href="invitedLectures.php">Invited Lectures</a>
+                <a href="Honours_IL.php">Invited Lectures</a>
               </li>
             </ul>
           </li>
@@ -329,31 +366,31 @@ if (Input::exists() && isset($_POST['edit'])) {
             <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Activity</a>
             <ul class="collapse list-unstyled show" id="homeSubmenu">
               <li>
-                <a href="studentActivities.php">Student Activities</a>
+                <a href="Activities_SA.php">Student Activities</a>
               </li>
               <li>
-                <a href="departmentalActivities.php">Departmental Activities</a>
+                <a href="Activities_DA.php">Departmental Activities</a>
               </li>
               <li>
-                <a href="instituteActivites.php">Institute Activities</a>
+                <a href="Activites_IA.php">Institute Activities</a>
               </li>
               <li>
-                <a href="professionalActivities.php">Professional Activities</a>
+                <a href="Activities_PA.php">Professional Activities</a>
               </li>
               <li>
-                <a href="seminar.php">Seminar, Conference, Workshops</a>
+                <a href="Activities_SCW.php">Seminar, Conference, Workshops</a>
               </li>
               <li>
-                <a href="shortTerm.php">Short Term Course</a>
+                <a href="Activities_STC.php">Short Term Course</a>
               </li>
               <li>
                 <a href="Activities_VA.php">Visit Abroad</a>
               </li>
               <li>
-                <a href="otherAcademic.php">Other Academic Activity</a>
+                <a href="Activities_OAA.php">Other Academic Activity</a>
               </li>
               <li>
-                <a href="anyOther.php">Any Other Information</a>
+                <a href="Activities_AOI.php">Any Other Information</a>
               </li>
             </ul>
           </li>
@@ -402,7 +439,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                   <form action="patent.php" method="post">
 
                     <input type="hidden" name="titlePrev" value="<?php echo $title ?>">
-                    
+
                     <input type="hidden" name="projectStatusPrev" value="<?php echo $projectStatus ?>">
                     <input type="hidden" name="refnPrev" value="<?php echo $refn ?>">
                     <input type="hidden" name="cyearPrev" value="<?php echo $cyear ?>">
@@ -412,7 +449,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                       <input type="text" class="form-control" name="title" id="title" required value=<?php echo "$title" ?>>
                     </div>
 
-                    
+
 
                     <div class="form-group">
                       <label> Ref. No.<span class="m-1 text-primary">*</span></label>
@@ -430,7 +467,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                       <input type="date" id="cyear" name="cyear" value=<?php echo "$cyear" ?>>
                     </div>
 
-                    
+
 
                     <input type="submit" class="btn btn-info" name="edit" value="Edit">
 
@@ -439,6 +476,56 @@ if (Input::exists() && isset($_POST['edit'])) {
                 </div>
                 <br>
                 <!--  EDIT FORM ends -->
+              <?php } else if (Input::exists() && isset($_POST['fill_entry'])) {
+
+                $title = Input::get('title');
+                // $other = Input::get('other');
+                // $juri = Input::get('juri');
+                $projectStatus = Input::get('projectStatus');
+                $refn = Input::get('refn');
+                $cyear = Input::get('cyear');
+
+              ?>
+                <!--  Fill FORM -->
+                <div class="card">
+                  <!--  EDIT FORM - HEADER -->
+                  <div class="card-header">
+                    <h4><i class='fa fa-edit'></i> Insert Patents</h4>
+                  </div>
+                  <br>
+                  <!-- EDIT FORM - HEADER ends -->
+
+                  <!--  EDIT FORM - BODY -->
+                  <form action="patent.php" method="post">
+
+                    <div class="form-group">
+                      <label> Title<span class="m-1 text-primary">*</span></label>
+                      <input type="text" class="form-control" name="title" id="title" required value=<?php echo "$title" ?>>
+                    </div>
+
+                    <div class="form-group">
+                      <label> Ref. No.<span class="m-1 text-primary">*</span></label>
+                      <input type="text" class="form-control" name="refn" id="refn" required value=<?php echo "$refn" ?>>
+                    </div>
+
+
+                    <div class="form-group">
+                      <label> Status</label>
+                      <input type="text" class="form-control" name="projectStatus" id="projectStatus" value=<?php echo "$projectStatus" ?>>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="cyear"> Date</label>
+                      <input type="date" id="cyear" name="cyear" value=<?php echo "$cyear" ?>>
+                    </div>
+
+                    <input type="submit" class="btn btn-info" name="cfill" value="Insert">
+
+                  </form>
+                  <!--  EDIT FORM - BODY ends -->
+                </div>
+                <br>
+                <!--  Fill FORM ends -->
               <?php
               } else { ?>
                 <!--  INSERT FORM -->
@@ -534,7 +621,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                         <td><?php echo $row['pdate']; ?></td>
                         <td><?php echo $row['ref']; ?></td>
                         <td><?php echo $row['projectStatus']; ?></td>
-                        
+
 
 
                         <!-- EDIT -->
@@ -546,17 +633,17 @@ if (Input::exists() && isset($_POST['edit'])) {
                             <input type="hidden" name="refn" value="<?php echo "'";
                                                                     echo $row['ref'];
                                                                     echo "'"; ?>">
-                                                                    <input type="hidden" name="cyear" value="<?php echo "'";
+                            <input type="hidden" name="cyear" value="<?php echo "'";
                                                                       echo $row['pdate'];
                                                                       echo "'"; ?>">
-                           
+
 
 
                             <input type="hidden" name="projectStatus" value="<?php echo "'";
                                                                               echo $row['projectStatus'];
                                                                               echo "'"; ?>">
 
-                            
+
 
                             <input type="submit" class="btn btn-primary" name="edit_entry" value="Edit" style="background-color: green">
                           </form>
@@ -571,18 +658,18 @@ if (Input::exists() && isset($_POST['edit'])) {
                             <input type="hidden" name="refn" value="<?php echo "'";
                                                                     echo $row['ref'];
                                                                     echo "'"; ?>">
-                                                                    <input type="hidden" name="cyear" value="<?php echo "'";
+                            <input type="hidden" name="cyear" value="<?php echo "'";
                                                                       echo $row['pdate'];
                                                                       echo "'"; ?>">
 
-                            
+
 
 
                             <input type="hidden" name="projectStatus" value="<?php echo "'";
                                                                               echo $row['projectStatus'];
                                                                               echo "'"; ?>">
 
-                            
+
 
                             <input type="submit" class="btn btn-danger" name="delete_entry" value="Delete">
                           </form>
@@ -600,84 +687,173 @@ if (Input::exists() && isset($_POST['edit'])) {
               <br>
               <!-- VIEW ADDED ends -->
 
-
-
-              <!-- Search Functions -->
+              <!-- Search 1 - by conference paper title  -->
               <div class="card">
                 <div class="card-header">
-                  <h4><i class="fa fa-search mr-3"></i> Search Patents </h4>
+                  <form action="patent.php">
+                    <h4><i class="fa fa-search mr-3"></i>Search by Title</h4>
+                    <div class="input-group">
+                      <input type="text" name="CnameS" required class="form-control" placeholder="Search By Title">
+                      <input type="submit" name="CnameSearch" class="btn btn-secondary">
+                    </div>
+                  </form>
                 </div>
-                <br>
-                <br>
-
-                <!-- Search 0 - by book title -->
-                <form action="patent.php">
-                  <div class="input-group">
-                    <input type="text" required name="BnameS" class="form-control" placeholder="Search By Title">
-                    <input type="submit" name="BnameSearch" class="btn btn-secondary">
-                  </div>
-                </form>
-                <br>
-                <div class="table-responsive">
-                  <?php
-                  if (strlen(Input::get('BnameS')) > 0) {
-                    $bnames = DB::getInstance();
-                    $bname = Input::get('BnameS');
-
-                    $bnames->query("SELECT fname,dept,title,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day,ref, projectStatus FROM faculty_profile_research WHERE rtype = 'pat' AND title LIKE '%$bname%' ORDER BY pdate DESC");
-
-                    if ($bnames->count()) {
-                      echo "<table class=\"table table-striped table-hover\">";
-                      echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Date</th><th>Ref. No.</th><th>Status</th></tr></thead>";
-                      echo "<tbody>";
-
-                      foreach ($bnames->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->day</td><td>$row->ref</td><td>$row->projectStatus</td> </tr>\n";
-                      }
-                      echo "</tbody></table>";
-                    }
-                  }
-                  ?>
-                </div>
-                <!-- Search 0 - by book title ends -->
-
-                <br>
-
-                <!-- Search 4 - by faculty name -->
-                <form action="patent.php">
-                  <div class="input-group">
-                    <input type="text" name="CfnameS" required class="form-control" placeholder="Search By Faculty Name">
-                    <input type="submit" name="CfnameSearch" class="btn btn-secondary">
-                  </div>
-                </form>
-                <br>
-                <div class="table-responsive">
-                  <?php
-                  if (strlen(Input::get('CfnameS')) > 0) {
-                    $cfnames = DB::getInstance();
-                    $cfname = Input::get('CfnameS');
-
-                    $cfnames->query("SELECT fname,dept,title,CONCAT_WS('-', MONTH(pdate), YEAR(pdate)) AS day,ref, projectStatus FROM faculty_profile_research WHERE rtype = 'pat' AND fname LIKE '%$cfname%' ORDER BY pdate DESC");
-
-                    if ($cfnames->count()) {
-                      echo "<table class=\"table table-striped table-hover\">";
-                      echo "<thead class=\"thead-inverse\">";
-                      echo "<tr><th>Name</th><th>Dept</th><th>Title</th><th>Date</th><th>Ref. No.</th><th>Status</th></tr></thead>";
-                      echo "<tbody>";
-
-                      foreach ($cfnames->results() as $row) {
-                        echo "<tr><td>$row->fname</td><td>$row->dept</td><td>$row->title</td><td>$row->day</td><td>$row->ref</td><td>$row->projectStatus</td> </tr>\n";
-                      }
-                      echo "</tbody></table>";
-                    }
-                  }
-                  ?>
-                </div>
-                <!-- Search 4 ends - by faculty name -->
               </div>
               <br>
-              <!-- Search Functions ends -->
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th>Name</th>
+                      <th>Dept</th>
+                      <th>Title</th>
+                      <th>Status</th>
+                      <th>Refn</th>
+                      <th>Date</th>
+
+                      <th></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+                    <?php
+                    if (strlen(Input::get(CnameS)) > 0) {
+                      $roll = $user->data()->{'Roll No'};
+                      $cname = Input::get('CnameS');
+                      $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+                      if (!$conn)
+                        die("Unable to connect to database");
+
+                      // echo $roll;
+                      $stmt = "SELECT fname,dept,title,projectStatus, ref, pdate FROM faculty_profile_research WHERE rtype = 'pat' AND title LIKE '%$cname%' ORDER BY pdate DESC";
+                      // echo $stmt;
+                      $result = mysqli_query($conn, $stmt);
+                      while ($row = mysqli_fetch_assoc($result)) {
+                    ?>
+                        <tr>
+                          <td><?php echo $row['fname']; ?></td>
+                          <td><?php echo $row['dept']; ?></td>
+                          <td><?php echo $row['title']; ?></td>
+                          <td><?php echo $row['projectStatus']; ?></td>
+                          <td><?php echo $row['ref']; ?></td>
+                          <td><?php echo $row['pdate']; ?></td>
+
+                          <!-- Fill -->
+                          <td>
+                            <form action="patent.php" method="post">
+                              <input type="hidden" name="title" value="<?php echo "'";
+                                                                        echo $row['title'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="cyear" value="<?php echo "'";
+                                                                        echo $row['pdate'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="projectStatus" value="<?php echo "'";
+                                                                                echo $row['projectStatus'];
+                                                                                echo "'"; ?>">
+                              <input type="hidden" name="refn" value="<?php echo "'";
+                                                                      echo $row['ref'];
+                                                                      echo "'"; ?>">
+
+                              <input type="submit" class="btn btn-info" name="fill_entry" value="Fill">
+                            </form>
+                          </td>
+                          <!-- Fill ends -->
+                        </tr>
+                    <?php
+                      }
+                    }
+                    ?>
+                  </tbody>
+                </table>
+              </div>
+              <!-- Search 1 - by  title -->
+              <br>
+
+              <!-- Search 2 - by status  -->
+              <div class="card">
+                <div class="card-header">
+                  <form action="patent.php">
+                    <h4><i class="fa fa-search mr-3"></i>Search by Status</h4>
+                    <div class="input-group">
+                      <input type="text" name="CstatusS" required class="form-control" placeholder="Search By Status">
+                      <input type="submit" name="CstatusSearch" class="btn btn-secondary">
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <br>
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th>Name</th>
+                      <th>Dept</th>
+                      <th>Title</th>
+                      <th>Status</th>
+                      <th>Refn</th>
+                      <th>Date</th>
+
+                      <th></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+                    <?php
+                    if (strlen(Input::get(CstatusS)) > 0) {
+                      $roll = $user->data()->{'Roll No'};
+                      $cstatus = Input::get('CstatusS');
+                      $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+                      if (!$conn)
+                        die("Unable to connect to database");
+
+                      // echo $roll;
+                      $stmt = "SELECT fname,dept,title,projectStatus, ref, pdate FROM faculty_profile_research WHERE rtype = 'pat' AND projectStatus LIKE '%$cstatus%' ORDER BY pdate DESC";
+                      // echo $stmt;
+                      $result = mysqli_query($conn, $stmt);
+                      while ($row = mysqli_fetch_assoc($result)) {
+                    ?>
+                        <tr>
+                          <td><?php echo $row['fname']; ?></td>
+                          <td><?php echo $row['dept']; ?></td>
+                          <td><?php echo $row['title']; ?></td>
+                          <td><?php echo $row['projectStatus']; ?></td>
+                          <td><?php echo $row['ref']; ?></td>
+                          <td><?php echo $row['pdate']; ?></td>
+
+                          <!-- Fill -->
+                          <td>
+                            <form action="patent.php" method="post">
+                              <input type="hidden" name="title" value="<?php echo "'";
+                                                                        echo $row['title'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="cyear" value="<?php echo "'";
+                                                                        echo $row['pdate'];
+                                                                        echo "'"; ?>">
+                              <input type="hidden" name="projectStatus" value="<?php echo "'";
+                                                                                echo $row['projectStatus'];
+                                                                                echo "'"; ?>">
+                              <input type="hidden" name="refn" value="<?php echo "'";
+                                                                      echo $row['ref'];
+                                                                      echo "'"; ?>">
+
+                              <input type="submit" class="btn btn-info" name="fill_entry" value="Fill">
+                            </form>
+                          </td>
+                          <!-- Fill ends -->
+                        </tr>
+                    <?php
+                      }
+                    }
+                    ?>
+                  </tbody>
+                </table>
+              </div>
+              <!-- Search 2 - by  status -->
+              
+
+
 
             </div>
           </div>
