@@ -4,6 +4,8 @@ require_once 'core/init.php';
 $user = new User();
 
 if ($user->isLoggedIn()) {
+    if($user->data()->prog=="admin")
+      Redirect::to('adminExport.php');
 } else {
   Redirect::to('index.php');
 }
@@ -218,6 +220,9 @@ if (Input::exists() && isset($_POST['edit'])) {
       <!-- NAVBAR collapse -->
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
+          <li class="nav-item px-2">
+            <a href="list.php" class="nav-link">Export</a>
+          </li>
           <!-- SHOW USERNAME -->
           <li class="nav-item px-2">
             <a href="profile.php" class="nav-link">
@@ -389,7 +394,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                 <a href="Activities_DA.php">Departmental Activities</a>
               </li>
               <li>
-                <a href="Activites_IA.php">Institute Activities</a>
+                <a href="Activities_IA.php">Institute Activities</a>
               </li>
               <li>
                 <a href="Activities_PA.php">Professional Activities</a>
