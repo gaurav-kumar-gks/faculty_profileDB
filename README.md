@@ -6,10 +6,10 @@
 * [bootstrap](https://getbootstrap.com/) 
 * [mysql](https://www.mysql.com/) 
 * [php](https://www.php.net/) 
-* [docker](https://www.docker.com/)
 * [phpmyadmin](https://www.phpmyadmin.net/) 
 * [html](https://developer.mozilla.org/en-US/docs/Web/HTML)
 * [css](https://developer.mozilla.org/en-US/docs/Web/CSS)
+* [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
 ### Requirements
 
@@ -20,20 +20,14 @@
 ### Changes you need to do 
 In following files change the following
 
-
-1. DB.php 
 	```
-	$user  =  'insert your faculty_profile_db's user name';
-	$password  =  'insert your faculty_profile_db's password';
-	// with single quotes
-	```
-2.  init.php 
+1.  init.php 
 	```
 	'user' => 'insert your faculty_user_db's user's name',
 	'password' => 'insert your faculty_user_db's password',
 	// with single quotes
 	```
-3. in other php files
+2. in other php files
    change mysqli_connect command
 	```
 	$conn = mysqli_connect("localhost", "insert your db user name here", "insert your db password here", "faculty_profile_db");
