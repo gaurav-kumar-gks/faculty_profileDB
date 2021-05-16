@@ -8,6 +8,8 @@ $user = new User();
 
 
 if ($user->isLoggedIn()) {
+    if($user->data()->prog=="admin")
+      Redirect::to('adminExport.php');
 } else {
   Redirect::to('index.php');
 }
@@ -63,7 +65,7 @@ if (Input::exists() && isset($_POST['delete_entry'])) {
     $activity = Input::get('activity');
     $activityDate = Input::get('activityDate');
     // run insert query
-    $conn = mysqli_connect("127.0.0.1", "root", "", "faculty_profile_db");
+    $conn = mysqli_connect("127.0.0.1", "root", "jrtalent", "faculty_profile_db");
     if (!$conn)
       die("Unable to connect to database");
 
@@ -211,6 +213,9 @@ if (Input::exists() && isset($_POST['edit'])) {
       <!-- NAVBAR collapse -->
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
+          <li class="nav-item px-2">
+            <a href="list.php" class="nav-link">Export</a>
+          </li>
           <!-- SHOW USERNAME -->
           <li class="nav-item px-2">
             <a href="profile.php" class="nav-link">
@@ -384,7 +389,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                 <a href="Activities_DA.php">Departmental Activities</a>
               </li>
               <li>
-                <a href="Activites_IA.php">Institute Activities</a>
+                <a href="Activities_IA.php">Institute Activities</a>
               </li>
               <li>
                 <a href="Activities_PA.php">Professional Activities</a>

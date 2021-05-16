@@ -12,6 +12,8 @@ $user = new User();
   - just uncomment the if Token::check Input::get if there is only one form on the page
  */
 if ($user->isLoggedIn()) {
+    if($user->data()->prog=="admin")
+      Redirect::to('adminExport.php');
 } else {
   Redirect::to('index.php');
 }
@@ -98,7 +100,7 @@ if (Input::exists() && isset($_POST['csubmit'])) {
       $activity=Input::get('activity');
       $activityDate=Input::get('activityDate');
       // run insert query
-      $conn=mysqli_connect("127.0.0.1","root","","faculty_profile_db");
+      $conn=mysqli_connect("127.0.0.1","root","jrtalent","faculty_profile_db");
       if(!$conn)
       die("Unable to connect to database");
 
@@ -152,7 +154,7 @@ if (Input::exists() && isset($_POST['csubmit'])) {
       $activity=Input::get('activity');
       $activityDate=Input::get('activityDate');
       // run insert query
-      $conn=mysqli_connect("127.0.0.1","root","","faculty_profile_db");
+      $conn=mysqli_connect("127.0.0.1","root","jrtalent","faculty_profile_db");
       if(!$conn)
       die("Unable to connect to database");
 
@@ -546,7 +548,7 @@ if (Input::exists() && isset($_POST['psubmit'])) {
 
                       <?php
                       $roll = $user->data()->{'Roll No'};
-                      $conn=mysqli_connect("127.0.0.1","root","","faculty_profile_db");
+                      $conn=mysqli_connect("127.0.0.1","root","jrtalent","faculty_profile_db");
                       if(!$conn)
                       die("Unable to connect to database");
                       // echo $roll;
