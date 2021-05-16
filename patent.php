@@ -5,6 +5,8 @@ $user = new User();
 
 /* user redirect  */
 if ($user->isLoggedIn()) {
+    if($user->data()->prog=="admin")
+      Redirect::to('adminExport.php');
 } else {
   Redirect::to('index.php');
 }
@@ -124,6 +126,63 @@ if (Input::exists() && isset($_POST['delete_entry'])) {
   }
 }
 
+
+
+if (Input::exists() && isset($_POST['upgrade_entry_x'])) {
+
+  try {
+    // fetch variables that are already stored in User from studentinfo table 
+    $fname = $user->data()->Name;
+    $roll = $user->data()->{'Roll No'};
+    $prog = $user->data()->prog;
+    $dept = $user->data()->department;
+    $ptype = 'j';
+    $email = $user->data()->email;
+    $aemail = $user->data()->aemail;
+    // echo $fid;
+
+    $SNO = Input::get('sno');
+    // $ltp=Input::get('ltp');
+    // $numOfStudents=Input::get('numOfStudents');
+    // $additionalInformation=Input::get('additionalInformation');
+    // $semester=Input::get('semester');
+    // $date=Input::get('student_activity_date');
+    // // run insert query
+    $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
+    // if(!$conn)
+    // die("Unable to connect to database");
+
+    // // $stmt="insert into discussion values('$email','$dateTime','$club_id','$text');";
+    // $stmt="Delete from `faculty_profile_teaching` where subCode='$subCode' and ltp='$ltp' and roll='$roll' and numOfStudents=$numOfStudents and activityDate = '$date' and additionalInformation='$additionalInformation' and semester=$semester";
+
+    $stmt = "select * from faculty_profile_research where rtype='pat' and sno>$SNO and roll='$roll' order by sno asc limit 1";
+    $result = mysqli_query($conn, $stmt);
+    $count = 0;
+    $val = 0;
+    while ($row = mysqli_fetch_assoc($result)) {
+      $count = $count + 1;
+      $val = $row['sno'];
+      // echo $row['sno'];
+    }
+    // echo $val;
+    if ($count != 0) {
+      $stmt = "update faculty_profile_research set sno=-1 where sno=$val";
+      $result = mysqli_query($conn, $stmt);
+      $stmt = "update faculty_profile_research set sno=$val where sno=$SNO";
+      $result = mysqli_query($conn, $stmt);
+      $stmt = "update faculty_profile_research set sno=$SNO where sno=-1";
+      $result = mysqli_query($conn, $stmt);
+    }
+    // $result=mysqli_query($conn,$stmt);
+    // // // echo if conference added successfully 
+  } catch (Exception $e) {
+    die($e->getMessage());
+  }
+}
+
+
+
+
 /* edit */
 if (Input::exists() && isset($_POST['edit'])) {
   try {
@@ -199,6 +258,9 @@ if (Input::exists() && isset($_POST['edit'])) {
       <!-- NAVBAR collapse -->
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
+          <li class="nav-item px-2">
+            <a href="list.php" class="nav-link">Export</a>
+          </li>
           <!-- SHOW USERNAME -->
           <li class="nav-item px-2">
             <a href="profile.php" class="nav-link">
@@ -372,7 +434,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                 <a href="Activities_DA.php">Departmental Activities</a>
               </li>
               <li>
-                <a href="Activites_IA.php">Institute Activities</a>
+                <a href="Activities_IA.php">Institute Activities</a>
               </li>
               <li>
                 <a href="Activities_PA.php">Professional Activities</a>
@@ -469,7 +531,7 @@ if (Input::exists() && isset($_POST['edit'])) {
 
 
 
-                    <input type="submit" class="btn btn-info" name="edit" value="Edit">
+                    <input type="submit" class="btn btn-info" name="edit" value="Submit">
 
                   </form>
                   <!--  EDIT FORM - BODY ends -->
@@ -560,7 +622,7 @@ if (Input::exists() && isset($_POST['edit'])) {
 
                     <div class="form-group">
                       <label for="cyear"> Date</label>
-                      <input type="date" id="cyear" name="cyear" value=<?php echo "$cyear" ?>>
+                      <input type="date" id="cyear" name="cyear">
                     </div>
 
 
@@ -593,6 +655,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                 <table class="table table-striped table-hover">
                   <thead class="thead-inverse">
                     <tr>
+                      <th></th>
                       <th>Title</th>
                       <th>Date</th>
                       <th>Ref. No.</th>
@@ -611,18 +674,12 @@ if (Input::exists() && isset($_POST['edit'])) {
                       die("Unable to connect to database");
 
                     // echo $roll;
-                    $stmt = "SELECT * FROM faculty_profile_research WHERE roll='$roll' AND rtype='pat' ORDER BY lastUpdated DESC;";
+                    $stmt = "SELECT * FROM faculty_profile_research WHERE roll='$roll' AND rtype='pat' ORDER BY sno DESC;";
                     // echo $stmt;
                     $result = mysqli_query($conn, $stmt);
                     while ($row = mysqli_fetch_assoc($result)) {
                     ?>
                       <tr>
-                        <td><?php echo $row['title']; ?></td>
-                        <td><?php echo $row['pdate']; ?></td>
-                        <td><?php echo $row['ref']; ?></td>
-                        <td><?php echo $row['projectStatus']; ?></td>
-
-
 
                         <!-- EDIT -->
                         <td>
@@ -649,6 +706,23 @@ if (Input::exists() && isset($_POST['edit'])) {
                           </form>
                         </td>
                         <!-- EDIT ends -->
+
+                        <td><?php echo $row['title']; ?></td>
+                        <td><?php echo $row['pdate']; ?></td>
+                        <td><?php echo $row['ref']; ?></td>
+                        <td><?php echo $row['projectStatus']; ?></td>
+
+
+
+                        
+                        <td>
+
+                          <form action="patent.php" method="post">
+                            <input type='hidden' name='sno' value=<?php echo $row['sno']; ?>>
+                            <input type="image" name="upgrade_entry" value="Upgrade" src="./Images/upward_arrow.png" height="50" width="60">
+                          </form>
+
+                        </td>
                         <!-- DELETE -->
                         <td>
                           <form action="patent.php" method="post">
@@ -718,7 +792,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                   <tbody>
 
                     <?php
-                    if (strlen(Input::get(CnameS)) > 0) {
+                    if (strlen(Input::get('CnameS')) > 0) {
                       $roll = $user->data()->{'Roll No'};
                       $cname = Input::get('CnameS');
                       $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
@@ -801,7 +875,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                   <tbody>
 
                     <?php
-                    if (strlen(Input::get(CstatusS)) > 0) {
+                    if (strlen(Input::get('CstatusS')) > 0) {
                       $roll = $user->data()->{'Roll No'};
                       $cstatus = Input::get('CstatusS');
                       $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");

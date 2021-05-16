@@ -5,6 +5,8 @@ $user = new User();
 
 /* user redirect  */
 if ($user->isLoggedIn()) {
+    if($user->data()->prog=="admin")
+      Redirect::to('adminExport.php');
 } else {
   Redirect::to('index.php');
 }
@@ -268,6 +270,9 @@ if (Input::exists() && isset($_POST['edit'])) {
       <!-- NAVBAR collapse -->
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
+          <li class="nav-item px-2">
+            <a href="list.php" class="nav-link">Export</a>
+          </li>
           <!-- SHOW USERNAME -->
           <li class="nav-item px-2">
             <a href="profile.php" class="nav-link">
@@ -441,7 +446,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                 <a href="Activities_DA.php">Departmental Activities</a>
               </li>
               <li>
-                <a href="Activites_IA.php">Institute Activities</a>
+                <a href="Activities_IA.php">Institute Activities</a>
               </li>
               <li>
                 <a href="Activities_PA.php">Professional Activities</a>
@@ -549,7 +554,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                       <input type="text" class="form-control" name="clink" value=<?php echo "$clink" ?>>
                     </div>
 
-                    <input type="submit" class="btn btn-info" name="edit" value="Edit">
+                    <input type="submit" class="btn btn-info" name="edit" value="Submit">
 
                   </form>
                   <!-- EDITED VOLUMES EDIT FORM - BODY ends -->
@@ -827,7 +832,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                   <tbody>
 
                     <?php
-                    if (strlen(Input::get(CnameS)) > 0) {
+                    if (strlen(Input::get('CnameS')) > 0) {
                       $roll = $user->data()->{'Roll No'};
                       $cname = Input::get('CnameS');
                       $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
@@ -919,7 +924,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                   <tbody>
 
                     <?php
-                    if (strlen(Input::get(CevnameS)) > 0) {
+                    if (strlen(Input::get('CevnameS')) > 0) {
                       $roll = $user->data()->{'Roll No'};
                       $cevname = Input::get('CevnameS');
                       $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
@@ -1011,7 +1016,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                   <tbody>
 
                     <?php
-                    if (strlen(Input::get(CpnameS)) > 0) {
+                    if (strlen(Input::get('CpnameS')) > 0) {
                       $roll = $user->data()->{'Roll No'};
                       $cpname = Input::get('CpnameS');
                       $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
@@ -1103,7 +1108,7 @@ if (Input::exists() && isset($_POST['edit'])) {
                   <tbody>
 
                     <?php
-                    if (strlen(Input::get(CfnameS)) > 0) {
+                    if (strlen(Input::get('CfnameS')) > 0) {
                       $roll = $user->data()->{'Roll No'};
                       $cfname = Input::get('CfnameS');
                       $conn = mysqli_connect("localhost", "root", "jrtalent", "faculty_profile_db");
