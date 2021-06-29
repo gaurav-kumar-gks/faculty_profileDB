@@ -1,7 +1,6 @@
-
 ## University Faculty Profile
 
-### Tech
+### Tech Stack Used
 
 * [bootstrap](https://getbootstrap.com/) 
 * [mysql](https://www.mysql.com/) 
@@ -18,9 +17,8 @@
  
 
 ### Changes you need to do 
-In following files change the following
+Change the following
 
-	```
 1.  init.php 
 	```
 	'user' => 'insert your faculty_user_db's user's name',
